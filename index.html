@@ -74,6 +74,14 @@
             from { opacity: 0; transform: translateY(10px); }
             to { opacity: 1; transform: translateY(0); }
         }
+
+        /* Placeholder para a div editável */
+        [contenteditable]:empty:before {
+            content: attr(data-placeholder);
+            color: #9ca3af; /* text-gray-400 */
+            pointer-events: none;
+            display: block; /* Garante que funcione em navegadores Webkit */
+        }
     </style>
 </head>
 <body class="bg-gray-100 text-gray-800 font-sans antialiased min-h-screen flex flex-col">
@@ -189,7 +197,7 @@
             <div class="p-5 flex-1 overflow-y-auto flex flex-col gap-5">
                 <input type="hidden" id="edit-post-id">
                 
-                <!-- NOVO: Formato e Status da Publicação -->
+                <!-- Formato e Status da Publicação -->
                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <div class="bg-gray-50 p-4 rounded-lg border border-gray-200">
                         <p class="text-sm font-semibold text-gray-900 mb-3 flex items-center gap-1"><i data-lucide="layers" class="w-4 h-4 text-blue-600"></i> Formato</p>
@@ -236,6 +244,7 @@
                     <div>
                         <label class="block text-sm font-medium text-gray-700 mb-1 flex items-center gap-1"><i data-lucide="image" class="w-4 h-4"></i> Link da Imagem (Google Drive ou Site)</label>
                         <input type="text" id="post-image" class="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-900 text-sm" placeholder="Cole o link do Google Drive aqui...">
+                        <p class="text-xs text-gray-500 mt-1">Lembre-se de configurar o link no Drive como "Qualquer pessoa com o link".</p>
                     </div>
                     
                     <div class="relative">
@@ -255,8 +264,9 @@
                 </div>
 
                 <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-1">Conteúdo Completo (Aceita HTML e Links Automáticos)</label>
-                    <textarea id="post-fulltext" rows="8" class="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-900 font-mono text-sm" placeholder="<p>Escreva seu artigo completo aqui. Links 'http' viram botões automaticamente!</p>"></textarea>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Conteúdo Completo</label>
+                    <!-- NOVO: Box de Escrita Rich Text Editável -->
+                    <div id="post-fulltext" contenteditable="true" data-placeholder="Cole aqui o seu texto do Word ou Gemini. Negritos e links serão preservados automaticamente..." class="w-full border border-gray-300 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-900 min-h-[250px] bg-white overflow-y-auto prose prose-blue max-w-none cursor-text shadow-inner"></div>
                 </div>
             </div>
             
@@ -396,7 +406,7 @@
                     imageUrl: document.getElementById('post-image').value,
                     youtubeUrl: document.getElementById('post-youtube').value,
                     description: document.getElementById('post-description').value,
-                    fullText: document.getElementById('post-fulltext').value,
+                    fullText: document.getElementById('post-fulltext').innerHTML, // NOVO: Captura o conteúdo formatado do Div
                 };
 
                 try {
@@ -414,7 +424,7 @@
                 }
             };
 
-            // NOVO: Exclusão com suporte ao editor
+            // Exclusão com suporte ao editor
             window.deletePost = async (id, fromEditor = false) => {
                 if (!currentUser) return;
                 if (!id) return;
@@ -433,7 +443,7 @@
         // ---- FUNÇÕES AUXILIARES ----
 
         function getDriveImageUrl(url) {
-            if (!url) return "https://images.unsplash.com/photo-1555066931-4365d14bab8c?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80";
+            if (!url) return ""; // NOVO: Retorna vazio se não tiver URL, removendo o tapa-buraco de fotos aleatórias.
             const match = url.match(/\/d\/([a-zA-Z0-9_-]+)/) || url.match(/id=([a-zA-Z0-9_-]+)/);
             if (match && match[1]) return `https://drive.google.com/uc?export=view&id=${match[1]}`;
             return url; 
@@ -494,7 +504,7 @@
         function renderPostsFeed() {
             container.innerHTML = ''; 
             
-            // NOVO: Filtrar apenas os posts que não são rascunho
+            // Filtrar apenas os posts que não são rascunho
             const visiblePosts = blogPosts.filter(p => p.status !== 'draft');
 
             if (visiblePosts.length === 0) {
@@ -524,12 +534,13 @@
                             </div>
                             <iframe class="w-full h-full pointer-events-none object-cover" src="https://www.youtube.com/embed/${ytId}?autoplay=1&mute=1&controls=0&rel=0&playsinline=1&loop=1&playlist=${ytId}" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
                         </div>`;
-                } else {
+                } else if (post.imageUrl) {
                     const finalImageUrl = getDriveImageUrl(post.imageUrl);
                     const clickAction = postType === 'page' ? `window.openArticle('${post.id}')` : `window.togglePost('${post.id}')`;
+                    // NOVO: Adicionado fallback (onerror) visual cinza com texto claro informando que a imagem falhou.
                     mediaHtml = `
-                        <div class="h-48 sm:h-64 overflow-hidden relative cursor-pointer group" onclick="${clickAction}">
-                            <img src="${finalImageUrl}" onerror="this.src='https://images.unsplash.com/photo-1555066931-4365d14bab8c?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80'" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105">
+                        <div class="h-48 sm:h-64 overflow-hidden relative cursor-pointer group bg-gray-100" onclick="${clickAction}">
+                            <img src="${finalImageUrl}" onerror="this.src='https://placehold.co/800x400/f3f4f6/a1a1aa?text=Imagem+Indisponível'" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105">
                             <div class="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent pointer-events-none"></div>
                         </div>`;
                 }
@@ -629,8 +640,8 @@
                     </div>`;
             } else if (post.imageUrl) {
                 mediaHtml = `
-                    <div class="aspect-[21/9] sm:aspect-[21/9] h-64 sm:h-auto w-full rounded-2xl overflow-hidden mb-8 shadow-sm">
-                        <img src="${getDriveImageUrl(post.imageUrl)}" class="w-full h-full object-cover">
+                    <div class="aspect-[21/9] sm:aspect-[21/9] h-64 sm:h-auto w-full rounded-2xl overflow-hidden mb-8 shadow-sm bg-gray-100">
+                        <img src="${getDriveImageUrl(post.imageUrl)}" onerror="this.src='https://placehold.co/800x400/f3f4f6/a1a1aa?text=Imagem+Indisponível'" class="w-full h-full object-cover">
                     </div>`;
             }
 
@@ -690,7 +701,7 @@
                 const item = document.createElement('div');
                 item.className = 'flex justify-between items-center p-4 border border-gray-200 rounded-lg bg-white hover:border-blue-300 transition-colors';
                 
-                // NOVO: Etiquetas visuais na lista
+                // Etiquetas visuais na lista
                 const typeLabel = post.type === 'page' ? '<span class="bg-blue-100 text-blue-800 px-2 py-0.5 rounded text-[10px] font-bold mr-2 shrink-0">PÁGINA</span>' : '<span class="bg-gray-100 text-gray-800 px-2 py-0.5 rounded text-[10px] font-bold mr-2 shrink-0">POST</span>';
                 const statusLabel = post.status === 'draft' ? '<span class="bg-yellow-100 text-yellow-800 px-2 py-0.5 rounded text-[10px] font-bold mr-2 shrink-0">RASCUNHO</span>' : '<span class="bg-green-100 text-green-800 px-2 py-0.5 rounded text-[10px] font-bold mr-2 shrink-0">PUBLICADO</span>';
                 
@@ -713,10 +724,11 @@
 
         window.openEditor = () => {
             document.getElementById('edit-post-id').value = '';
-            ['title', 'subtitle', 'image', 'youtube', 'description', 'fulltext'].forEach(f => {
+            ['title', 'subtitle', 'image', 'youtube', 'description'].forEach(f => {
                 const el = document.getElementById(`post-${f}`);
                 if(el) el.value = '';
             });
+            document.getElementById('post-fulltext').innerHTML = ''; // NOVO: Limpa o editor Rich Text
             
             // Valores padrão: Post e Publicado
             document.getElementById('type-post').checked = true; 
@@ -753,7 +765,7 @@
             document.getElementById('post-image').value = post.imageUrl || '';
             document.getElementById('post-youtube').value = post.youtubeUrl || '';
             document.getElementById('post-description').value = post.description;
-            document.getElementById('post-fulltext').value = post.fullText;
+            document.getElementById('post-fulltext').innerHTML = post.fullText || ''; // NOVO: Preenche o editor Rich Text
             
             // Mostrar botão de excluir
             document.getElementById('btn-delete-editor').classList.remove('hidden');

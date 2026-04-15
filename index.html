@@ -4,6 +4,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     
+    <!-- Pré-conexão com os servidores do Google para acelerar o carregamento -->
+    <link rel="preconnect" href="https://www.gstatic.com">
+    <link rel="preconnect" href="https://firestore.googleapis.com">
+    
     <!-- Item 1: Título da aba do navegador -->
     <title>Novidades PLH</title>
     
@@ -115,11 +119,23 @@
             <p class="text-gray-500">Fique por dentro das novidades, dicas e informativos.</p>
         </div>
 
-        <!-- Contêiner do Feed -->
+        <!-- Contêiner do Feed com Skeleton Loader (Melhora a percepção de velocidade) -->
         <div id="feed-container" class="flex flex-col gap-6">
-            <div class="text-center py-10 text-gray-500 animate-pulse flex flex-col items-center gap-3">
-                <i data-lucide="loader-2" class="w-8 h-8 animate-spin text-indigo-500"></i>
-                <p>Conectando ao banco de dados...</p>
+            <div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden animate-pulse">
+                <div class="h-48 sm:h-64 bg-gray-200 w-full"></div>
+                <div class="p-6">
+                    <div class="h-8 bg-gray-200 rounded w-3/4 mb-3"></div>
+                    <div class="h-4 bg-gray-200 rounded w-1/3 mb-4"></div>
+                    <div class="h-4 bg-gray-200 rounded w-full mb-2"></div>
+                    <div class="h-4 bg-gray-200 rounded w-5/6"></div>
+                </div>
+            </div>
+            <div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden animate-pulse hidden sm:block opacity-60">
+                <div class="h-48 sm:h-64 bg-gray-200 w-full"></div>
+                <div class="p-6">
+                    <div class="h-8 bg-gray-200 rounded w-3/4 mb-3"></div>
+                    <div class="h-4 bg-gray-200 rounded w-1/3 mb-4"></div>
+                </div>
             </div>
         </div>
 
@@ -246,9 +262,18 @@
 
         let currentUser = null;
         let blogPosts = [];
-        const ADMIN_PASSWORD = "Biguidu2013@"; // Nova Senha Configurada
+        const ADMIN_PASSWORD = "Biguidu2013@"; 
         const container = document.getElementById('feed-container');
         
+        // ---- SISTEMA DE CACHE LOCAL PARA CARREGAMENTO INSTANTÂNEO ----
+        const cachedData = localStorage.getItem('plh_blog_cache');
+        if (cachedData) {
+            try {
+                blogPosts = JSON.parse(cachedData);
+                if(blogPosts.length > 0) renderPostsFeed();
+            } catch(e) { console.error("Erro ao ler cache:", e); }
+        }
+
         if (!firebaseConfig || !firebaseConfig.apiKey) {
             container.innerHTML = '<div class="text-center py-10 bg-red-50 rounded-lg border border-red-100"><p class="text-red-600 font-bold mb-2">Aviso de Banco de Dados</p><p class="text-gray-700 text-sm">O banco de dados não está configurado.</p></div>';
             lucide.createIcons();
@@ -261,36 +286,19 @@
             const initAuth = async () => {
                 try {
                     let signedIn = false;
-                    
-                    // Tenta usar o token do ambiente se existir, mas com fallback para evitar o erro 'custom-token-mismatch'
                     if (typeof __initial_auth_token !== 'undefined' && __initial_auth_token) {
                         try {
                             await signInWithCustomToken(auth, __initial_auth_token);
                             signedIn = true;
                         } catch (tokenError) {
-                            console.warn("Aviso: Token incompatível detectado (normal em projetos próprios). Realizando acesso anônimo...", tokenError);
+                            console.warn("Acesso anônimo ativado.");
                         }
                     }
-                    
-                    // Se o token falhou ou não existe, usa a autenticação anônima (que ativamos no seu Firebase)
                     if (!signedIn) {
                         await signInAnonymously(auth);
                     }
                 } catch (error) { 
                     console.error("Erro auth geral:", error); 
-                    container.innerHTML = `
-                        <div class="bg-red-50 p-6 rounded-lg border border-red-200 text-center mx-auto w-full max-w-lg">
-                            <i data-lucide="alert-triangle" class="w-10 h-10 text-red-500 mx-auto mb-3"></i>
-                            <p class="text-red-700 font-bold mb-2 text-lg">Erro de Segurança do Firebase</p>
-                            <p class="text-gray-700 text-sm mb-4">O banco de dados bloqueou o acesso porque o seu domínio da Vercel ainda não está na lista de domínios autorizados.</p>
-                            <p class="text-gray-600 text-sm font-semibold mb-1">Como resolver:</p>
-                            <ol class="text-left text-sm text-gray-600 list-decimal pl-5 bg-white p-3 rounded border border-gray-100">
-                                <li>Vá no Firebase em <b>Authentication</b> > <b>Configurações</b>.</li>
-                                <li>Clique em <b>Domínios autorizados</b> e adicione seu domínio da Vercel.</li>
-                            </ol>
-                            <p class="text-gray-400 text-xs mt-4 break-words">Log técnico: ${error.message}</p>
-                        </div>`;
-                    lucide.createIcons();
                 }
             };
             initAuth();
@@ -310,6 +318,9 @@
                     
                     blogPosts.sort((a, b) => b.createdAt - a.createdAt); // Ordena do mais novo pro mais velho
                     
+                    // Salva a versão mais recente na memória para o próximo acesso ser instantâneo
+                    localStorage.setItem('plh_blog_cache', JSON.stringify(blogPosts));
+                    
                     if (blogPosts.length === 0) {
                         createInitialPost();
                     } else {
@@ -318,12 +329,6 @@
                     }
                 }, (error) => {
                     console.error("Erro Snapshot:", error);
-                    container.innerHTML = `
-                        <div class="bg-red-50 p-6 rounded-lg border border-red-200 text-center mx-auto w-full max-w-lg">
-                             <p class="text-red-700 font-bold mb-2">Erro de Permissão no Banco de Dados</p>
-                             <p class="text-gray-700 text-sm">O banco de dados recusou a leitura. Verifique se o seu banco está no 'Modo de Teste' nas Regras de Segurança.</p>
-                             <p class="text-gray-400 text-xs mt-2 break-words">${error.message}</p>
-                        </div>`;
                 });
             }
 

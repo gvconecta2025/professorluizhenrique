@@ -47,7 +47,7 @@
             overflow: hidden;
         }
         #mobile-menu.menu-open {
-            max-height: 200px; /* Ajuste conforme a quantidade de itens no menu */
+            max-height: 250px; /* Ajuste conforme a quantidade de itens no menu */
         }
 
         /* Estilos do Modal Admin */
@@ -56,6 +56,11 @@
             backdrop-filter: blur(4px);
         }
         .hidden { display: none !important; }
+
+        /* Esconder o iframe click overlay após o clique inicial */
+        .yt-unlocked iframe {
+            pointer-events: auto !important;
+        }
     </style>
 </head>
 <body class="bg-gray-100 text-gray-800 font-sans antialiased min-h-screen relative pb-16">
@@ -63,31 +68,41 @@
     <!-- Cabeçalho do Site com Menu Hambúrguer -->
     <header class="bg-white shadow-sm sticky top-0 z-20">
         <div class="max-w-3xl mx-auto px-4 py-4 flex items-center justify-between">
-            <!-- Item 1: Título do Site Atualizado -->
+            <!-- Título do Site -->
             <h1 class="text-xl sm:text-2xl font-bold tracking-tight text-indigo-600 flex items-center gap-2 truncate">
                 <i data-lucide="book-open" class="w-6 h-6 shrink-0"></i>
                 Novidades PLH
             </h1>
             
             <!-- Navegação Desktop (Visível apenas em telas médias pra cima) -->
-            <nav class="hidden md:flex gap-4 text-sm font-medium text-gray-500">
+            <nav class="hidden md:flex items-center gap-5 text-sm font-medium text-gray-500">
                 <a href="#" class="hover:text-indigo-600 transition-colors">Início</a>
                 <a href="#" class="hover:text-indigo-600 transition-colors">Sobre</a>
                 <a href="#" class="hover:text-indigo-600 transition-colors">Contato</a>
+                <!-- Ícone da Engrenagem Escondido no Menu Desktop -->
+                <a href="#" onclick="window.openAdminLogin(); return false;" class="hover:text-indigo-600 text-gray-400 transition-colors border-l border-gray-200 pl-4" title="Acesso Restrito">
+                    <i data-lucide="settings" class="w-4 h-4"></i>
+                </a>
             </nav>
 
-            <!-- Item 4: Botão do Menu Hambúrguer (Visível apenas em telas pequenas) -->
+            <!-- Botão do Menu Hambúrguer (Visível apenas em telas pequenas) -->
             <button onclick="window.toggleMobileMenu()" class="md:hidden p-2 text-gray-600 hover:text-indigo-600 focus:outline-none">
                 <i data-lucide="menu" class="w-6 h-6"></i>
             </button>
         </div>
 
-        <!-- Item 4: Container do Menu Mobile (Expansível) -->
+        <!-- Container do Menu Mobile (Expansível) -->
         <div id="mobile-menu" class="bg-white border-t border-gray-100 md:hidden px-4 shadow-sm">
             <nav class="flex flex-col py-4 gap-4 text-sm font-medium text-gray-600">
-                 <a href="#" class="hover:text-indigo-600 transition-colors">Início</a>
+                <a href="#" class="hover:text-indigo-600 transition-colors">Início</a>
                 <a href="#" class="hover:text-indigo-600 transition-colors">Sobre</a>
                 <a href="#" class="hover:text-indigo-600 transition-colors">Contato</a>
+                <!-- Engrenagem Escondida no Menu Mobile -->
+                <div class="border-t border-gray-100 pt-3 mt-1">
+                    <a href="#" onclick="window.openAdminLogin(); return false;" class="flex items-center gap-2 text-gray-400 hover:text-indigo-600 transition-colors">
+                        <i data-lucide="settings" class="w-4 h-4"></i> Painel
+                    </a>
+                </div>
             </nav>
         </div>
     </header>
@@ -97,7 +112,7 @@
         
         <div class="mb-8 text-center sm:text-left">
             <h2 class="text-3xl font-extrabold text-gray-900 mb-2">Últimas Atualizações</h2>
-            <p class="text-gray-500">Clique em uma postagem para ler o conteúdo completo.</p>
+            <p class="text-gray-500">Fique por dentro das novidades, dicas e informativos.</p>
         </div>
 
         <!-- Contêiner do Feed -->
@@ -146,13 +161,13 @@
     </div>
 
     <!-- Modal 3: Editor de Post -->
-    <div id="editor-modal" class="hidden fixed inset-0 z-50 flex items-center justify-center modal-overlay px-4">
-        <div class="bg-white rounded-2xl shadow-xl w-full max-w-3xl max-h-[90vh] flex flex-col relative overflow-hidden">
-            <div class="p-6 border-b border-gray-100 flex justify-between items-center bg-gray-50">
+    <div id="editor-modal" class="hidden fixed inset-0 z-50 flex items-center justify-center modal-overlay px-4 py-4">
+        <div class="bg-white rounded-2xl shadow-xl w-full max-w-3xl max-h-full flex flex-col relative overflow-hidden">
+            <div class="p-5 border-b border-gray-100 flex justify-between items-center bg-gray-50">
                 <h3 id="editor-title" class="text-xl font-bold text-gray-900">Nova Publicação</h3>
                 <button onclick="window.closeEditor()" class="text-gray-400 hover:text-gray-600"><i data-lucide="x" class="w-6 h-6"></i></button>
             </div>
-            <div class="p-6 flex-1 overflow-y-auto flex flex-col gap-4">
+            <div class="p-5 flex-1 overflow-y-auto flex flex-col gap-4">
                 <input type="hidden" id="edit-post-id">
                 
                 <div>
@@ -165,9 +180,28 @@
                     <input type="text" id="post-subtitle" class="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500" placeholder="Um breve resumo para chamar atenção">
                 </div>
 
-                <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-1">URL da Imagem de Capa</label>
-                    <input type="text" id="post-image" class="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500" placeholder="https://link-da-imagem.com/foto.jpg">
+                <div class="bg-indigo-50/50 p-4 rounded-lg border border-indigo-100 flex flex-col gap-3">
+                    <p class="text-xs font-semibold text-indigo-700 uppercase tracking-wide">Mídia Principal (Escolha Imagem OU Vídeo)</p>
+                    
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1 flex items-center gap-1"><i data-lucide="image" class="w-4 h-4"></i> Link da Imagem (Google Drive ou Site)</label>
+                        <input type="text" id="post-image" class="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500 text-sm" placeholder="Cole o link de compartilhamento do Google Drive aqui...">
+                    </div>
+                    
+                    <div class="relative">
+                        <div class="absolute inset-0 flex items-center" aria-hidden="true">
+                            <div class="w-full border-t border-indigo-200"></div>
+                        </div>
+                        <div class="relative flex justify-center">
+                            <span class="px-2 bg-indigo-50/50 text-xs text-indigo-500 font-medium rounded-full">OU</span>
+                        </div>
+                    </div>
+
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1 flex items-center gap-1"><i data-lucide="youtube" class="w-4 h-4 text-red-500"></i> Link do Vídeo (YouTube)</label>
+                        <input type="text" id="post-youtube" class="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500 text-sm" placeholder="https://www.youtube.com/watch?v=...">
+                        <p class="text-xs text-gray-500 mt-1">Se preenchido, o vídeo substituirá a imagem. Ele iniciará mudo e sem controles até receber um clique.</p>
+                    </div>
                 </div>
 
                 <div>
@@ -177,10 +211,10 @@
 
                 <div>
                     <label class="block text-sm font-medium text-gray-700 mb-1">Conteúdo Completo (Aceita HTML)</label>
-                    <textarea id="post-fulltext" rows="5" class="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500 font-mono text-sm" placeholder="<p>Escreva seu artigo aqui...</p>"></textarea>
+                    <textarea id="post-fulltext" rows="5" class="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500 font-mono text-sm" placeholder="<p>Escreva seu artigo completo aqui...</p>"></textarea>
                 </div>
             </div>
-            <div class="p-6 border-t border-gray-100 flex justify-end gap-3 bg-gray-50">
+            <div class="p-5 border-t border-gray-100 flex justify-end gap-3 bg-gray-50">
                 <button onclick="window.closeEditor()" class="px-4 py-2 border border-gray-300 rounded-lg text-gray-700 font-medium hover:bg-gray-100 transition-colors">Cancelar</button>
                 <button onclick="window.savePost()" id="btn-save-post" class="px-6 py-2 bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg font-medium transition-colors flex items-center gap-2">
                     <i data-lucide="save" class="w-4 h-4"></i> Salvar
@@ -189,12 +223,7 @@
         </div>
     </div>
 
-    <!-- Item 6: Botão de Engrenagem (Admin) -->
-    <button onclick="window.openAdminLogin()" class="fixed bottom-4 left-4 z-30 bg-white p-3 rounded-full shadow-md text-gray-500 hover:text-indigo-600 hover:shadow-lg transition-all duration-300 border border-gray-200" title="Painel do Professor">
-        <i data-lucide="settings" class="w-6 h-6"></i>
-    </button>
-
-    <!-- Item 5: Rodapé Atualizado -->
+    <!-- Rodapé -->
     <footer class="bg-white border-t border-gray-200 mt-12 py-8 text-center text-gray-500 text-sm relative z-10">
         <p>&copy; 2026 PLH Preparatórios.. Feito pelo Professor Luiz Henrique</p>
     </footer>
@@ -217,7 +246,7 @@
 
         let currentUser = null;
         let blogPosts = [];
-        const ADMIN_PASSWORD = "plh"; // Senha configurada para o painel
+        const ADMIN_PASSWORD = "Biguidu2013@"; // Nova Senha Configurada
         const container = document.getElementById('feed-container');
         
         if (!firebaseConfig || !firebaseConfig.apiKey) {
@@ -231,14 +260,24 @@
 
             const initAuth = async () => {
                 try {
+                    let signedIn = false;
+                    
+                    // Tenta usar o token do ambiente se existir, mas com fallback para evitar o erro 'custom-token-mismatch'
                     if (typeof __initial_auth_token !== 'undefined' && __initial_auth_token) {
-                        await signInWithCustomToken(auth, __initial_auth_token);
-                    } else {
+                        try {
+                            await signInWithCustomToken(auth, __initial_auth_token);
+                            signedIn = true;
+                        } catch (tokenError) {
+                            console.warn("Aviso: Token incompatível detectado (normal em projetos próprios). Realizando acesso anônimo...", tokenError);
+                        }
+                    }
+                    
+                    // Se o token falhou ou não existe, usa a autenticação anônima (que ativamos no seu Firebase)
+                    if (!signedIn) {
                         await signInAnonymously(auth);
                     }
                 } catch (error) { 
-                    console.error("Erro auth:", error); 
-                    // BUG 2 FIX: Tratar erro visualmente se o domínio da Vercel não estiver autorizado
+                    console.error("Erro auth geral:", error); 
                     container.innerHTML = `
                         <div class="bg-red-50 p-6 rounded-lg border border-red-200 text-center mx-auto w-full max-w-lg">
                             <i data-lucide="alert-triangle" class="w-10 h-10 text-red-500 mx-auto mb-3"></i>
@@ -293,10 +332,11 @@
                 try {
                     await addDoc(collection(db, 'artifacts', appId, 'public', 'data', 'posts'), {
                         title: "Bem-vindo ao Novo Blog PLH!",
-                        subtitle: "Seu sistema está pronto para uso e conectado à nuvem.",
+                        subtitle: "Sistema com suporte a YouTube e Google Drive.",
                         imageUrl: "https://images.unsplash.com/photo-1499750310107-5fef28a66643?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
-                        description: "Clique na engrenagem no canto inferior esquerdo, use a senha 'plh' para acessar o painel e comece a gerenciar suas novidades.",
-                        fullText: "<p>Seu banco de dados está online. Você pode apagar este post inicial pelo painel de controle e criar os seus próprios.</p>",
+                        youtubeUrl: "",
+                        description: "Agora você pode acessar o painel pelo menu principal, colar links do drive para imagens e links do youtube para vídeos autoplays.",
+                        fullText: "<p>Seu banco de dados está online. Acesse o menu hambúrguer, clique em Painel e use sua nova senha.</p>",
                         createdAt: Date.now()
                     });
                 } catch(error) {
@@ -314,7 +354,8 @@
                 const postData = {
                     title: document.getElementById('post-title').value || "Sem título",
                     subtitle: document.getElementById('post-subtitle').value,
-                    imageUrl: document.getElementById('post-image').value || "https://images.unsplash.com/photo-1555066931-4365d14bab8c?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
+                    imageUrl: document.getElementById('post-image').value,
+                    youtubeUrl: document.getElementById('post-youtube').value,
                     description: document.getElementById('post-description').value,
                     fullText: document.getElementById('post-fulltext').value,
                 };
@@ -346,6 +387,24 @@
             };
         } // fim do Firebase
 
+        // Funções Auxiliares: Conversores de URL para Drive e Youtube
+        function getDriveImageUrl(url) {
+            if (!url) return "https://images.unsplash.com/photo-1555066931-4365d14bab8c?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80";
+            // Extrai o ID do arquivo de links de compartilhamento do Google Drive
+            const match = url.match(/\/d\/([a-zA-Z0-9_-]+)/) || url.match(/id=([a-zA-Z0-9_-]+)/);
+            if (match && match[1]) {
+                return `https://drive.google.com/uc?export=view&id=${match[1]}`;
+            }
+            return url; // Retorna normal se não for link do drive
+        }
+
+        function getYoutubeId(url) {
+            if (!url) return null;
+            const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|&v=)([^#&?]*).*/;
+            const match = url.match(regExp);
+            return (match && match[2].length === 11) ? match[2] : null;
+        }
+
         // Funções de UI da Tela Principal
         function renderPostsFeed() {
             container.innerHTML = ''; 
@@ -353,13 +412,41 @@
             blogPosts.forEach(post => {
                 const article = document.createElement('article');
                 article.className = 'bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden hover:shadow-md transition-shadow duration-300';
-                article.innerHTML = `
-                    <div class="cursor-pointer group" onclick="window.togglePost('${post.id}')">
-                        <div class="h-48 sm:h-64 overflow-hidden relative">
-                            <img src="${post.imageUrl}" onerror="this.src='https://images.unsplash.com/photo-1555066931-4365d14bab8c?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80'" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105">
-                            <div class="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent"></div>
+                
+                // Definir lógica da Mídia: Imagem do Drive ou Vídeo do YouTube
+                let mediaHtml = '';
+                const ytId = getYoutubeId(post.youtubeUrl);
+                
+                if (ytId) {
+                    // Mídia: YOUTUBE (Autoplay Mudo + Esconder Controles)
+                    mediaHtml = `
+                        <div class="h-48 sm:h-64 overflow-hidden relative bg-black cursor-pointer group" onclick="window.enableYtControls(this, '${ytId}', event)" title="Clique para ativar som e controles">
+                            <div class="absolute inset-0 z-10 bg-gradient-to-t from-black/50 to-transparent pointer-events-none transition-opacity group-hover:opacity-70 flex items-center justify-center">
+                                <i data-lucide="play-circle" class="w-14 h-14 text-white/80 opacity-0 group-hover:opacity-100 transition-opacity transform scale-90 group-hover:scale-100"></i>
+                            </div>
+                            <!-- Parâmetros Mágicos: autoplay=1 (toca sozinho), mute=1 (sem som), controls=0 (sem botões de pause/play) -->
+                            <iframe class="w-full h-full pointer-events-none object-cover" 
+                                    src="https://www.youtube.com/embed/${ytId}?autoplay=1&mute=1&controls=0&rel=0&playsinline=1&loop=1&playlist=${ytId}" 
+                                    frameborder="0" allow="autoplay; encrypted-media" allowfullscreen>
+                            </iframe>
                         </div>
-                        <div class="p-6">
+                    `;
+                } else {
+                    // Mídia: IMAGEM (com suporte a Google Drive)
+                    const finalImageUrl = getDriveImageUrl(post.imageUrl);
+                    mediaHtml = `
+                        <div class="h-48 sm:h-64 overflow-hidden relative cursor-pointer group" onclick="window.togglePost('${post.id}')">
+                            <img src="${finalImageUrl}" onerror="this.src='https://images.unsplash.com/photo-1555066931-4365d14bab8c?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80'" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105">
+                            <div class="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent pointer-events-none"></div>
+                        </div>
+                    `;
+                }
+
+                article.innerHTML = `
+                    <div>
+                        ${mediaHtml}
+                        <!-- Cabeçalho (Clicável para expandir o texto) -->
+                        <div class="p-6 cursor-pointer group" onclick="window.togglePost('${post.id}')">
                             <h3 class="text-2xl font-bold text-gray-900 leading-tight mb-1 group-hover:text-indigo-600 transition-colors">${post.title}</h3>
                             <p class="text-sm font-medium text-indigo-500 mb-3">${post.subtitle}</p>
                             <p class="text-gray-600 line-clamp-2">${post.description}</p>
@@ -369,6 +456,7 @@
                             </div>
                         </div>
                     </div>
+                    <!-- Conteúdo Expansível (Estilo FAQ) -->
                     <div id="content-${post.id}" class="faq-content bg-gray-50/50 border-t border-gray-100">
                         <div class="faq-content-inner">
                             <div class="p-6 prose prose-indigo max-w-none text-gray-700">
@@ -385,7 +473,25 @@
             lucide.createIcons();
         }
 
+        // Função para destravar os botões do YouTube quando o usuário clicar no vídeo
+        window.enableYtControls = (element, ytId, event) => {
+            if (event) event.stopPropagation(); // Impede de abrir o texto do blog sem querer ao clicar no vídeo
+            element.onclick = null; // Remove o evento de clique após o primeiro uso
+            
+            // Remove a sobreposição falsa e o ícone de play
+            const overlay = element.querySelector('div.absolute');
+            if(overlay) overlay.remove();
+
+            // Adiciona classe para destravar os cliques do usuário no iframe
+            element.classList.add('yt-unlocked');
+            const iframe = element.querySelector('iframe');
+            
+            // Recarrega o vídeo recriando-o, ativando som (mute=0) e controles (controls=1)
+            iframe.src = `https://www.youtube.com/embed/${ytId}?autoplay=1&mute=0&controls=1&rel=0&playsinline=1`;
+        };
+
         window.toggleMobileMenu = () => document.getElementById('mobile-menu').classList.toggle('menu-open');
+        
         window.togglePost = (id) => {
             const contentDiv = document.getElementById(`content-${id}`);
             const indicatorDiv = document.querySelector(`.toggle-indicator-${id}`);
@@ -394,7 +500,12 @@
         };
 
         // Funções do Painel Admin
-        window.openAdminLogin = () => { document.getElementById('login-modal').classList.remove('hidden'); document.getElementById('admin-password').value = ''; document.getElementById('login-error').classList.add('hidden'); };
+        window.openAdminLogin = () => { 
+            window.toggleMobileMenu(); // Fecha o menu hamburger se estiver aberto
+            document.getElementById('login-modal').classList.remove('hidden'); 
+            document.getElementById('admin-password').value = ''; 
+            document.getElementById('login-error').classList.add('hidden'); 
+        };
         window.closeAdminLogin = () => document.getElementById('login-modal').classList.add('hidden');
         window.verifyPassword = () => {
             if (document.getElementById('admin-password').value === ADMIN_PASSWORD) {
@@ -416,6 +527,9 @@
                 item.innerHTML = `
                     <div class="flex-1 min-w-0 pr-4">
                         <h5 class="text-sm font-bold text-gray-900 truncate">${post.title}</h5>
+                        <p class="text-xs text-gray-500 mt-1 flex items-center gap-1">
+                            ${post.youtubeUrl ? '<i data-lucide="youtube" class="w-3 h-3 text-red-500"></i> Vídeo' : '<i data-lucide="image" class="w-3 h-3 text-indigo-400"></i> Imagem'}
+                        </p>
                     </div>
                     <div class="flex items-center gap-2 flex-shrink-0">
                         <button onclick="window.editPost('${post.id}')" class="p-2 text-indigo-600 hover:bg-indigo-50 rounded-lg transition-colors"><i data-lucide="edit-2" class="w-4 h-4"></i></button>
@@ -429,7 +543,10 @@
 
         window.openEditor = () => {
             document.getElementById('edit-post-id').value = '';
-            ['title', 'subtitle', 'image', 'description', 'fulltext'].forEach(f => document.getElementById(`post-${f}`).value = '');
+            ['title', 'subtitle', 'image', 'youtube', 'description', 'fulltext'].forEach(f => {
+                const el = document.getElementById(`post-${f}`);
+                if(el) el.value = '';
+            });
             document.getElementById('editor-title').textContent = "Nova Publicação";
             document.getElementById('dashboard-modal').classList.add('hidden');
             document.getElementById('editor-modal').classList.remove('hidden');
@@ -446,7 +563,8 @@
             document.getElementById('edit-post-id').value = post.id;
             document.getElementById('post-title').value = post.title;
             document.getElementById('post-subtitle').value = post.subtitle;
-            document.getElementById('post-image').value = post.imageUrl;
+            document.getElementById('post-image').value = post.imageUrl || '';
+            document.getElementById('post-youtube').value = post.youtubeUrl || '';
             document.getElementById('post-description').value = post.description;
             document.getElementById('post-fulltext').value = post.fullText;
             document.getElementById('editor-title').textContent = "Editar Publicação";
@@ -454,7 +572,7 @@
             document.getElementById('editor-modal').classList.remove('hidden');
         };
 
-        // BUG 1 FIX: Disparar criação de ícones imediatamente, não esperar evento DOMContentLoaded no módulo.
+        // Disparar criação de ícones imediatamente
         lucide.createIcons();
     </script>
 </body>

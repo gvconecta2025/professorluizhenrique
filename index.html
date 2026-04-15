@@ -10,16 +10,15 @@
     <title>Professor Luiz Henrique</title>
     
     <!-- Metadados para Redes Sociais -->
-    <meta property="og:title" content="Professor Luiz Henrique">
-    <meta property="og:description" content="Acesse as últimas notícias, artigos e atualizações.">
-    <meta property="og:image" content="social-preview.png">
+    <meta property="og:title" content="Professor Luiz Henrique - Mensagens de Fé">
+    <meta property="og:description" content="Acesse palavras de fé, artigos religiosos e reflexões diárias.">
+    <meta property="og:image" content="https://lh3.googleusercontent.com/d/1mMr4QBxQtAPXYNg1aGRZ1a2Jib-PbJIx">
     <meta property="og:type" content="website">
     <meta name="twitter:card" content="summary_large_image">
 
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/lucide@latest"></script>
     <style>
-        /* Melhorias de Scroll e Animação */
         html { scroll-behavior: smooth; }
         
         .faq-content {
@@ -61,22 +60,18 @@
             display: block;
         }
 
-        /* Definições de Temas com degradês dinâmicos */
+        /* Temas de Leitura */
         .theme-light { background-color: #ffffff; color: #1f2937; }
         .theme-polen { background-color: #f4ecd8; color: #5f4b32; }
         .theme-cafe { background-color: #3c2f2f; color: #e7d8c9; }
         .theme-dark { background-color: #111827; color: #f3f4f6; }
         
-        /* Temas Degradê solicitados */
         .theme-verde { background: linear-gradient(135deg, #065f46 0%, #064e3b 100%); color: #ffffff; }
         .theme-azul { background: linear-gradient(135deg, #1e40af 0%, #1e3a8a 100%); color: #ffffff; }
         .theme-vermelho { background: linear-gradient(135deg, #991b1b 0%, #7f1d1d 100%); color: #ffffff; }
 
         .theme-verde .prose, .theme-azul .prose, .theme-vermelho .prose, .theme-dark .prose, .theme-cafe .prose {
             color: inherit !important;
-        }
-        .theme-verde h1, .theme-azul h1, .theme-vermelho h1, .theme-verde p, .theme-azul p, .theme-vermelho p {
-            color: white !important;
         }
 
         /* Tamanhos de Fonte */
@@ -87,11 +82,11 @@
 </head>
 <body class="bg-gray-100 text-gray-800 font-sans antialiased min-h-screen flex flex-col">
 
-    <!-- Cabeçalho Principal -->
+    <!-- Cabeçalho -->
     <header class="bg-white shadow-sm sticky top-0 z-20 flex-shrink-0">
         <div class="max-w-3xl mx-auto px-4 py-4 flex items-center justify-between">
             <a href="#" onclick="window.clearFilter(); window.closeArticle(); return false;" class="text-xl sm:text-2xl font-bold tracking-tight text-blue-900 flex items-center gap-2 truncate hover:opacity-80 transition-opacity">
-                <i data-lucide="book-open" class="w-6 h-6 shrink-0 text-blue-700"></i>
+                <i data-lucide="cross" class="w-6 h-6 shrink-0 text-blue-700"></i>
                 Professor Luiz Henrique
             </a>
             
@@ -107,7 +102,7 @@
                 
                 <div class="flex flex-col">
                     <button onclick="window.toggleCategories(event)" class="flex items-center justify-between w-full text-left hover:text-blue-900 transition-colors focus:outline-none py-1">
-                        <span class="flex items-center gap-2"><i data-lucide="folder" class="w-4 h-4"></i> Artigos por Categoria</span>
+                        <span class="flex items-center gap-2"><i data-lucide="folder" class="w-4 h-4"></i> Categorias</span>
                         <i data-lucide="chevron-down" id="cat-chevron" class="w-4 h-4 transition-transform"></i>
                     </button>
                     <div id="categories-list" class="hidden flex-col pl-6 mt-3 gap-3 text-gray-500 border-l-2 border-gray-100 ml-2"></div>
@@ -125,78 +120,65 @@
         </div>
     </header>
 
-    <!-- FEED DE NOTÍCIAS -->
+    <!-- FEED -->
     <main id="home-view" class="flex-grow max-w-3xl w-full mx-auto px-4 py-8 z-10 fade-enter">
         <div class="mb-8 text-center sm:text-left" id="feed-header">
-            <h2 class="text-3xl font-extrabold text-gray-900 mb-2">Novidades</h2>
-            <p class="text-gray-500">Últimas atualizações, artigos e dicas preparatórias.</p>
+            <h2 class="text-3xl font-black text-gray-900 mb-2">Reflexões</h2>
+            <p class="text-gray-500">Palavras de fé e ensinamentos diários.</p>
         </div>
 
         <div id="feed-container" class="flex flex-col gap-6">
-            <!-- Skeleton Loader -->
             <div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden animate-pulse">
                 <div class="aspect-video bg-gray-200 w-full"></div>
                 <div class="p-6">
                     <div class="h-8 bg-gray-200 rounded w-3/4 mb-3"></div>
-                    <div class="h-4 bg-gray-200 rounded w-full mb-2"></div>
-                    <div class="h-4 bg-gray-200 rounded w-1/2"></div>
+                    <div class="h-4 bg-gray-200 rounded w-full"></div>
                 </div>
             </div>
         </div>
     </main>
 
-    <!-- VISUALIZAÇÃO DO ARTIGO -->
+    <!-- ARTIGO COMPLETO -->
     <main id="article-view" class="hidden flex-grow w-full bg-white z-10 transition-all duration-300">
         <div class="max-w-3xl mx-auto px-4 py-8 fade-enter">
-            
-            <!-- Barra de Ferramentas de Leitura -->
             <div class="flex flex-wrap items-center justify-between gap-4 mb-8 border-b border-gray-200/50 pb-6">
-                <button onclick="window.closeArticle()" class="flex items-center gap-2 text-blue-600 hover:text-blue-800 font-bold transition-colors group">
+                <button onclick="window.closeArticle()" class="flex items-center gap-2 text-blue-600 hover:text-blue-800 font-bold group">
                     <i data-lucide="arrow-left" class="w-5 h-5 transform group-hover:-translate-x-1 transition-transform"></i> Voltar
                 </button>
 
                 <div class="flex items-center gap-3">
-                    <button onclick="window.toggleFontSize()" class="p-2 bg-gray-100 hover:bg-gray-200 rounded-lg text-gray-700 transition-colors border border-gray-200" title="Ajustar Tamanho da Fonte">
+                    <button onclick="window.toggleFontSize()" class="p-2 bg-gray-100 hover:bg-gray-200 rounded-lg text-gray-700 border border-gray-200" title="Ajustar Fonte">
                         <i data-lucide="type" class="w-5 h-5"></i>
                     </button>
-                    
-                    <!-- Seletor de Temas (Incluindo Degradês) -->
-                    <div class="flex gap-1.5 p-1.5 bg-gray-100 rounded-xl border border-gray-200 shadow-inner">
-                        <button onclick="window.setArticleTheme('light')" class="w-6 h-6 rounded-full bg-white border border-gray-300 shadow-sm" title="Claro"></button>
-                        <button onclick="window.setArticleTheme('polen')" class="w-6 h-6 rounded-full bg-[#f4ecd8] border border-gray-300" title="Polen"></button>
-                        <button onclick="window.setArticleTheme('cafe')" class="w-6 h-6 rounded-full bg-[#3c2f2f] border border-gray-600" title="Café"></button>
-                        <button onclick="window.setArticleTheme('dark')" class="w-6 h-6 rounded-full bg-gray-900 border border-black" title="Escuro"></button>
-                        <button onclick="window.setArticleTheme('verde')" class="w-6 h-6 rounded-full bg-gradient-to-br from-green-600 to-green-800 border border-green-900" title="Degradê Verde"></button>
-                        <button onclick="window.setArticleTheme('azul')" class="w-6 h-6 rounded-full bg-gradient-to-br from-blue-600 to-blue-800 border border-blue-900" title="Degradê Azul"></button>
-                        <button onclick="window.setArticleTheme('vermelho')" class="w-6 h-6 rounded-full bg-gradient-to-br from-red-600 to-red-800 border border-red-900" title="Degradê Vermelho"></button>
+                    <div class="flex gap-1.5 p-1.5 bg-gray-100 rounded-xl border border-gray-200">
+                        <button onclick="window.setArticleTheme('light')" class="w-5 h-5 rounded-full bg-white border border-gray-300 shadow-sm" title="Claro"></button>
+                        <button onclick="window.setArticleTheme('polen')" class="w-5 h-5 rounded-full bg-[#f4ecd8] border border-gray-300" title="Polen"></button>
+                        <button onclick="window.setArticleTheme('dark')" class="w-5 h-5 rounded-full bg-gray-900 border border-black" title="Escuro"></button>
+                        <button onclick="window.setArticleTheme('verde')" class="w-5 h-5 rounded-full bg-gradient-to-br from-green-600 to-green-800" title="Verde"></button>
+                        <button onclick="window.setArticleTheme('azul')" class="w-5 h-5 rounded-full bg-gradient-to-br from-blue-600 to-blue-800" title="Azul"></button>
                     </div>
                 </div>
             </div>
 
-            <article id="article-content" class="pb-16">
-                <!-- Conteúdo injetado via JS -->
-            </article>
+            <article id="article-content" class="pb-16"></article>
         </div>
     </main>
 
-    <!-- Modais Administrativos -->
+    <!-- MODAL LOGIN -->
     <div id="login-modal" class="hidden fixed inset-0 z-50 flex items-center justify-center modal-overlay px-4">
         <div class="bg-white rounded-2xl shadow-2xl w-full max-w-sm p-8 relative">
             <button onclick="window.closeAdminLogin()" class="absolute top-4 right-4 text-gray-400 hover:text-gray-600"><i data-lucide="x" class="w-6 h-6"></i></button>
             <div class="text-center mb-6">
-                <div class="w-16 h-16 bg-blue-50 text-blue-600 rounded-full flex items-center justify-center mx-auto mb-4">
-                    <i data-lucide="lock" class="w-8 h-8"></i>
-                </div>
+                <div class="w-16 h-16 bg-blue-50 text-blue-600 rounded-full flex items-center justify-center mx-auto mb-4"><i data-lucide="lock" class="w-8 h-8"></i></div>
                 <h3 class="text-2xl font-bold text-gray-900">Acesso Restrito</h3>
-                <p class="text-sm text-gray-500">Apenas para o Professor Luiz Henrique.</p>
             </div>
-            <input type="password" id="admin-password" placeholder="Sua senha secreta" class="w-full border border-gray-300 rounded-xl px-4 py-3 mb-4 focus:ring-2 focus:ring-blue-900 outline-none transition-all">
-            <button onclick="window.verifyPassword()" class="w-full bg-blue-900 hover:bg-blue-950 text-white font-bold py-3 rounded-xl shadow-lg transition-transform active:scale-95">Entrar no Painel</button>
-            <p id="login-error" class="text-red-500 text-sm mt-3 text-center hidden">Senha incorreta. Tente novamente.</p>
+            <input type="password" id="admin-password" placeholder="Senha" class="w-full border border-gray-300 rounded-xl px-4 py-3 mb-4 focus:ring-2 focus:ring-blue-900 outline-none transition-all">
+            <button onclick="window.verifyPassword()" class="w-full bg-blue-900 hover:bg-blue-950 text-white font-bold py-3 rounded-xl transition-transform active:scale-95">Entrar</button>
+            <p id="login-error" class="text-red-500 text-sm mt-3 text-center hidden">Senha incorreta.</p>
         </div>
     </div>
 
-    <!-- Dashboard -->
+    <!-- DASHBOARD -->
     <div id="dashboard-modal" class="hidden fixed inset-0 z-50 flex items-center justify-center modal-overlay px-4">
         <div class="bg-white rounded-2xl shadow-2xl w-full max-w-4xl max-h-[90vh] flex flex-col relative overflow-hidden">
             <div class="p-6 border-b border-gray-100 flex justify-between items-center bg-gray-50/50">
@@ -205,107 +187,87 @@
             </div>
             <div class="p-6 flex-1 overflow-y-auto">
                 <div class="flex flex-col sm:flex-row justify-between items-center gap-4 mb-8">
-                    <h4 class="text-lg font-semibold text-gray-800">Gerenciar Publicações</h4>
-                    <button onclick="window.openEditor()" class="w-full sm:w-auto bg-blue-900 hover:bg-blue-950 text-white px-6 py-2.5 rounded-xl font-bold flex items-center justify-center gap-2 transition-colors">
+                    <h4 class="text-lg font-semibold text-gray-800">Suas Publicações</h4>
+                    <button onclick="window.openEditor()" class="w-full sm:w-auto bg-blue-900 hover:bg-blue-950 text-white px-6 py-2.5 rounded-xl font-bold flex items-center justify-center gap-2">
                         <i data-lucide="plus" class="w-5 h-5"></i> Nova Publicação
                     </button>
                 </div>
-                <div id="admin-posts-list" class="flex flex-col gap-3"></div>
+                <div id="admin-posts-list" class="flex flex-col gap-3">
+                    <p class="text-center text-gray-400 py-10">Carregando publicações...</p>
+                </div>
             </div>
         </div>
     </div>
 
-    <!-- Editor -->
+    <!-- EDITOR -->
     <div id="editor-modal" class="hidden fixed inset-0 z-50 flex items-center justify-center modal-overlay px-4 py-4">
         <div class="bg-white rounded-2xl shadow-2xl w-full max-w-3xl max-h-full flex flex-col relative overflow-hidden">
-            <div class="p-5 border-b border-gray-100 flex justify-between items-center bg-gray-50 flex-shrink-0">
+            <div class="p-5 border-b border-gray-100 flex justify-between items-center bg-gray-50">
                 <h3 id="editor-title" class="text-xl font-bold text-gray-900">Nova Publicação</h3>
                 <button onclick="window.closeEditor()" class="text-gray-400 hover:text-gray-600"><i data-lucide="x" class="w-6 h-6"></i></button>
             </div>
-            
             <div class="p-6 flex-1 overflow-y-auto flex flex-col gap-6">
                 <input type="hidden" id="edit-post-id">
-                
                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <div class="bg-gray-50 p-4 rounded-xl border border-gray-200">
-                        <p class="text-sm font-bold text-gray-900 mb-3 flex items-center gap-1"><i data-lucide="layers" class="w-4 h-4 text-blue-600"></i> Formato</p>
+                        <p class="text-sm font-bold text-gray-900 mb-3">Formato</p>
                         <div class="flex flex-col gap-3">
-                            <label class="flex items-center gap-2 cursor-pointer">
-                                <input type="radio" name="post_type" value="post" id="type-post" class="text-blue-900 w-4 h-4" checked>
-                                <span class="text-sm text-gray-700">Feed (Post Expansível)</span>
+                            <label class="flex items-center gap-2 cursor-pointer text-sm">
+                                <input type="radio" name="post_type" value="post" id="type-post" class="text-blue-900 w-4 h-4" checked> Feed (Reflexão Curta)
                             </label>
-                            <label class="flex items-center gap-2 cursor-pointer">
-                                <input type="radio" name="post_type" value="page" id="type-page" class="text-blue-900 w-4 h-4">
-                                <span class="text-sm text-gray-700">Artigo (Página Inteira)</span>
+                            <label class="flex items-center gap-2 cursor-pointer text-sm">
+                                <input type="radio" name="post_type" value="page" id="type-page" class="text-blue-900 w-4 h-4"> Artigo (Página de Fé)
                             </label>
                         </div>
                     </div>
-
                     <div class="bg-gray-50 p-4 rounded-xl border border-gray-200">
-                        <p class="text-sm font-bold text-gray-900 mb-3 flex items-center gap-1"><i data-lucide="eye" class="w-4 h-4 text-blue-600"></i> Status</p>
+                        <p class="text-sm font-bold text-gray-900 mb-3">Status</p>
                         <div class="flex flex-col gap-3">
-                            <label class="flex items-center gap-2 cursor-pointer">
-                                <input type="radio" name="post_status" value="published" id="status-published" class="text-blue-900 w-4 h-4" checked>
-                                <span class="text-sm text-gray-700">Publicado (Visível no site)</span>
+                            <label class="flex items-center gap-2 cursor-pointer text-sm">
+                                <input type="radio" name="post_status" value="published" id="status-published" class="text-blue-900 w-4 h-4" checked> Publicado
                             </label>
-                            <label class="flex items-center gap-2 cursor-pointer">
-                                <input type="radio" name="post_status" value="draft" id="status-draft" class="text-blue-900 w-4 h-4">
-                                <span class="text-sm text-gray-700">Rascunho (Oculto)</span>
+                            <label class="flex items-center gap-2 cursor-pointer text-sm">
+                                <input type="radio" name="post_status" value="draft" id="status-draft" class="text-blue-900 w-4 h-4"> Rascunho
                             </label>
                         </div>
                     </div>
                 </div>
-
                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <div>
                         <label class="block text-sm font-bold text-gray-700 mb-1">Título</label>
-                        <input type="text" id="post-title" class="w-full border border-gray-300 rounded-xl px-4 py-2.5 focus:ring-2 focus:ring-blue-900 outline-none shadow-sm">
+                        <input type="text" id="post-title" class="w-full border border-gray-300 rounded-xl px-4 py-2.5 focus:ring-2 focus:ring-blue-900 outline-none">
                     </div>
                     <div>
                         <label class="block text-sm font-bold text-gray-700 mb-1">Categoria</label>
-                        <input type="text" id="post-category" class="w-full border border-gray-300 rounded-xl px-4 py-2.5 focus:ring-2 focus:ring-blue-900 outline-none shadow-sm" placeholder="Ex: Direito Administrativo">
+                        <input type="text" id="post-category" class="w-full border border-gray-300 rounded-xl px-4 py-2.5 focus:ring-2 focus:ring-blue-900 outline-none" placeholder="Ex: Mensagens de Fé">
                     </div>
                 </div>
-                
                 <div>
                     <label class="block text-sm font-bold text-gray-700 mb-1">Subtítulo</label>
-                    <input type="text" id="post-subtitle" class="w-full border border-gray-300 rounded-xl px-4 py-2.5 focus:ring-2 focus:ring-blue-900 outline-none shadow-sm">
+                    <input type="text" id="post-subtitle" class="w-full border border-gray-300 rounded-xl px-4 py-2.5 focus:ring-2 focus:ring-blue-900 outline-none">
                 </div>
-
                 <div class="bg-blue-50/30 p-5 rounded-xl border border-blue-100 flex flex-col gap-4">
-                    <p class="text-xs font-bold text-blue-900 uppercase tracking-widest flex items-center gap-2"><i data-lucide="clapperboard" class="w-4 h-4"></i> Mídia de Capa (16:9)</p>
-                    <input type="text" id="post-image" class="w-full border border-gray-300 rounded-xl px-4 py-2.5 text-sm focus:ring-2 focus:ring-blue-900 outline-none bg-white" placeholder="Link da Imagem (Drive ou Site)">
-                    <div class="relative flex justify-center"><span class="px-3 bg-blue-50 text-[10px] text-blue-800 font-black rounded-full border border-blue-100">OU</span></div>
-                    <input type="text" id="post-youtube" class="w-full border border-gray-300 rounded-xl px-4 py-2.5 text-sm focus:ring-2 focus:ring-blue-900 outline-none bg-white" placeholder="Link do Vídeo (YouTube)">
+                    <p class="text-xs font-bold text-blue-900 uppercase">Imagem ou Vídeo de Capa</p>
+                    <input type="text" id="post-image" class="w-full border border-gray-300 rounded-xl px-4 py-2.5 text-sm focus:ring-2 focus:ring-blue-900 outline-none" placeholder="Link da Imagem (Google Drive)">
+                    <input type="text" id="post-youtube" class="w-full border border-gray-300 rounded-xl px-4 py-2.5 text-sm focus:ring-2 focus:ring-blue-900 outline-none" placeholder="Link do Vídeo (YouTube)">
                 </div>
-
                 <div>
-                    <label class="block text-sm font-bold text-gray-700 mb-1">Descrição Curta (Resumo do Card)</label>
-                    <textarea id="post-description" rows="2" class="w-full border border-gray-300 rounded-xl px-4 py-2.5 focus:ring-2 focus:ring-blue-900 outline-none shadow-sm"></textarea>
-                </div>
-
-                <div>
-                    <label class="block text-sm font-bold text-gray-700 mb-1">Conteúdo do Artigo</label>
-                    <div class="border border-gray-300 border-b-0 rounded-t-xl bg-gray-50 px-3 py-2.5 flex flex-wrap gap-2 items-center">
-                        <button type="button" onclick="window.execEditor('bold')" class="p-2 hover:bg-gray-200 rounded-lg" title="Negrito"><i data-lucide="bold" class="w-4 h-4"></i></button>
-                        <button type="button" onclick="window.execEditor('italic')" class="p-2 hover:bg-gray-200 rounded-lg" title="Itálico"><i data-lucide="italic" class="w-4 h-4"></i></button>
-                        <button type="button" onclick="window.execEditor('underline')" class="p-2 hover:bg-gray-200 rounded-lg" title="Sublinhado"><i data-lucide="underline" class="w-4 h-4"></i></button>
-                        <div class="w-px h-6 bg-gray-300 mx-1"></div>
-                        <button type="button" onclick="window.execEditor('formatBlock', '<H2>')" class="px-2.5 py-1 font-black text-sm hover:bg-gray-200 rounded-lg">H1</button>
-                        <button type="button" onclick="window.execEditor('formatBlock', '<H3>')" class="px-2.5 py-1 font-black text-sm hover:bg-gray-200 rounded-lg opacity-70">H2</button>
-                        <div class="w-px h-6 bg-gray-300 mx-1"></div>
-                        <button type="button" onclick="window.insertEditorImage()" class="p-2 text-blue-600 hover:bg-blue-100 rounded-lg"><i data-lucide="image" class="w-4 h-4"></i></button>
-                        <button type="button" onclick="window.insertEditorVideo()" class="p-2 text-red-600 hover:bg-red-50 rounded-lg"><i data-lucide="youtube" class="w-4 h-4"></i></button>
+                    <label class="block text-sm font-bold text-gray-700 mb-1">Conteúdo da Mensagem</label>
+                    <div class="border border-gray-300 border-b-0 rounded-t-xl bg-gray-50 px-3 py-2 flex flex-wrap gap-2 items-center">
+                        <button type="button" onclick="window.execEditor('bold')" class="p-2 hover:bg-gray-200 rounded"><i data-lucide="bold" class="w-4 h-4"></i></button>
+                        <button type="button" onclick="window.execEditor('italic')" class="p-2 hover:bg-gray-200 rounded"><i data-lucide="italic" class="w-4 h-4"></i></button>
+                        <button type="button" onclick="window.execEditor('formatBlock', '<H2>')" class="px-2 font-bold text-sm">H1</button>
+                        <button type="button" onclick="window.insertEditorImage()" class="p-2 text-blue-600"><i data-lucide="image" class="w-4 h-4"></i></button>
+                        <button type="button" onclick="window.insertEditorVideo()" class="p-2 text-red-600"><i data-lucide="youtube" class="w-4 h-4"></i></button>
                     </div>
-                    <div id="post-fulltext" contenteditable="true" data-placeholder="Escreva seu conhecimento aqui..." class="w-full border border-gray-300 rounded-b-xl px-5 py-5 min-h-[400px] bg-white overflow-y-auto prose prose-blue max-w-none shadow-inner outline-none focus:ring-2 focus:ring-blue-900/30"></div>
+                    <div id="post-fulltext" contenteditable="true" data-placeholder="Escreva a palavra de Deus aqui..." class="w-full border border-gray-300 rounded-b-xl px-5 py-5 min-h-[300px] bg-white overflow-y-auto prose prose-blue max-w-none shadow-inner outline-none"></div>
                 </div>
             </div>
-            
-            <div class="p-6 border-t border-gray-100 flex justify-between items-center bg-gray-50/50">
-                <button id="btn-delete-editor" onclick="window.deletePost(document.getElementById('edit-post-id').value, true)" class="hidden px-5 py-2.5 text-red-600 font-bold hover:bg-red-50 rounded-xl transition-colors"><i data-lucide="trash-2" class="w-4 h-4 inline mr-2"></i> Excluir</button>
+            <div class="p-6 border-t border-gray-100 flex justify-between items-center bg-gray-50">
+                <button id="btn-delete-editor" onclick="window.deletePost(document.getElementById('edit-post-id').value, true)" class="hidden px-5 py-2.5 text-red-600 font-bold hover:bg-red-50 rounded-xl"><i data-lucide="trash-2" class="w-4 h-4 inline mr-2"></i> Excluir</button>
                 <div class="flex gap-3 ml-auto">
-                    <button onclick="window.closeEditor()" class="px-6 py-2.5 border border-gray-300 rounded-xl font-medium bg-white hover:bg-gray-50 transition-colors">Cancelar</button>
-                    <button onclick="window.savePost()" id="btn-save-post" class="px-8 py-2.5 bg-blue-900 text-white rounded-xl font-bold shadow-lg transition-transform active:scale-95">Salvar Publicação</button>
+                    <button onclick="window.closeEditor()" class="px-6 py-2.5 border border-gray-300 rounded-xl font-medium">Cancelar</button>
+                    <button onclick="window.savePost()" id="btn-save-post" class="px-8 py-2.5 bg-blue-900 text-white rounded-xl font-bold shadow-lg transition-transform active:scale-95">Salvar Reflexão</button>
                 </div>
             </div>
         </div>
@@ -313,7 +275,7 @@
 
     <!-- Notificações -->
     <div id="toast" class="fixed bottom-6 right-6 bg-green-700 text-white px-8 py-4 rounded-2xl shadow-2xl transform transition-transform duration-300 translate-y-32 opacity-0 z-50 flex items-center gap-3 font-bold border-b-4 border-green-900">
-        <i data-lucide="check-circle" class="w-6 h-6"></i> Link copiado para compartilhar!
+        <i data-lucide="check-circle" class="w-6 h-6"></i> Link copiado com sucesso!
     </div>
 
     <script type="module">
@@ -321,7 +283,6 @@
         import { getAuth, onAuthStateChanged, signInAnonymously, signInWithCustomToken } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
         import { getFirestore, collection, onSnapshot, addDoc, updateDoc, deleteDoc, doc } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
 
-        // Configuração segura e robusta
         const firebaseConfig = {
             apiKey: "AIzaSyCg5aIHRDyOPHDwrP_OFYMn2AE9euWVOyw",
             authDomain: "professorluizhenrique-a9fe9.firebaseapp.com",
@@ -342,7 +303,6 @@
         const db = getFirestore(app);
         const appId = typeof __app_id !== 'undefined' ? __app_id : 'plh-blog-default';
 
-        // Inicialização com Deep Linking
         window.onload = async () => {
             if (typeof __initial_auth_token !== 'undefined' && __initial_auth_token) {
                 await signInWithCustomToken(auth, __initial_auth_token);
@@ -359,23 +319,20 @@
                         blogPosts.sort((a, b) => b.createdAt - a.createdAt);
                         updateCategoriesMenu();
                         renderPostsFeed();
-                        renderAdminList();
+                        renderAdminList(); 
 
-                        // Lógica de Deep Link: Verifica se veio de um compartilhamento
                         const urlParams = new URLSearchParams(window.location.search);
                         const sharedPostId = urlParams.get('post');
                         if (sharedPostId) {
-                            // Limpa a URL sem recarregar a página
                             const newUrl = window.location.protocol + "//" + window.location.host + window.location.pathname;
                             window.history.pushState({path:newUrl},'',newUrl);
                             window.openArticle(sharedPostId);
                         }
-                    });
+                    }, (err) => console.error(err));
                 }
             });
         };
 
-        // Funções de Persistência
         window.savePost = async () => {
             const btn = document.getElementById('btn-save-post');
             const id = document.getElementById('edit-post-id').value;
@@ -385,8 +342,8 @@
             const postData = {
                 type: document.querySelector('input[name="post_type"]:checked').value,
                 status: document.querySelector('input[name="post_status"]:checked').value,
-                category: document.getElementById('post-category').value.trim(),
-                title: document.getElementById('post-title').value || "Sem título",
+                category: document.getElementById('post-category').value.trim() || "Geral",
+                title: document.getElementById('post-title').value || "Mensagem de Fé",
                 subtitle: document.getElementById('post-subtitle').value || "",
                 imageUrl: document.getElementById('post-image').value || "",
                 youtubeUrl: document.getElementById('post-youtube').value || "",
@@ -402,18 +359,42 @@
                     await addDoc(collection(db, 'artifacts', appId, 'public', 'data', 'posts'), postData);
                 }
                 window.closeEditor();
-            } catch (e) { alert("Erro ao salvar: " + e.message); } 
-            finally { btn.disabled = false; btn.textContent = "Salvar Publicação"; }
+            } catch (e) { alert(e.message); } 
+            finally { btn.disabled = false; btn.textContent = "Salvar Reflexão"; }
         };
 
         window.deletePost = async (id, fromEditor = false) => {
-            if (confirm("Você deseja excluir esta publicação definitivamente?")) {
+            if (confirm("Excluir esta reflexão?")) {
                 await deleteDoc(doc(db, 'artifacts', appId, 'public', 'data', 'posts', id));
                 if (fromEditor) window.closeEditor();
             }
         };
 
-        // Funções de UI e Auxiliares
+        window.sharePost = async (id, title, subtitle, event) => {
+            if(event) event.stopPropagation();
+            const safeTitle = (title || "Mensagem de Fé").replace(/["]/g, "");
+            const url = window.location.href.split('?')[0] + '?post=' + id;
+            const inviteText = `🙏 *Palavra de Fé - Prof. Luiz Henrique*\n\n*${safeTitle}*\n${subtitle ? `_${subtitle}_\n` : ""}\nLeia no site:\n${url}`;
+            
+            if (navigator.share) {
+                try {
+                    await navigator.share({ title: safeTitle, text: inviteText, url: url });
+                } catch(e) { window.copyToClipboard(url); }
+            } else { window.copyToClipboard(url); }
+        };
+
+        window.copyToClipboard = (text) => {
+            const textArea = document.createElement("textarea");
+            textArea.value = text;
+            document.body.appendChild(textArea);
+            textArea.select();
+            document.execCommand('copy');
+            document.body.removeChild(textArea);
+            const toast = document.getElementById('toast');
+            toast.classList.remove('translate-y-32', 'opacity-0');
+            setTimeout(() => toast.classList.add('translate-y-32', 'opacity-0'), 3000);
+        };
+
         window.getDriveImageUrl = (url) => {
             if (!url) return "";
             const match = url.match(/\/d\/([a-zA-Z0-9_-]+)/) || url.match(/id=([a-zA-Z0-9_-]+)/);
@@ -426,30 +407,8 @@
             return (match && match[2].length === 11) ? match[2] : null;
         };
 
-        window.sharePost = async (id, title, subtitle, event) => {
-            if(event) event.stopPropagation();
-            const cleanTitle = title.replace(/[^\w\sà-úÀ-Ú]/gi, '');
-            const cleanSub = subtitle.replace(/[^\w\sà-úÀ-Ú]/gi, '');
-            const url = window.location.href.split('?')[0] + '?post=' + id;
-            const inviteText = `📚 *Dica Preparatória - Prof. Luiz Henrique*\n\n*${cleanTitle}*\n_${cleanSub}_\n\nLeia o artigo completo aqui:\n${url}`;
-            
-            if (navigator.share) {
-                try {
-                    await navigator.share({ title: title, text: inviteText, url: url });
-                } catch(e) {}
-            } else {
-                navigator.clipboard.writeText(url).then(() => {
-                    const toast = document.getElementById('toast');
-                    toast.classList.remove('translate-y-32', 'opacity-0');
-                    setTimeout(() => toast.classList.add('translate-y-32', 'opacity-0'), 3000);
-                });
-            }
-        };
-
-        // Gestão de Leitura
         window.setArticleTheme = (theme) => {
             const view = document.getElementById('article-view');
-            // Remove temas antigos sem apagar as classes base do Tailwind
             const themes = ['theme-light', 'theme-polen', 'theme-cafe', 'theme-dark', 'theme-verde', 'theme-azul', 'theme-vermelho'];
             view.classList.remove(...themes);
             view.classList.add('theme-' + theme);
@@ -459,51 +418,50 @@
             const body = document.querySelector('#text-body');
             const sizes = ['font-normal-view', 'font-large-view', 'font-xlarge-view'];
             body.classList.remove(...sizes);
-            
-            if (currentFontSize === 'normal') { currentFontSize = 'large'; }
-            else if (currentFontSize === 'large') { currentFontSize = 'xlarge'; }
-            else { currentFontSize = 'normal'; }
-            
+            currentFontSize = currentFontSize === 'normal' ? 'large' : (currentFontSize === 'large' ? 'xlarge' : 'normal');
             body.classList.add('font-' + currentFontSize + '-view');
         };
 
-        // Renderização
         function renderPostsFeed() {
             const header = document.getElementById('feed-header');
             header.innerHTML = currentCategoryFilter 
-                ? `<div class="flex items-center gap-3"><button onclick="window.clearFilter()" class="p-2 bg-gray-200 hover:bg-gray-300 rounded-full transition-colors"><i data-lucide="arrow-left" class="w-4 h-4"></i></button><h2 class="text-3xl font-black">Pasta: ${currentCategoryFilter}</h2></div>` 
-                : `<h2 class="text-3xl font-black text-gray-900">Novidades</h2><p class="text-gray-500">Acompanhe os estudos e atualizações.</p>`;
+                ? `<div class="flex items-center gap-3"><button onclick="window.clearFilter()" class="p-2 bg-gray-200 rounded-full"><i data-lucide="arrow-left" class="w-4 h-4"></i></button><h2 class="text-3xl font-black">Pasta: ${currentCategoryFilter}</h2></div>` 
+                : `<h2 class="text-3xl font-black text-gray-900">Reflexões</h2><p class="text-gray-500">Palavras de fé e ensinamentos diários.</p>`;
             
             container.innerHTML = '';
             let posts = blogPosts.filter(p => p.status !== 'draft');
             if (currentCategoryFilter) posts = posts.filter(p => p.category === currentCategoryFilter);
 
+            if (posts.length === 0) {
+                container.innerHTML = `<p class="text-center py-20 text-gray-400">Nenhuma palavra compartilhada ainda.</p>`;
+            }
+
             posts.forEach(post => {
                 const article = document.createElement('article');
                 article.className = 'bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden hover:shadow-xl transition-all duration-500 group';
-                
                 const ytId = window.getYoutubeId(post.youtubeUrl);
                 const mediaHtml = ytId 
-                    ? `<div class="aspect-video bg-black relative"><iframe class="w-full h-full pointer-events-none" src="https://www.youtube.com/embed/${ytId}?controls=0&mute=1&autoplay=0" frameborder="0"></iframe><div class="absolute inset-0 z-10"></div></div>` 
-                    : `<div class="aspect-video bg-gray-100 overflow-hidden"><img src="${window.getDriveImageUrl(post.imageUrl)}" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"></div>`;
-                
+                    ? `<div class="aspect-video bg-black relative"><iframe class="w-full h-full pointer-events-none" src="https://www.youtube.com/embed/${ytId}?mute=1"></iframe><div class="absolute inset-0 z-10"></div></div>` 
+                    : `<div class="aspect-video bg-gray-100 overflow-hidden"><img src="${window.getDriveImageUrl(post.imageUrl)}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"></div>`;
                 const clickAction = post.type === 'page' ? `window.openArticle('${post.id}')` : `window.togglePost('${post.id}')`;
+                const safeTitle = (post.title || "").replace(/'/g, "\\'");
+                const safeSubtitle = (post.subtitle || "").replace(/'/g, "\\'");
 
                 article.innerHTML = `
                     ${mediaHtml}
                     <div class="p-6 cursor-pointer" onclick="${clickAction}">
                         <div class="flex gap-2 mb-3">
-                            <span class="bg-blue-900 text-white text-[9px] font-black px-2 py-0.5 rounded-full uppercase tracking-widest">${post.type === 'page' ? 'Artigo' : 'Post'}</span>
-                            ${post.category ? `<span class="bg-gray-100 text-gray-500 text-[9px] font-bold px-2 py-0.5 rounded-full uppercase tracking-tighter border border-gray-200">${post.category}</span>` : ''}
+                            <span class="bg-blue-900 text-white text-[9px] font-black px-2 py-0.5 rounded-full uppercase tracking-widest">${post.type === 'page' ? 'Artigo' : 'Mensagem'}</span>
+                            ${post.category ? `<span class="bg-gray-100 text-gray-500 text-[9px] font-bold px-2 py-0.5 rounded-full uppercase border border-gray-200">${post.category}</span>` : ''}
                         </div>
                         <h3 class="text-2xl font-black mb-2 text-gray-900 leading-tight group-hover:text-blue-900 transition-colors">${post.title}</h3>
-                        <p class="text-gray-500 text-sm line-clamp-2 mb-4">${post.description}</p>
-                        <div class="flex items-center justify-between pt-4 border-t border-gray-50">
-                            <div class="text-blue-900 font-black text-xs uppercase flex items-center gap-1 toggle-indicator-${post.id}">Ler mais <i data-lucide="chevron-right" class="w-3 h-3"></i></div>
-                            <button onclick="window.sharePost('${post.id}', '${post.title.replace(/'/g,"")}', '${post.subtitle.replace(/'/g,"")}', event)" class="p-2 text-gray-400 hover:text-green-600 hover:bg-green-50 rounded-full transition-all"><i data-lucide="share-2" class="w-5 h-5"></i></button>
+                        <p class="text-gray-500 text-sm line-clamp-2">${post.description}</p>
+                        <div class="flex items-center justify-between pt-4 mt-4 border-t border-gray-50">
+                            <div class="text-blue-900 font-black text-xs uppercase toggle-indicator-${post.id}">Ler mais</div>
+                            <button onclick="window.sharePost('${post.id}', '${safeTitle}', '${safeSubtitle}', event)" class="p-2 text-gray-400 hover:text-green-600 transition-all"><i data-lucide="share-2" class="w-5 h-5"></i></button>
                         </div>
                     </div>
-                    ${post.type === 'post' ? `<div id="content-${post.id}" class="faq-content bg-gray-50 border-t"><div class="faq-content-inner p-8 prose prose-blue max-w-none text-gray-700">${post.fullText}</div></div>` : ''}
+                    ${post.type === 'post' ? `<div id="content-${post.id}" class="faq-content bg-gray-50 border-t"><div class="faq-content-inner p-8 prose max-w-none text-gray-700">${post.fullText}</div></div>` : ''}
                 `;
                 container.appendChild(article);
             });
@@ -514,26 +472,23 @@
             const post = blogPosts.find(p => p.id === id);
             if (!post) return;
             document.getElementById('home-view').classList.add('hidden');
-            const articleView = document.getElementById('article-view');
-            articleView.classList.remove('hidden');
+            const view = document.getElementById('article-view');
+            view.classList.remove('hidden');
             window.scrollTo(0, 0);
-
             const ytId = window.getYoutubeId(post.youtubeUrl);
-            const mediaHtml = ytId 
-                ? `<div class="aspect-video rounded-3xl overflow-hidden mb-8 shadow-2xl bg-black"><iframe class="w-full h-full" src="https://www.youtube.com/embed/${ytId}" frameborder="0" allowfullscreen></iframe></div>` 
-                : `<div class="aspect-video rounded-3xl overflow-hidden mb-8 shadow-xl"><img src="${window.getDriveImageUrl(post.imageUrl)}" class="w-full h-full object-cover"></div>`;
+            const mediaHtml = ytId ? `<div class="aspect-video rounded-3xl overflow-hidden mb-8 shadow-2xl bg-black"><iframe class="w-full h-full" src="https://www.youtube.com/embed/${ytId}" frameborder="0" allowfullscreen></iframe></div>` : `<div class="aspect-video rounded-3xl overflow-hidden mb-8 shadow-xl"><img src="${window.getDriveImageUrl(post.imageUrl)}" class="w-full h-full object-cover"></div>`;
+            const safeTitle = (post.title || "").replace(/'/g, "\\'");
+            const safeSubtitle = (post.subtitle || "").replace(/'/g, "\\'");
 
             document.getElementById('article-content').innerHTML = `
                 ${mediaHtml}
                 <div class="px-2">
                     <h1 class="text-4xl sm:text-6xl font-black mb-6 leading-tight tracking-tight">${post.title}</h1>
                     <p class="text-xl sm:text-2xl opacity-80 mb-10 pb-10 border-b border-gray-300/30 font-medium italic">${post.subtitle}</p>
-                    <div id="text-body" class="prose prose-lg max-w-none font-normal-view leading-relaxed">
-                        ${post.fullText}
-                    </div>
+                    <div id="text-body" class="prose prose-lg max-w-none font-normal-view leading-relaxed">${post.fullText}</div>
                     <div class="mt-16 pt-12 border-t border-gray-200/50 flex justify-center">
-                        <button onclick="window.sharePost('${post.id}', '${post.title.replace(/'/g,"")}', '${post.subtitle.replace(/'/g,"")}', event)" class="flex items-center gap-3 bg-green-600 hover:bg-green-700 text-white px-10 py-5 rounded-full font-black shadow-2xl transition-all hover:scale-105 active:scale-95 uppercase tracking-wide">
-                            <i data-lucide="share-2" class="w-6 h-6"></i> Compartilhar no WhatsApp
+                        <button onclick="window.sharePost('${post.id}', '${safeTitle}', '${safeSubtitle}', event)" class="flex items-center gap-3 bg-green-600 hover:bg-green-700 text-white sm:px-10 px-6 sm:py-5 py-3 rounded-full font-black shadow-2xl transition-all hover:scale-105 active:scale-95 uppercase text-sm sm:text-base">
+                            <i data-lucide="share-2" class="w-5 h-5 sm:w-6 sm:h-6"></i> Compartilhar Palavra
                         </button>
                     </div>
                 </div>
@@ -543,96 +498,50 @@
             lucide.createIcons();
         };
 
-        // Editor e Rich Text
-        window.execEditor = (cmd, val = null) => {
-            document.execCommand(cmd, false, val);
-            document.getElementById('post-fulltext').focus();
-        };
-
-        window.insertEditorImage = () => {
-            const url = prompt("Link da imagem:");
-            if (url) {
-                const final = window.getDriveImageUrl(url);
-                window.execEditor('insertHTML', `<img src="${final}" class="w-full rounded-xl my-4" />`);
-            }
-        };
-
-        window.insertEditorVideo = () => {
-            const url = prompt("Link do YouTube:");
-            const id = window.getYoutubeId(url);
-            if (id) {
-                window.execEditor('insertHTML', `<div class="aspect-video w-full rounded-xl overflow-hidden my-4"><iframe class="w-full h-full" src="https://www.youtube.com/embed/${id}" frameborder="0" allowfullscreen></iframe></div>`);
-            }
-        };
-
-        // Outros Controles
-        window.toggleMobileMenu = () => document.getElementById('mobile-menu').classList.toggle('menu-open');
         window.closeArticle = () => {
             document.getElementById('article-view').classList.add('hidden');
             document.getElementById('home-view').classList.remove('hidden');
         };
-        window.togglePost = (id) => {
-            const el = document.getElementById('content-' + id);
-            el.classList.toggle('open');
-            document.querySelector('.toggle-indicator-' + id).innerHTML = el.classList.contains('open') ? `Recolher <i data-lucide="chevron-up" class="w-3 h-3"></i>` : `Ler mais <i data-lucide="chevron-right" class="w-3 h-3"></i>`;
-            lucide.createIcons();
-        };
-        window.filterByCategory = (cat) => { currentCategoryFilter = cat; window.closeArticle(); document.getElementById('mobile-menu').classList.remove('menu-open'); renderPostsFeed(); };
-        window.clearFilter = () => { currentCategoryFilter = null; renderPostsFeed(); };
-        window.toggleCategories = (e) => { e.stopPropagation(); document.getElementById('categories-list').classList.toggle('hidden'); };
-        function updateCategoriesMenu() {
-            const cats = [...new Set(blogPosts.filter(p => p.status === 'published' && p.category).map(p => p.category))];
-            document.getElementById('categories-list').innerHTML = cats.map(c => `<a href="#" onclick="window.filterByCategory('${c}'); return false;" class="hover:text-blue-900 py-1 flex items-center gap-2 font-bold"><i data-lucide="folder-open" class="w-3 h-3"></i> ${c}</a>`).join('') || '<span class="text-xs italic text-gray-400">Sem categorias...</span>';
-            lucide.createIcons();
-        }
 
-        // Admin Auth
-        window.openAdminLogin = () => { document.getElementById('mobile-menu').classList.remove('menu-open'); document.getElementById('login-modal').classList.remove('hidden'); document.getElementById('admin-password').focus(); };
-        window.closeAdminLogin = () => document.getElementById('login-modal').classList.add('hidden');
-        window.verifyPassword = () => {
-            if (document.getElementById('admin-password').value === ADMIN_PASSWORD) {
-                window.closeAdminLogin(); document.getElementById('dashboard-modal').classList.remove('hidden');
-            } else { document.getElementById('login-error').classList.remove('hidden'); }
-        };
-        window.closeDashboard = () => document.getElementById('dashboard-modal').classList.add('hidden');
-        window.openEditor = () => {
-            document.getElementById('edit-post-id').value = '';
-            ['title', 'subtitle', 'image', 'youtube', 'description', 'category'].forEach(f => document.getElementById('post-'+f).value = '');
-            document.getElementById('post-fulltext').innerHTML = '';
-            document.getElementById('editor-modal').classList.remove('hidden');
-            document.getElementById('btn-delete-editor').classList.add('hidden');
-        };
-        window.editPost = (id) => {
-            const p = blogPosts.find(x => x.id === id);
-            document.getElementById('edit-post-id').value = p.id;
-            document.getElementById('post-title').value = p.title;
-            document.getElementById('post-subtitle').value = p.subtitle;
-            document.getElementById('post-category').value = p.category || '';
-            document.getElementById('post-image').value = p.imageUrl || '';
-            document.getElementById('post-youtube').value = p.youtubeUrl || '';
-            document.getElementById('post-description').value = p.description;
-            document.getElementById('post-fulltext').innerHTML = p.fullText;
-            document.getElementById('editor-modal').classList.remove('hidden');
-            document.getElementById('btn-delete-editor').classList.remove('hidden');
-        };
-        window.closeEditor = () => { document.getElementById('editor-modal').classList.add('hidden'); };
-
-        function renderAdminList() {
+        window.renderAdminList = () => {
             const list = document.getElementById('admin-posts-list');
+            if (!list) return;
+            if (blogPosts.length === 0) {
+                list.innerHTML = `<p class="text-center py-10 text-gray-400">Nenhuma publicação encontrada.</p>`;
+                return;
+            }
             list.innerHTML = blogPosts.map(p => `
-                <div class="flex justify-between items-center p-4 border rounded-2xl bg-white hover:border-blue-200 transition-colors shadow-sm">
+                <div class="flex justify-between items-center p-4 border rounded-2xl bg-white shadow-sm">
                     <div class="truncate mr-4 flex items-center gap-3">
                         <span class="text-[10px] font-black px-2 py-0.5 rounded-full ${p.status === 'draft' ? 'bg-yellow-100 text-yellow-800' : 'bg-green-100 text-green-800'}">${p.status.toUpperCase()}</span>
-                        <span class="font-black text-gray-800">${p.title}</span>
+                        <span class="font-black text-gray-800 truncate">${p.title}</span>
                     </div>
                     <div class="flex gap-2 shrink-0">
-                        <button onclick="window.editPost('${p.id}')" class="p-2.5 bg-blue-50 text-blue-900 rounded-xl hover:bg-blue-100 transition-colors"><i data-lucide="edit-3" class="w-5 h-5"></i></button>
-                        <button onclick="window.deletePost('${p.id}')" class="p-2.5 bg-red-50 text-red-600 rounded-xl hover:bg-red-100 transition-colors"><i data-lucide="trash-2" class="w-5 h-5"></i></button>
+                        <button onclick="window.editPost('${p.id}')" class="p-2.5 bg-blue-50 text-blue-900 rounded-xl"><i data-lucide="edit-3" class="w-5 h-5"></i></button>
+                        <button onclick="window.deletePost('${p.id}')" class="p-2.5 bg-red-50 text-red-600 rounded-xl"><i data-lucide="trash-2" class="w-5 h-5"></i></button>
                     </div>
                 </div>
             `).join('');
             lucide.createIcons();
-        }
+        };
+
+        window.execEditor = (cmd, val = null) => { document.execCommand(cmd, false, val); document.getElementById('post-fulltext').focus(); };
+        window.insertEditorImage = () => { const url = prompt("Link da imagem:"); if (url) window.execEditor('insertHTML', `<img src="${window.getDriveImageUrl(url)}" class="w-full rounded-xl my-4" />`); };
+        window.insertEditorVideo = () => { const url = prompt("Link do YouTube:"); const id = window.getYoutubeId(url); if (id) window.execEditor('insertHTML', `<div class="aspect-video w-full rounded-xl overflow-hidden my-4"><iframe class="w-full h-full" src="https://www.youtube.com/embed/${id}" frameborder="0" allowfullscreen></iframe></div>`); };
+        window.toggleMobileMenu = () => document.getElementById('mobile-menu').classList.toggle('menu-open');
+        window.togglePost = (id) => { const el = document.getElementById('content-' + id); el.classList.toggle('open'); document.querySelector('.toggle-indicator-' + id).textContent = el.classList.contains('open') ? "Recolher" : "Ler mais"; };
+        window.filterByCategory = (cat) => { currentCategoryFilter = cat; window.closeArticle(); document.getElementById('mobile-menu').classList.remove('menu-open'); renderPostsFeed(); };
+        window.clearFilter = () => { currentCategoryFilter = null; renderPostsFeed(); };
+        window.toggleCategories = (e) => { e.stopPropagation(); document.getElementById('categories-list').classList.toggle('hidden'); };
+        function updateCategoriesMenu() { const cats = [...new Set(blogPosts.filter(p => p.status === 'published' && p.category).map(p => p.category))]; document.getElementById('categories-list').innerHTML = cats.map(c => `<a href="#" onclick="window.filterByCategory('${c}'); return false;" class="hover:text-blue-900 py-1 flex items-center gap-2 font-bold"><i data-lucide="folder-open" class="w-3 h-3"></i> ${c}</a>`).join('') || '<span class="text-xs italic text-gray-400">Sem categorias...</span>'; lucide.createIcons(); }
+
+        window.openAdminLogin = () => { document.getElementById('mobile-menu').classList.remove('menu-open'); document.getElementById('login-modal').classList.remove('hidden'); };
+        window.closeAdminLogin = () => document.getElementById('login-modal').classList.add('hidden');
+        window.verifyPassword = () => { if (document.getElementById('admin-password').value === ADMIN_PASSWORD) { window.closeAdminLogin(); document.getElementById('dashboard-modal').classList.remove('hidden'); window.renderAdminList(); } else { document.getElementById('login-error').classList.remove('hidden'); } };
+        window.closeDashboard = () => document.getElementById('dashboard-modal').classList.add('hidden');
+        window.openEditor = () => { document.getElementById('edit-post-id').value = ''; ['title', 'subtitle', 'image', 'youtube', 'description', 'category'].forEach(f => document.getElementById('post-'+f).value = ''); document.getElementById('post-fulltext').innerHTML = ''; document.getElementById('editor-modal').classList.remove('hidden'); document.getElementById('btn-delete-editor').classList.add('hidden'); };
+        window.editPost = (id) => { const p = blogPosts.find(x => x.id === id); document.getElementById('edit-post-id').value = p.id; document.getElementById('post-title').value = p.title; document.getElementById('post-subtitle').value = p.subtitle; document.getElementById('post-category').value = p.category || ''; document.getElementById('post-image').value = p.imageUrl || ''; document.getElementById('post-youtube').value = p.youtubeUrl || ''; document.getElementById('post-description').value = p.description; document.getElementById('post-fulltext').innerHTML = p.fullText; document.getElementById('editor-modal').classList.remove('hidden'); document.getElementById('btn-delete-editor').classList.remove('hidden'); };
+        window.closeEditor = () => document.getElementById('editor-modal').classList.add('hidden');
 
         lucide.createIcons();
     </script>

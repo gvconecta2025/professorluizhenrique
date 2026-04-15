@@ -10,8 +10,8 @@
     <title>Professor Luiz Henrique</title>
     
     <!-- Metadados para Redes Sociais -->
-    <meta property="og:title" content="Professor Luiz Henrique - Mensagens de Fé">
-    <meta property="og:description" content="Acesse palavras de fé, artigos religiosos e reflexões diárias.">
+    <meta property="og:title" content="Professor Luiz Henrique - Reflexões de Fé">
+    <meta property="og:description" content="Estudos e aprendizados sobre a Fé. Acesse palavras e reflexões diárias.">
     <meta property="og:image" content="https://lh3.googleusercontent.com/d/1mMr4QBxQtAPXYNg1aGRZ1a2Jib-PbJIx">
     <meta property="og:type" content="website">
     <meta name="twitter:card" content="summary_large_image">
@@ -78,6 +78,18 @@
         .font-normal-view { font-size: 1.125rem; line-height: 1.75rem; }
         .font-large-view { font-size: 1.35rem; line-height: 2.1rem; }
         .font-xlarge-view { font-size: 1.6rem; line-height: 2.4rem; }
+
+        /* Botão Flutuante */
+        .floating-btn {
+            position: fixed;
+            bottom: 24px;
+            right: 24px;
+            z-index: 40;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+        .floating-btn:hover {
+            transform: scale(1.05);
+        }
     </style>
 </head>
 <body class="bg-gray-100 text-gray-800 font-sans antialiased min-h-screen flex flex-col">
@@ -123,11 +135,12 @@
     <!-- FEED -->
     <main id="home-view" class="flex-grow max-w-3xl w-full mx-auto px-4 py-8 z-10 fade-enter">
         <div class="mb-8 text-center sm:text-left" id="feed-header">
-            <h2 class="text-3xl font-black text-gray-900 mb-2">Reflexões</h2>
-            <p class="text-gray-500">Palavras de fé e ensinamentos diários.</p>
+            <h2 class="text-3xl font-black text-gray-900 mb-1">Reflexões</h2>
+            <p class="text-gray-500 font-medium">Estudos e aprendizados sobre a Fé.</p>
         </div>
 
         <div id="feed-container" class="flex flex-col gap-6">
+            <!-- Skeleton Loader -->
             <div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden animate-pulse">
                 <div class="aspect-video bg-gray-200 w-full"></div>
                 <div class="p-6">
@@ -163,6 +176,11 @@
             <article id="article-content" class="pb-16"></article>
         </div>
     </main>
+
+    <!-- Botão Flutuante -->
+    <a href="https://chat.whatsapp.com/DgwfvBpeVZIIzHZLgiIlCk" target="_blank" class="floating-btn bg-green-600 text-white px-5 py-3 rounded-full shadow-2xl flex items-center gap-2 font-bold text-sm sm:text-base border-b-4 border-green-800 active:translate-y-1 active:border-b-0">
+        <i data-lucide="bell" class="w-5 h-5"></i> Seja Notificado
+    </a>
 
     <!-- MODAL LOGIN -->
     <div id="login-modal" class="hidden fixed inset-0 z-50 flex items-center justify-center modal-overlay px-4">
@@ -247,8 +265,9 @@
                     <input type="text" id="post-subtitle" class="w-full border border-gray-300 rounded-xl px-4 py-2.5 focus:ring-2 focus:ring-blue-900 outline-none">
                 </div>
                 <div class="bg-blue-50/30 p-5 rounded-xl border border-blue-100 flex flex-col gap-4">
-                    <p class="text-xs font-bold text-blue-900 uppercase">Imagem ou Vídeo de Capa</p>
+                    <p class="text-xs font-bold text-blue-900 uppercase tracking-widest flex items-center gap-2"><i data-lucide="image" class="w-4 h-4"></i> Mídia de Capa (16:9)</p>
                     <input type="text" id="post-image" class="w-full border border-gray-300 rounded-xl px-4 py-2.5 text-sm focus:ring-2 focus:ring-blue-900 outline-none" placeholder="Link da Imagem (Google Drive)">
+                    <div class="relative flex justify-center"><span class="px-2 bg-blue-50 text-[10px] text-blue-800 font-bold border rounded-full">OU</span></div>
                     <input type="text" id="post-youtube" class="w-full border border-gray-300 rounded-xl px-4 py-2.5 text-sm focus:ring-2 focus:ring-blue-900 outline-none" placeholder="Link do Vídeo (YouTube)">
                 </div>
                 <div>
@@ -372,13 +391,19 @@
 
         window.sharePost = async (id, title, subtitle, event) => {
             if(event) event.stopPropagation();
-            const safeTitle = (title || "Mensagem de Fé").replace(/["]/g, "");
+            const safeTitle = (title || "Reflexão de Fé").replace(/["]/g, "");
             const url = window.location.href.split('?')[0] + '?post=' + id;
-            const inviteText = `🙏 *Palavra de Fé - Prof. Luiz Henrique*\n\n*${safeTitle}*\n${subtitle ? `_${subtitle}_\n` : ""}\nLeia no site:\n${url}`;
+            
+            // Texto formatado para convite
+            const inviteText = `🙏 *Reflexão de Fé - Prof. Luiz Henrique*\n\n*${safeTitle}*\n${subtitle ? `_${subtitle}_\n` : ""}\nLeia o conteúdo completo em nosso site:\n${url}`;
             
             if (navigator.share) {
                 try {
-                    await navigator.share({ title: safeTitle, text: inviteText, url: url });
+                    await navigator.share({ 
+                        title: safeTitle, 
+                        text: inviteText, 
+                        url: url 
+                    });
                 } catch(e) { window.copyToClipboard(url); }
             } else { window.copyToClipboard(url); }
         };
@@ -424,41 +449,49 @@
 
         function renderPostsFeed() {
             const header = document.getElementById('feed-header');
-            header.innerHTML = currentCategoryFilter 
-                ? `<div class="flex items-center gap-3"><button onclick="window.clearFilter()" class="p-2 bg-gray-200 rounded-full"><i data-lucide="arrow-left" class="w-4 h-4"></i></button><h2 class="text-3xl font-black">Pasta: ${currentCategoryFilter}</h2></div>` 
-                : `<h2 class="text-3xl font-black text-gray-900">Reflexões</h2><p class="text-gray-500">Palavras de fé e ensinamentos diários.</p>`;
+            if (currentCategoryFilter) {
+                header.innerHTML = `<div class="flex items-center gap-3"><button onclick="window.clearFilter()" class="p-2 bg-gray-200 rounded-full"><i data-lucide="arrow-left" class="w-4 h-4 text-gray-700"></i></button><h2 class="text-3xl font-black">Pasta: ${currentCategoryFilter}</h2></div>`;
+            } else {
+                header.innerHTML = `<h2 class="text-3xl font-black text-gray-900 mb-1">Reflexões</h2><p class="text-gray-500 font-medium">Estudos e aprendizados sobre a Fé.</p>`;
+            }
             
             container.innerHTML = '';
             let posts = blogPosts.filter(p => p.status !== 'draft');
             if (currentCategoryFilter) posts = posts.filter(p => p.category === currentCategoryFilter);
 
             if (posts.length === 0) {
-                container.innerHTML = `<p class="text-center py-20 text-gray-400">Nenhuma palavra compartilhada ainda.</p>`;
+                container.innerHTML = `<p class="text-center py-20 text-gray-400">Em breve compartilharemos uma nova palavra aqui.</p>`;
+                lucide.createIcons();
+                return;
             }
 
             posts.forEach(post => {
                 const article = document.createElement('article');
-                article.className = 'bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden hover:shadow-xl transition-all duration-500 group';
+                article.className = 'bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden hover:shadow-xl transition-all duration-500 group cursor-pointer';
+                
                 const ytId = window.getYoutubeId(post.youtubeUrl);
                 const mediaHtml = ytId 
                     ? `<div class="aspect-video bg-black relative"><iframe class="w-full h-full pointer-events-none" src="https://www.youtube.com/embed/${ytId}?mute=1"></iframe><div class="absolute inset-0 z-10"></div></div>` 
                     : `<div class="aspect-video bg-gray-100 overflow-hidden"><img src="${window.getDriveImageUrl(post.imageUrl)}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"></div>`;
+                
                 const clickAction = post.type === 'page' ? `window.openArticle('${post.id}')` : `window.togglePost('${post.id}')`;
-                const safeTitle = (post.title || "").replace(/'/g, "\\'");
-                const safeSubtitle = (post.subtitle || "").replace(/'/g, "\\'");
+                const safeTitleForParam = (post.title || "").replace(/'/g, "\\'");
+                const safeSubtitleForParam = (post.subtitle || "").replace(/'/g, "\\'");
 
                 article.innerHTML = `
-                    ${mediaHtml}
-                    <div class="p-6 cursor-pointer" onclick="${clickAction}">
-                        <div class="flex gap-2 mb-3">
-                            <span class="bg-blue-900 text-white text-[9px] font-black px-2 py-0.5 rounded-full uppercase tracking-widest">${post.type === 'page' ? 'Artigo' : 'Mensagem'}</span>
-                            ${post.category ? `<span class="bg-gray-100 text-gray-500 text-[9px] font-bold px-2 py-0.5 rounded-full uppercase border border-gray-200">${post.category}</span>` : ''}
-                        </div>
-                        <h3 class="text-2xl font-black mb-2 text-gray-900 leading-tight group-hover:text-blue-900 transition-colors">${post.title}</h3>
-                        <p class="text-gray-500 text-sm line-clamp-2">${post.description}</p>
-                        <div class="flex items-center justify-between pt-4 mt-4 border-t border-gray-50">
-                            <div class="text-blue-900 font-black text-xs uppercase toggle-indicator-${post.id}">Ler mais</div>
-                            <button onclick="window.sharePost('${post.id}', '${safeTitle}', '${safeSubtitle}', event)" class="p-2 text-gray-400 hover:text-green-600 transition-all"><i data-lucide="share-2" class="w-5 h-5"></i></button>
+                    <div onclick="${clickAction}">
+                        ${mediaHtml}
+                        <div class="p-6">
+                            <div class="flex gap-2 mb-3">
+                                <span class="bg-blue-900 text-white text-[9px] font-black px-2 py-0.5 rounded-full uppercase tracking-widest">${post.type === 'page' ? 'Artigo' : 'Mensagem'}</span>
+                                ${post.category ? `<span class="bg-gray-100 text-gray-500 text-[9px] font-bold px-2 py-0.5 rounded-full uppercase border border-gray-200">${post.category}</span>` : ''}
+                            </div>
+                            <h3 class="text-2xl font-black mb-2 text-gray-900 leading-tight group-hover:text-blue-900 transition-colors">${post.title}</h3>
+                            <p class="text-gray-500 text-sm line-clamp-2">${post.description}</p>
+                            <div class="flex items-center justify-between pt-4 mt-4 border-t border-gray-50">
+                                <div class="text-blue-900 font-black text-xs uppercase flex items-center gap-1 toggle-indicator-${post.id}">Ler mais <i data-lucide="chevron-right" class="w-3 h-3"></i></div>
+                                <button onclick="window.sharePost('${post.id}', '${safeTitleForParam}', '${safeSubtitleForParam}', event)" class="p-2 text-gray-400 hover:text-green-600 transition-all"><i data-lucide="share-2" class="w-5 h-5"></i></button>
+                            </div>
                         </div>
                     </div>
                     ${post.type === 'post' ? `<div id="content-${post.id}" class="faq-content bg-gray-50 border-t"><div class="faq-content-inner p-8 prose max-w-none text-gray-700">${post.fullText}</div></div>` : ''}
@@ -477,8 +510,9 @@
             window.scrollTo(0, 0);
             const ytId = window.getYoutubeId(post.youtubeUrl);
             const mediaHtml = ytId ? `<div class="aspect-video rounded-3xl overflow-hidden mb-8 shadow-2xl bg-black"><iframe class="w-full h-full" src="https://www.youtube.com/embed/${ytId}" frameborder="0" allowfullscreen></iframe></div>` : `<div class="aspect-video rounded-3xl overflow-hidden mb-8 shadow-xl"><img src="${window.getDriveImageUrl(post.imageUrl)}" class="w-full h-full object-cover"></div>`;
-            const safeTitle = (post.title || "").replace(/'/g, "\\'");
-            const safeSubtitle = (post.subtitle || "").replace(/'/g, "\\'");
+            
+            const safeTitleForParam = (post.title || "").replace(/'/g, "\\'");
+            const safeSubtitleForParam = (post.subtitle || "").replace(/'/g, "\\'");
 
             document.getElementById('article-content').innerHTML = `
                 ${mediaHtml}
@@ -487,7 +521,7 @@
                     <p class="text-xl sm:text-2xl opacity-80 mb-10 pb-10 border-b border-gray-300/30 font-medium italic">${post.subtitle}</p>
                     <div id="text-body" class="prose prose-lg max-w-none font-normal-view leading-relaxed">${post.fullText}</div>
                     <div class="mt-16 pt-12 border-t border-gray-200/50 flex justify-center">
-                        <button onclick="window.sharePost('${post.id}', '${safeTitle}', '${safeSubtitle}', event)" class="flex items-center gap-3 bg-green-600 hover:bg-green-700 text-white sm:px-10 px-6 sm:py-5 py-3 rounded-full font-black shadow-2xl transition-all hover:scale-105 active:scale-95 uppercase text-sm sm:text-base">
+                        <button onclick="window.sharePost('${post.id}', '${safeTitleForParam}', '${safeSubtitleForParam}', event)" class="flex items-center gap-3 bg-green-600 hover:bg-green-700 text-white sm:px-10 px-6 sm:py-5 py-3 rounded-full font-black shadow-2xl transition-all hover:scale-105 active:scale-95 uppercase text-sm sm:text-base">
                             <i data-lucide="share-2" class="w-5 h-5 sm:w-6 sm:h-6"></i> Compartilhar Palavra
                         </button>
                     </div>
@@ -507,7 +541,7 @@
             const list = document.getElementById('admin-posts-list');
             if (!list) return;
             if (blogPosts.length === 0) {
-                list.innerHTML = `<p class="text-center py-10 text-gray-400">Nenhuma publicação encontrada.</p>`;
+                list.innerHTML = `<p class="text-center py-10 text-gray-400">Nenhuma publicação encontrada no banco.</p>`;
                 return;
             }
             list.innerHTML = blogPosts.map(p => `
@@ -529,7 +563,7 @@
         window.insertEditorImage = () => { const url = prompt("Link da imagem:"); if (url) window.execEditor('insertHTML', `<img src="${window.getDriveImageUrl(url)}" class="w-full rounded-xl my-4" />`); };
         window.insertEditorVideo = () => { const url = prompt("Link do YouTube:"); const id = window.getYoutubeId(url); if (id) window.execEditor('insertHTML', `<div class="aspect-video w-full rounded-xl overflow-hidden my-4"><iframe class="w-full h-full" src="https://www.youtube.com/embed/${id}" frameborder="0" allowfullscreen></iframe></div>`); };
         window.toggleMobileMenu = () => document.getElementById('mobile-menu').classList.toggle('menu-open');
-        window.togglePost = (id) => { const el = document.getElementById('content-' + id); el.classList.toggle('open'); document.querySelector('.toggle-indicator-' + id).textContent = el.classList.contains('open') ? "Recolher" : "Ler mais"; };
+        window.togglePost = (id) => { const el = document.getElementById('content-' + id); el.classList.toggle('open'); document.querySelector('.toggle-indicator-' + id).innerHTML = el.classList.contains('open') ? `Recolher <i data-lucide="chevron-up" class="w-3 h-3"></i>` : `Ler mais <i data-lucide="chevron-right" class="w-3 h-3"></i>`; lucide.createIcons(); };
         window.filterByCategory = (cat) => { currentCategoryFilter = cat; window.closeArticle(); document.getElementById('mobile-menu').classList.remove('menu-open'); renderPostsFeed(); };
         window.clearFilter = () => { currentCategoryFilter = null; renderPostsFeed(); };
         window.toggleCategories = (e) => { e.stopPropagation(); document.getElementById('categories-list').classList.toggle('hidden'); };

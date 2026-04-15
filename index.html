@@ -3,7 +3,18 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Blog Feed Expandível</title>
+    
+    <!-- Item 1: Título da aba do navegador -->
+    <title>Novidades PLH</title>
+    
+    <!-- Item 3: Metadados para Redes Sociais (WhatsApp, etc.) -->
+    <meta property="og:title" content="Fique por dentro - PLH">
+    <meta property="og:description" content="Acesse as últimas notícias, artigos e atualizações do Professor Luiz Henrique.">
+    <!-- Importante: A imagem 'social-preview.png' deve estar na raiz do seu repositório no GitHub -->
+    <meta property="og:image" content="social-preview.png">
+    <meta property="og:type" content="website">
+    <meta name="twitter:card" content="summary_large_image">
+
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- Ícones Lucide -->
     <script src="https://unpkg.com/lucide@latest"></script>
@@ -28,19 +39,46 @@
         .open .chevron-icon {
             transform: rotate(180deg);
         }
+
+        /* Menu Mobile Animado */
+        #mobile-menu {
+            transition: max-height 0.3s ease-in-out;
+            max-height: 0;
+            overflow: hidden;
+        }
+        #mobile-menu.menu-open {
+            max-height: 200px; /* Ajuste conforme a quantidade de itens no menu */
+        }
     </style>
 </head>
-<body class="bg-gray-100 text-gray-800 font-sans antialiased min-h-screen">
+<body class="bg-gray-100 text-gray-800 font-sans antialiased min-h-screen relative pb-16">
 
-    <!-- Cabeçalho do Site -->
-    <header class="bg-white shadow-sm sticky top-0 z-10">
-        <div class="max-w-3xl mx-auto px-4 py-5 flex items-center justify-between">
-            <h1 class="text-2xl font-bold tracking-tight text-indigo-600 flex items-center gap-2">
-                <i data-lucide="book-open" class="w-6 h-6"></i>
-                Meu Blog
+    <!-- Cabeçalho do Site com Menu Hambúrguer -->
+    <header class="bg-white shadow-sm sticky top-0 z-20">
+        <div class="max-w-3xl mx-auto px-4 py-4 flex items-center justify-between">
+            <!-- Item 1: Título do Site Atualizado -->
+            <h1 class="text-xl sm:text-2xl font-bold tracking-tight text-indigo-600 flex items-center gap-2 truncate">
+                <i data-lucide="book-open" class="w-6 h-6 shrink-0"></i>
+                Novidades PLH
             </h1>
-            <nav class="hidden sm:flex gap-4 text-sm font-medium text-gray-500">
+            
+            <!-- Navegação Desktop (Visível apenas em telas médias pra cima) -->
+            <nav class="hidden md:flex gap-4 text-sm font-medium text-gray-500">
                 <a href="#" class="hover:text-indigo-600 transition-colors">Início</a>
+                <a href="#" class="hover:text-indigo-600 transition-colors">Sobre</a>
+                <a href="#" class="hover:text-indigo-600 transition-colors">Contato</a>
+            </nav>
+
+            <!-- Item 4: Botão do Menu Hambúrguer (Visível apenas em telas pequenas) -->
+            <button onclick="toggleMobileMenu()" class="md:hidden p-2 text-gray-600 hover:text-indigo-600 focus:outline-none">
+                <i data-lucide="menu" class="w-6 h-6"></i>
+            </button>
+        </div>
+
+        <!-- Item 4: Container do Menu Mobile (Expansível) -->
+        <div id="mobile-menu" class="bg-white border-t border-gray-100 md:hidden px-4 shadow-sm">
+            <nav class="flex flex-col py-4 gap-4 text-sm font-medium text-gray-600">
+                 <a href="#" class="hover:text-indigo-600 transition-colors">Início</a>
                 <a href="#" class="hover:text-indigo-600 transition-colors">Sobre</a>
                 <a href="#" class="hover:text-indigo-600 transition-colors">Contato</a>
             </nav>
@@ -48,7 +86,7 @@
     </header>
 
     <!-- Área Principal de Postagens -->
-    <main class="max-w-3xl mx-auto px-4 py-8">
+    <main class="max-w-3xl mx-auto px-4 py-8 z-10">
         
         <div class="mb-8 text-center sm:text-left">
             <h2 class="text-3xl font-extrabold text-gray-900 mb-2">Últimas Atualizações</h2>
@@ -62,16 +100,37 @@
 
     </main>
 
-    <!-- Rodapé -->
-    <footer class="bg-white border-t border-gray-200 mt-12 py-8 text-center text-gray-500 text-sm">
-        <p>&copy; 2026 Meu Blog. Feito para o GitHub e Vercel.</p>
+    <!-- Item 6: Botão de Engrenagem (Admin Placeholder) -->
+    <button onclick="adminAlert()" class="fixed bottom-4 left-4 z-30 bg-white p-3 rounded-full shadow-md text-gray-500 hover:text-indigo-600 hover:shadow-lg transition-all duration-300 border border-gray-200" title="Painel do Professor">
+        <i data-lucide="settings" class="w-6 h-6"></i>
+    </button>
+
+    <!-- Item 5: Rodapé Atualizado -->
+    <footer class="bg-white border-t border-gray-200 mt-12 py-8 text-center text-gray-500 text-sm relative z-10">
+        <p>&copy; 2026 PLH Preparatórios.. Feito pelo Professor Luiz Henrique</p>
     </footer>
 
     <script>
         // Inicializa os ícones do Lucide
         lucide.createIcons();
 
-        // Dados simulados para o nosso blog (Você pode facilmente trocar por dados de uma API no futuro)
+        // --- Funções de UI (Menu e Admin) ---
+
+        // Função para alternar o menu mobile
+        function toggleMobileMenu() {
+            const mobileMenu = document.getElementById('mobile-menu');
+            mobileMenu.classList.toggle('menu-open');
+        }
+
+        // Função temporária para o botão de admin (Item 6)
+        function adminAlert() {
+            alert("Olá, Professor Luiz Henrique!\n\nO ícone da engrenagem está no lugar.\n\nPara que o painel de controle (criar, editar, deletar posts) funcione de verdade e salve os dados, precisamos conectar um BANDO DE DADOS (como o Firebase) na próxima etapa. No momento, este site é apenas visual (estático).");
+        }
+
+
+        // --- Dados e Renderização do Blog ---
+
+        // Dados simulados para o nosso blog
         const posts = [
             {
                 id: 1,
@@ -120,6 +179,7 @@
         // Função para renderizar os posts na tela
         function renderPosts() {
             const container = document.getElementById('feed-container');
+            container.innerHTML = ''; // Limpa container antes de renderizar
             
             posts.forEach(post => {
                 // Criação do elemento do card

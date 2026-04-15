@@ -265,7 +265,7 @@
 
                 <div>
                     <label class="block text-sm font-medium text-gray-700 mb-1">Conteúdo Completo</label>
-                    <!-- NOVO: Box de Escrita Rich Text Editável -->
+                    <!-- Box de Escrita Rich Text Editável -->
                     <div id="post-fulltext" contenteditable="true" data-placeholder="Cole aqui o seu texto do Word ou Gemini. Negritos e links serão preservados automaticamente..." class="w-full border border-gray-300 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-900 min-h-[250px] bg-white overflow-y-auto prose prose-blue max-w-none cursor-text shadow-inner"></div>
                 </div>
             </div>
@@ -406,7 +406,7 @@
                     imageUrl: document.getElementById('post-image').value,
                     youtubeUrl: document.getElementById('post-youtube').value,
                     description: document.getElementById('post-description').value,
-                    fullText: document.getElementById('post-fulltext').innerHTML, // NOVO: Captura o conteúdo formatado do Div
+                    fullText: document.getElementById('post-fulltext').innerHTML,
                 };
 
                 try {
@@ -443,9 +443,12 @@
         // ---- FUNÇÕES AUXILIARES ----
 
         function getDriveImageUrl(url) {
-            if (!url) return ""; // NOVO: Retorna vazio se não tiver URL, removendo o tapa-buraco de fotos aleatórias.
+            if (!url) return ""; 
             const match = url.match(/\/d\/([a-zA-Z0-9_-]+)/) || url.match(/id=([a-zA-Z0-9_-]+)/);
-            if (match && match[1]) return `https://drive.google.com/uc?export=view&id=${match[1]}`;
+            if (match && match[1]) {
+                // Rota alternativa do Google para contornar bloqueio de imagens em sites de terceiros
+                return `https://lh3.googleusercontent.com/d/${match[1]}`;
+            }
             return url; 
         }
 
@@ -537,7 +540,6 @@
                 } else if (post.imageUrl) {
                     const finalImageUrl = getDriveImageUrl(post.imageUrl);
                     const clickAction = postType === 'page' ? `window.openArticle('${post.id}')` : `window.togglePost('${post.id}')`;
-                    // NOVO: Adicionado fallback (onerror) visual cinza com texto claro informando que a imagem falhou.
                     mediaHtml = `
                         <div class="h-48 sm:h-64 overflow-hidden relative cursor-pointer group bg-gray-100" onclick="${clickAction}">
                             <img src="${finalImageUrl}" onerror="this.src='https://placehold.co/800x400/f3f4f6/a1a1aa?text=Imagem+Indisponível'" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105">

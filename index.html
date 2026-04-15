@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Blog Feed Expandível</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Ícones Lucide -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        /* Estilos personalizados para a animação suave de expansão estilo FAQ */
+        .faq-content {
+            display: grid;
+            grid-template-rows: 0fr;
+            transition: grid-template-rows 0.4s ease-out;
+        }
+        .faq-content.open {
+            grid-template-rows: 1fr;
+        }
+        .faq-content-inner {
+            overflow: hidden;
+        }
+        
+        /* Rotação do ícone ao expandir */
+        .chevron-icon {
+            transition: transform 0.3s ease;
+        }
+        .open .chevron-icon {
+            transform: rotate(180deg);
+        }
+    </style>
+</head>
+<body class="bg-gray-100 text-gray-800 font-sans antialiased min-h-screen">
+
+    <!-- Cabeçalho do Site -->
+    <header class="bg-white shadow-sm sticky top-0 z-10">
+        <div class="max-w-3xl mx-auto px-4 py-5 flex items-center justify-between">
+            <h1 class="text-2xl font-bold tracking-tight text-indigo-600 flex items-center gap-2">
+                <i data-lucide="book-open" class="w-6 h-6"></i>
+                Meu Blog
+            </h1>
+            <nav class="hidden sm:flex gap-4 text-sm font-medium text-gray-500">
+                <a href="#" class="hover:text-indigo-600 transition-colors">Início</a>
+                <a href="#" class="hover:text-indigo-600 transition-colors">Sobre</a>
+                <a href="#" class="hover:text-indigo-600 transition-colors">Contato</a>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Área Principal de Postagens -->
+    <main class="max-w-3xl mx-auto px-4 py-8">
+        
+        <div class="mb-8 text-center sm:text-left">
+            <h2 class="text-3xl font-extrabold text-gray-900 mb-2">Últimas Atualizações</h2>
+            <p class="text-gray-500">Clique em uma postagem para ler o conteúdo completo.</p>
+        </div>
+
+        <!-- Contêiner do Feed -->
+        <div id="feed-container" class="flex flex-col gap-6">
+            <!-- As postagens serão injetadas aqui via JavaScript -->
+        </div>
+
+    </main>
+
+    <!-- Rodapé -->
+    <footer class="bg-white border-t border-gray-200 mt-12 py-8 text-center text-gray-500 text-sm">
+        <p>&copy; 2026 Meu Blog. Feito para o GitHub e Vercel.</p>
+    </footer>
+
+    <script>
+        // Inicializa os ícones do Lucide
+        lucide.createIcons();
+
+        // Dados simulados para o nosso blog (Você pode facilmente trocar por dados de uma API no futuro)
+        const posts = [
+            {
+                id: 1,
+                title: "A Revolução da Inteligência Artificial em 2026",
+                subtitle: "Como as novas tecnologias estão moldando nosso dia a dia.",
+                imageUrl: "https://images.unsplash.com/photo-1677442136019-21780ecad995?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
+                description: "Neste artigo, exploramos os avanços recentes na área de IA e como modelos locais estão se tornando cada vez mais acessíveis para desenvolvedores e usuários comuns.",
+                fullText: `
+                    <p class="mb-4">O ano de 2026 marca um ponto de inflexão incrível. Não estamos mais limitados apenas a serviços em nuvem para tarefas complexas. As arquiteturas de chips evoluíram a tal ponto que inferências densas acontecem diretamente nos nossos aparelhos.</p>
+                    <p class="mb-4">Além disso, ferramentas open-source democratizaram o desenvolvimento. Equipes pequenas agora conseguem entregar soluções que antes exigiam o orçamento de megacorporações.</p>
+                    <p class="mb-4 text-indigo-600 font-semibold">O futuro é distribuído, privado e incrivelmente rápido.</p>
+                `
+            },
+            {
+                id: 2,
+                title: "Trabalho Remoto e Nômades Digitais",
+                subtitle: "Encontrando o equilíbrio perfeito entre produtividade e viagens.",
+                imageUrl: "https://images.unsplash.com/photo-1522202176988-66273c2fd55f?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
+                description: "Viajar o mundo enquanto se mantém uma carreira sólida deixou de ser um mito. Descubra os melhores destinos e práticas para o trabalho remoto.",
+                fullText: `
+                    <p class="mb-4">A adaptação ao trabalho remoto exigiu disciplina, mas as recompensas são imensas. A chave não é trabalhar menos, mas sim ter autonomia sobre onde e quando a energia criativa flui melhor.</p>
+                    <p class="mb-4">Destinos na América Latina, como o Brasil, e no Sudeste Asiático continuam liderando as escolhas devido ao custo de vida, clima e infraestrutura crescente de internet.</p>
+                    <ul class="list-disc pl-5 mb-4 text-gray-600">
+                        <li>Sempre tenha um plano B de internet (roteador 5G).</li>
+                        <li>Respeite o fuso horário da sua equipe principal.</li>
+                        <li>Crie uma rotina matinal sólida, não importa onde esteja.</li>
+                    </ul>
+                `
+            },
+            {
+                id: 3,
+                title: "Design Minimalista no Frontend",
+                subtitle: "Por que menos continua sendo mais na interface do usuário.",
+                imageUrl: "https://images.unsplash.com/photo-1507238692062-5a04405b6ac8?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
+                description: "Aprenda a focar no conteúdo principal da sua página removendo distrações visuais e melhorando a jornada do seu usuário.",
+                fullText: `
+                    <p class="mb-4">O design minimalista não é sobre ter telas vazias, mas sim sobre eliminar tudo o que não adiciona valor direto à tarefa do usuário. É focar na tipografia legível, contraste adequado e espaços em branco generosos.</p>
+                    <p class="mb-4">Frameworks como o Tailwind CSS ajudam imensamente nesse processo, permitindo que os desenvolvedores apliquem margens precisas e paletas consistentes diretamente no HTML.</p>
+                    <div class="bg-gray-100 p-4 rounded-lg border-l-4 border-indigo-500 italic text-gray-700">
+                        "A perfeição é alcançada não quando não há mais nada para adicionar, mas quando não há mais nada para retirar." - Antoine de Saint-Exupéry
+                    </div>
+                `
+            }
+        ];
+
+        // Função para renderizar os posts na tela
+        function renderPosts() {
+            const container = document.getElementById('feed-container');
+            
+            posts.forEach(post => {
+                // Criação do elemento do card
+                const article = document.createElement('article');
+                article.className = 'bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden hover:shadow-md transition-shadow duration-300';
+                
+                // Estrutura HTML do card
+                article.innerHTML = `
+                    <div class="cursor-pointer group" onclick="togglePost(${post.id})">
+                        <!-- Imagem de Capa -->
+                        <div class="h-48 sm:h-64 overflow-hidden relative">
+                            <img src="${post.imageUrl}" alt="Capa da postagem: ${post.title}" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105">
+                            <div class="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent"></div>
+                        </div>
+                        
+                        <!-- Cabeçalho do Card (Visível sempre) -->
+                        <div class="p-6">
+                            <h3 class="text-2xl font-bold text-gray-900 leading-tight mb-1 group-hover:text-indigo-600 transition-colors">${post.title}</h3>
+                            <p class="text-sm font-medium text-indigo-500 mb-3">${post.subtitle}</p>
+                            <p class="text-gray-600 line-clamp-2">${post.description}</p>
+                            
+                            <!-- Indicador de Expansão -->
+                            <div class="mt-4 flex items-center text-sm font-semibold text-indigo-600 gap-1 toggle-indicator-${post.id}">
+                                <span>Ler artigo completo</span>
+                                <i data-lucide="chevron-down" class="w-4 h-4 chevron-icon"></i>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Conteúdo Expansível (Estilo FAQ) -->
+                    <div id="content-${post.id}" class="faq-content bg-gray-50/50 border-t border-gray-100">
+                        <div class="faq-content-inner">
+                            <div class="p-6 prose prose-indigo max-w-none text-gray-700">
+                                ${post.fullText}
+                            </div>
+                            <div class="px-6 pb-6 pt-2">
+                                <button onclick="togglePost(${post.id})" class="text-sm bg-gray-200 hover:bg-gray-300 text-gray-800 py-2 px-4 rounded-lg font-medium transition-colors">
+                                    Recolher artigo
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                
+                container.appendChild(article);
+            });
+
+            // Atualizar ícones após injetar o HTML dinâmico
+            lucide.createIcons();
+        }
+
+        // Função para alternar a exibição do conteúdo (Expandir/Recolher)
+        function togglePost(id) {
+            const contentDiv = document.getElementById(`content-${id}`);
+            const indicatorDiv = document.querySelector(`.toggle-indicator-${id}`);
+            
+            // Alterna a classe 'open' que controla a expansão do CSS Grid
+            contentDiv.classList.toggle('open');
+            indicatorDiv.classList.toggle('open');
+
+            // Troca o texto baseado no estado atual
+            const spanText = indicatorDiv.querySelector('span');
+            if (contentDiv.classList.contains('open')) {
+                spanText.textContent = "Recolher artigo";
+            } else {
+                spanText.textContent = "Ler artigo completo";
+            }
+        }
+
+        // Inicializa a renderização assim que a página carrega
+        window.onload = renderPosts;
+    </script>
+</body>
+</html>

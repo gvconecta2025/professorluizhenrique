@@ -64,13 +64,11 @@
         .theme-azul { background: linear-gradient(135deg, #1e3a8a 0%, #1e40af 100%); color: #ffffff; }
         .theme-vermelho { background: linear-gradient(135deg, #7f1d1d 0%, #991b1b 100%); color: #ffffff; }
 
-        /* Ajuste do texto interno (prose) para temas escuros/coloridos */
         .theme-verde .prose, .theme-azul .prose, .theme-vermelho .prose, .theme-dark .prose, .theme-cafe .prose {
             color: inherit !important;
         }
         .theme-verde .prose h1, .theme-azul .prose h1, .theme-vermelho .prose h1,
-        .theme-verde .prose h2, .theme-azul .prose h2, .theme-vermelho .prose h2,
-        .theme-verde .prose h3, .theme-azul .prose h3, .theme-vermelho .prose h3 {
+        .theme-verde .prose h2, .theme-azul .prose h2, .theme-vermelho .prose h2 {
             color: #ffffff !important;
         }
 
@@ -209,7 +207,7 @@
                     </button>
                 </div>
                 <div id="admin-posts-list" class="flex flex-col gap-3">
-                    <!-- Lista injetada via JS -->
+                    <p class="text-center text-gray-400 py-10">Carregando publicações...</p>
                 </div>
             </div>
         </div>
@@ -329,19 +327,21 @@
                     const postsRef = collection(db, 'artifacts', appId, 'public', 'data', 'posts');
                     onSnapshot(postsRef, (snapshot) => {
                         blogPosts = [];
-                        snapshot.forEach(doc => { blogPosts.push({ id: doc.id, ...doc.data() }); });
-                        blogPosts.sort((a, b) => b.createdAt - a.createdAt);
+                        snapshot.forEach(doc => { 
+                            blogPosts.push({ id: doc.id, ...doc.data() }); 
+                        });
+                        blogPosts.sort((a, b) => (b.createdAt || 0) - (a.createdAt || 0));
                         
                         updateCategoriesMenu();
                         renderPostsFeed();
                         
-                        // Atualiza a lista do admin se o painel estiver aberto
+                        // Garante que a lista do admin atualize se o modal estiver aberto
                         if (!document.getElementById('dashboard-modal').classList.contains('hidden')) {
                             window.renderAdminList();
                         }
                         
                         checkDeepLink();
-                    }, (err) => console.error(err));
+                    }, (err) => console.error("Firebase Error:", err));
                 }
             });
         };
@@ -350,7 +350,6 @@
             const urlParams = new URLSearchParams(window.location.search);
             const post = urlParams.get('post');
             if (post && blogPosts.some(p => p.id === post)) {
-                // Limpa parâmetros
                 const cleanUrl = window.location.origin + window.location.pathname;
                 window.history.replaceState({}, '', cleanUrl);
                 window.openArticle(post);
@@ -382,13 +381,15 @@
                     await addDoc(collection(db, 'artifacts', appId, 'public', 'data', 'posts'), postData);
                 }
                 window.closeEditor();
-            } catch (e) { alert(e.message); } finally { btn.disabled = false; }
+            } catch (e) { alert("Erro ao salvar: " + e.message); } finally { btn.disabled = false; }
         };
 
         window.deletePost = async (id, fromEditor = false) => {
             if (confirm("Você tem certeza que deseja excluir esta reflexão definitivamente?")) {
-                await deleteDoc(doc(db, 'artifacts', appId, 'public', 'data', 'posts', id));
-                if (fromEditor) window.closeEditor();
+                try {
+                    await deleteDoc(doc(db, 'artifacts', appId, 'public', 'data', 'posts', id));
+                    if (fromEditor) window.closeEditor();
+                } catch(e) { alert("Erro ao deletar: " + e.message); }
             }
         };
 
@@ -397,7 +398,7 @@
             const safeTitle = (title || "Reflexão de Fé").replace(/["]/g, "");
             const url = window.location.origin + window.location.pathname + '?post=' + id;
             
-            // Convite espiritualizado e limpo
+            // Convite espiritualizado em um único bloco de texto para o WhatsApp
             const inviteText = `🙏 *Reflexão de Fé - Prof. Luiz Henrique*\n\n*${safeTitle}*\n${subtitle ? `_${subtitle}_` : ""}\n\nLeia o conteúdo completo aqui:\n${url}`;
             
             if (navigator.share) {
@@ -405,7 +406,6 @@
                     await navigator.share({ 
                         title: safeTitle, 
                         text: inviteText
-                        // Notar que não passamos 'url' separadamente para evitar links duplicados em alguns navegadores
                     });
                 } catch(e) { window.copyToClipboard(url); }
             } else {
@@ -441,6 +441,7 @@
         window.toggleFontSize = () => {
             const body = document.querySelector('#text-body');
             const sizes = ['font-normal-view', 'font-large-view', 'font-xlarge-view'];
+            if(!body) return;
             body.classList.remove(...sizes);
             currentFontSize = currentFontSize === 'normal' ? 'large' : (currentFontSize === 'large' ? 'xlarge' : 'normal');
             body.classList.add('font-' + currentFontSize + '-view');
@@ -459,7 +460,7 @@
             if (currentCategoryFilter) posts = posts.filter(p => p.category === currentCategoryFilter);
 
             if (posts.length === 0) {
-                container.innerHTML = `<p class="text-center py-20 text-gray-400">Aguardando a próxima palavra de fé.</p>`;
+                container.innerHTML = `<p class="text-center py-20 text-gray-400">Em breve, uma nova reflexão de fé será compartilhada aqui.</p>`;
                 lucide.createIcons();
                 return;
             }
@@ -473,12 +474,12 @@
                     ? `<div class="aspect-video bg-black relative"><iframe class="w-full h-full pointer-events-none" src="https://www.youtube.com/embed/${ytId}?mute=1"></iframe><div class="absolute inset-0 z-10"></div></div>` 
                     : `<div class="aspect-video bg-gray-100 overflow-hidden"><img src="${window.getDriveImageUrl(post.imageUrl)}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"></div>`;
                 
-                const actionCall = post.type === 'page' ? `window.openArticle('${post.id}')` : `window.togglePost('${post.id}')`;
+                const isPage = post.type === 'page';
                 const safeTitle = (post.title || "").replace(/'/g, "\\'");
                 const safeSubtitle = (post.subtitle || "").replace(/'/g, "\\'");
 
                 article.innerHTML = `
-                    <div onclick="${actionCall}">
+                    <div onclick="window.${isPage ? 'openArticle' : 'togglePost'}('${post.id}')">
                         ${mediaHtml}
                         <div class="p-6">
                             <div class="flex gap-2 mb-3">
@@ -493,18 +494,19 @@
                             </div>
                         </div>
                     </div>
-                    ${post.type === 'post' ? `<div id="content-${post.id}" class="faq-content bg-gray-50 border-t"><div class="faq-content-inner p-8 prose max-w-none text-gray-700">${post.fullText}</div></div>` : ''}
+                    ${!isPage ? `<div id="content-${post.id}" class="faq-content bg-gray-50 border-t"><div class="faq-content-inner p-8 prose max-w-none text-gray-700">${post.fullText}</div></div>` : ''}
                 `;
                 container.appendChild(article);
             });
             lucide.createIcons();
-        }
+        };
 
         window.openArticle = (id) => {
             const post = blogPosts.find(p => p.id === id);
             if (!post) return;
             document.getElementById('home-view').classList.add('hidden');
-            const view = document.getElementById('article-view'); view.classList.remove('hidden');
+            const view = document.getElementById('article-view'); 
+            view.classList.remove('hidden');
             window.scrollTo(0, 0);
             
             const ytId = window.getYoutubeId(post.youtubeUrl);
@@ -534,13 +536,13 @@
             const list = document.getElementById('admin-posts-list');
             if (!list) return;
             if (blogPosts.length === 0) {
-                list.innerHTML = `<p class="text-center py-10 text-gray-400">Nenhuma publicação encontrada no banco.</p>`;
+                list.innerHTML = `<p class="text-center py-10 text-gray-400">Nenhuma publicação encontrada para gerenciar.</p>`;
                 return;
             }
             list.innerHTML = blogPosts.map(p => `
                 <div class="flex justify-between items-center p-4 border rounded-2xl bg-white shadow-sm">
                     <div class="truncate mr-4 flex items-center gap-3 min-w-0">
-                        <span class="text-[10px] font-black px-2 py-0.5 rounded-full ${p.status === 'draft' ? 'bg-yellow-100 text-yellow-800' : 'bg-green-100 text-green-800'} shrink-0">${p.status.toUpperCase()}</span>
+                        <span class="text-[10px] font-black px-2 py-0.5 rounded-full ${p.status === 'draft' ? 'bg-yellow-100 text-yellow-800' : 'bg-green-100 text-green-800'} shrink-0">${(p.status || 'published').toUpperCase()}</span>
                         <span class="font-black text-gray-800 truncate">${p.title}</span>
                     </div>
                     <div class="flex gap-2 shrink-0">
@@ -553,7 +555,7 @@
         };
 
         window.closeArticle = () => { document.getElementById('article-view').classList.add('hidden'); document.getElementById('home-view').classList.remove('hidden'); };
-        window.togglePost = (id) => { const el = document.getElementById('content-' + id); el.classList.toggle('open'); document.querySelector('.toggle-indicator-' + id).innerHTML = el.classList.contains('open') ? `Recolher <i data-lucide="chevron-up" class="w-3 h-3"></i>` : `Ler mais <i data-lucide="chevron-right" class="w-3 h-3"></i>`; lucide.createIcons(); };
+        window.togglePost = (id) => { const el = document.getElementById('content-' + id); if(!el) return; el.classList.toggle('open'); document.querySelector('.toggle-indicator-' + id).innerHTML = el.classList.contains('open') ? `Recolher <i data-lucide="chevron-up" class="w-3 h-3"></i>` : `Ler mais <i data-lucide="chevron-right" class="w-3 h-3"></i>`; lucide.createIcons(); };
         window.filterByCategory = (cat) => { currentCategoryFilter = cat; window.closeArticle(); document.getElementById('mobile-menu').classList.remove('menu-open'); window.renderPostsFeed(); };
         window.clearFilter = () => { currentCategoryFilter = null; window.renderPostsFeed(); };
         window.toggleCategories = (e) => { e.stopPropagation(); document.getElementById('categories-list').classList.toggle('hidden'); };

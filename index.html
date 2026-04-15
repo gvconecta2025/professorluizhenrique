@@ -189,18 +189,34 @@
             <div class="p-5 flex-1 overflow-y-auto flex flex-col gap-5">
                 <input type="hidden" id="edit-post-id">
                 
-                <!-- NOVO: Formato da Publicação -->
-                <div class="bg-gray-50 p-4 rounded-lg border border-gray-200">
-                    <p class="text-sm font-semibold text-gray-900 mb-3">Formato da Publicação</p>
-                    <div class="flex flex-col sm:flex-row gap-4">
-                        <label class="flex items-center gap-2 cursor-pointer">
-                            <input type="radio" name="post_type" value="post" id="type-post" class="text-blue-900 focus:ring-blue-900 w-4 h-4" checked>
-                            <span class="text-sm text-gray-700">Feed (Post Expansível)</span>
-                        </label>
-                        <label class="flex items-center gap-2 cursor-pointer">
-                            <input type="radio" name="post_type" value="page" id="type-page" class="text-blue-900 focus:ring-blue-900 w-4 h-4">
-                            <span class="text-sm text-gray-700">Artigo (Página Inteira)</span>
-                        </label>
+                <!-- NOVO: Formato e Status da Publicação -->
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div class="bg-gray-50 p-4 rounded-lg border border-gray-200">
+                        <p class="text-sm font-semibold text-gray-900 mb-3 flex items-center gap-1"><i data-lucide="layers" class="w-4 h-4 text-blue-600"></i> Formato</p>
+                        <div class="flex flex-col gap-3">
+                            <label class="flex items-center gap-2 cursor-pointer">
+                                <input type="radio" name="post_type" value="post" id="type-post" class="text-blue-900 focus:ring-blue-900 w-4 h-4" checked>
+                                <span class="text-sm text-gray-700">Feed (Post Expansível)</span>
+                            </label>
+                            <label class="flex items-center gap-2 cursor-pointer">
+                                <input type="radio" name="post_type" value="page" id="type-page" class="text-blue-900 focus:ring-blue-900 w-4 h-4">
+                                <span class="text-sm text-gray-700">Artigo (Página Inteira)</span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="bg-gray-50 p-4 rounded-lg border border-gray-200">
+                        <p class="text-sm font-semibold text-gray-900 mb-3 flex items-center gap-1"><i data-lucide="eye" class="w-4 h-4 text-blue-600"></i> Status</p>
+                        <div class="flex flex-col gap-3">
+                            <label class="flex items-center gap-2 cursor-pointer">
+                                <input type="radio" name="post_status" value="published" id="status-published" class="text-blue-900 focus:ring-blue-900 w-4 h-4" checked>
+                                <span class="text-sm text-gray-700">Publicado (Visível a todos)</span>
+                            </label>
+                            <label class="flex items-center gap-2 cursor-pointer">
+                                <input type="radio" name="post_status" value="draft" id="status-draft" class="text-blue-900 focus:ring-blue-900 w-4 h-4">
+                                <span class="text-sm text-gray-700">Rascunho (Apenas no painel)</span>
+                            </label>
+                        </div>
                     </div>
                 </div>
 
@@ -243,11 +259,18 @@
                     <textarea id="post-fulltext" rows="8" class="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-900 font-mono text-sm" placeholder="<p>Escreva seu artigo completo aqui. Links 'http' viram botões automaticamente!</p>"></textarea>
                 </div>
             </div>
-            <div class="p-5 border-t border-gray-100 flex justify-end gap-3 bg-gray-50 flex-shrink-0">
-                <button onclick="window.closeEditor()" class="px-4 py-2 border border-gray-300 rounded-lg text-gray-700 font-medium hover:bg-gray-100 transition-colors">Cancelar</button>
-                <button onclick="window.savePost()" id="btn-save-post" class="px-6 py-2 bg-blue-900 hover:bg-blue-950 text-white rounded-lg font-medium transition-colors flex items-center gap-2">
-                    <i data-lucide="save" class="w-4 h-4"></i> Salvar Publicação
+            
+            <div class="p-5 border-t border-gray-100 flex justify-between items-center bg-gray-50 flex-shrink-0">
+                <!-- Botão Excluir Rápido dentro do Editor -->
+                <button id="btn-delete-editor" onclick="window.deletePost(document.getElementById('edit-post-id').value, true)" class="hidden px-4 py-2 text-red-600 font-medium hover:bg-red-50 rounded-lg transition-colors flex items-center gap-2">
+                    <i data-lucide="trash-2" class="w-4 h-4"></i> Excluir
                 </button>
+                <div class="flex gap-3 ml-auto">
+                    <button onclick="window.closeEditor()" class="px-4 py-2 border border-gray-300 rounded-lg text-gray-700 font-medium hover:bg-gray-100 transition-colors">Cancelar</button>
+                    <button onclick="window.savePost()" id="btn-save-post" class="px-6 py-2 bg-blue-900 hover:bg-blue-950 text-white rounded-lg font-medium transition-colors flex items-center gap-2 shadow-sm">
+                        <i data-lucide="save" class="w-4 h-4"></i> Salvar Publicação
+                    </button>
+                </div>
             </div>
         </div>
     </div>
@@ -337,6 +360,8 @@
                     blogPosts = [];
                     snapshot.forEach(doc => { blogPosts.push({ id: doc.id, ...doc.data() }); });
                     blogPosts.sort((a, b) => b.createdAt - a.createdAt);
+                    
+                    // Salva no cache
                     localStorage.setItem('plh_blog_cache', JSON.stringify(blogPosts));
                     
                     if (blogPosts.length === 0) {
@@ -356,12 +381,16 @@
 
                 const id = document.getElementById('edit-post-id').value;
                 
-                // Pega o valor do Radio Button (post ou page)
+                // Formato e Status
                 const typeElement = document.querySelector('input[name="post_type"]:checked');
                 const postType = typeElement ? typeElement.value : 'post';
+                
+                const statusElement = document.querySelector('input[name="post_status"]:checked');
+                const postStatus = statusElement ? statusElement.value : 'published';
 
                 const postData = {
                     type: postType,
+                    status: postStatus,
                     title: document.getElementById('post-title').value || "Sem título",
                     subtitle: document.getElementById('post-subtitle').value,
                     imageUrl: document.getElementById('post-image').value,
@@ -385,10 +414,18 @@
                 }
             };
 
-            window.deletePost = async (id) => {
+            // NOVO: Exclusão com suporte ao editor
+            window.deletePost = async (id, fromEditor = false) => {
                 if (!currentUser) return;
-                if (confirm("Excluir publicação definitivamente?")) {
-                    await deleteDoc(doc(db, 'artifacts', appId, 'public', 'data', 'posts', id));
+                if (!id) return;
+                
+                if (confirm("Você tem certeza que deseja excluir esta publicação definitivamente?")) {
+                    try {
+                        await deleteDoc(doc(db, 'artifacts', appId, 'public', 'data', 'posts', id));
+                        if (fromEditor) window.closeEditor();
+                    } catch (error) {
+                        alert("Erro ao apagar: " + error.message);
+                    }
                 }
             };
         }
@@ -409,28 +446,23 @@
             return (match && match[2].length === 11) ? match[2] : null;
         }
 
-        // NOVO: Função para transformar URLs em links clicáveis (sem quebrar tags HTML já existentes)
         function linkifyHtml(htmlString) {
             if(!htmlString) return '';
             const tempDiv = document.createElement('div');
             tempDiv.innerHTML = htmlString;
             
-            // Procura todos os nós de texto dentro do HTML
             const walker = document.createTreeWalker(tempDiv, NodeFilter.SHOW_TEXT, null, false);
             const nodesToReplace = [];
             let node;
             
             while (node = walker.nextNode()) {
-                // Ignora se já estiver dentro de um link <a> ou de botões/scripts
                 if (node.parentNode && ['A', 'SCRIPT', 'STYLE', 'BUTTON'].includes(node.parentNode.tagName)) continue; 
-                
                 const urlRegex = /(https?:\/\/[^\s<]+)/g;
                 if (urlRegex.test(node.nodeValue)) {
                     nodesToReplace.push(node);
                 }
             }
             
-            // Substitui os textos que têm URL pelo HTML com o link <a>
             nodesToReplace.forEach(n => {
                 const span = document.createElement('span');
                 span.innerHTML = n.nodeValue.replace(/(https?:\/\/[^\s<]+)/g, '<a href="$1" target="_blank" class="text-blue-600 font-medium hover:text-blue-800 underline break-words" rel="noopener noreferrer">$1</a>');
@@ -440,11 +472,8 @@
             return tempDiv.innerHTML;
         }
 
-        // NOVO: Função de Compartilhamento
         window.sharePost = async (id, title, event) => {
-            if(event) event.stopPropagation(); // Impede o clique de expandir o card
-            
-            // Cria um link falso que aponta pro site, ideal no futuro seria ter rotas reais
+            if(event) event.stopPropagation(); 
             const url = window.location.href.split('?')[0] + '?post=' + id; 
             
             if (navigator.share) {
@@ -465,15 +494,28 @@
         function renderPostsFeed() {
             container.innerHTML = ''; 
             
-            blogPosts.forEach(post => {
+            // NOVO: Filtrar apenas os posts que não são rascunho
+            const visiblePosts = blogPosts.filter(p => p.status !== 'draft');
+
+            if (visiblePosts.length === 0) {
+                container.innerHTML = `
+                    <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-10 text-center">
+                        <i data-lucide="eye-off" class="w-12 h-12 text-gray-300 mx-auto mb-3"></i>
+                        <h3 class="text-xl font-bold text-gray-900 mb-1">Fique de olho!</h3>
+                        <p class="text-gray-500">Nenhuma publicação disponível no momento. Novidades chegarão em breve.</p>
+                    </div>`;
+                lucide.createIcons();
+                return;
+            }
+
+            visiblePosts.forEach(post => {
                 const article = document.createElement('article');
                 article.className = 'bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden hover:shadow-md transition-shadow duration-300';
                 
                 let mediaHtml = '';
                 const ytId = getYoutubeId(post.youtubeUrl);
-                const postType = post.type || 'post'; // Se não tiver tipo (posts antigos), assume 'post'
+                const postType = post.type || 'post'; 
                 
-                // Mídia Principal
                 if (ytId) {
                     mediaHtml = `
                         <div class="h-48 sm:h-64 overflow-hidden relative bg-black cursor-pointer group" onclick="window.enableYtControls(this, '${ytId}', event)" title="Clique para ativar som e controles">
@@ -492,9 +534,7 @@
                         </div>`;
                 }
 
-                // Lógica de Layout (Post Sanfona VS Página Inteira)
                 if (postType === 'page') {
-                    // É UMA PÁGINA: O clique abre a tela cheia do artigo. Sem seção FAQ expansível.
                     article.innerHTML = `
                         <div>
                             ${mediaHtml}
@@ -516,7 +556,6 @@
                         </div>
                     `;
                 } else {
-                    // É UM POST: O clique expande na mesma tela
                     article.innerHTML = `
                         <div>
                             ${mediaHtml}
@@ -572,12 +611,10 @@
             indicatorDiv.querySelector('span').textContent = contentDiv.classList.contains('open') ? "Recolher" : "Ler mais";
         };
 
-        // NOVO: Controle de Páginas (Artigos)
         window.openArticle = (id) => {
             const post = blogPosts.find(p => p.id === id);
             if(!post) return;
             
-            // Esconde o Feed e Mostra o Artigo
             document.getElementById('home-view').classList.add('hidden');
             const articleView = document.getElementById('article-view');
             articleView.classList.remove('hidden');
@@ -586,13 +623,11 @@
             let mediaHtml = '';
             const ytId = getYoutubeId(post.youtubeUrl);
             if (ytId) {
-                // Vídeo Grande para a página (já destravado com controles)
                 mediaHtml = `
                     <div class="aspect-video w-full rounded-2xl overflow-hidden mb-8 shadow-md bg-black">
                         <iframe class="w-full h-full" src="https://www.youtube.com/embed/${ytId}?autoplay=0&controls=1&rel=0" frameborder="0" allowfullscreen></iframe>
                     </div>`;
             } else if (post.imageUrl) {
-                // Imagem Larga
                 mediaHtml = `
                     <div class="aspect-[21/9] sm:aspect-[21/9] h-64 sm:h-auto w-full rounded-2xl overflow-hidden mb-8 shadow-sm">
                         <img src="${getDriveImageUrl(post.imageUrl)}" class="w-full h-full object-cover">
@@ -625,7 +660,6 @@
                 articleView.classList.add('hidden');
                 document.getElementById('home-view').classList.remove('hidden');
                 window.scrollTo({ top: 0 });
-                // Reseta o conteúdo para pausar vídeos que possam estar tocando
                 document.getElementById('article-content').innerHTML = ''; 
             }
         };
@@ -656,18 +690,20 @@
                 const item = document.createElement('div');
                 item.className = 'flex justify-between items-center p-4 border border-gray-200 rounded-lg bg-white hover:border-blue-300 transition-colors';
                 
-                const typeLabel = post.type === 'page' ? '<span class="bg-blue-100 text-blue-800 px-2 py-0.5 rounded text-[10px] font-bold mr-2">PÁGINA</span>' : '';
+                // NOVO: Etiquetas visuais na lista
+                const typeLabel = post.type === 'page' ? '<span class="bg-blue-100 text-blue-800 px-2 py-0.5 rounded text-[10px] font-bold mr-2 shrink-0">PÁGINA</span>' : '<span class="bg-gray-100 text-gray-800 px-2 py-0.5 rounded text-[10px] font-bold mr-2 shrink-0">POST</span>';
+                const statusLabel = post.status === 'draft' ? '<span class="bg-yellow-100 text-yellow-800 px-2 py-0.5 rounded text-[10px] font-bold mr-2 shrink-0">RASCUNHO</span>' : '<span class="bg-green-100 text-green-800 px-2 py-0.5 rounded text-[10px] font-bold mr-2 shrink-0">PUBLICADO</span>';
                 
                 item.innerHTML = `
                     <div class="flex-1 min-w-0 pr-4">
-                        <h5 class="text-sm font-bold text-gray-900 truncate flex items-center">${typeLabel}${post.title}</h5>
+                        <h5 class="text-sm font-bold text-gray-900 truncate flex items-center">${typeLabel}${statusLabel}${post.title}</h5>
                         <p class="text-xs text-gray-500 mt-1 flex items-center gap-1">
                             ${post.youtubeUrl ? '<i data-lucide="youtube" class="w-3 h-3 text-red-500"></i> Vídeo' : '<i data-lucide="image" class="w-3 h-3 text-blue-400"></i> Imagem'}
                         </p>
                     </div>
                     <div class="flex items-center gap-2 flex-shrink-0">
-                        <button onclick="window.editPost('${post.id}')" class="p-2 text-blue-900 hover:bg-blue-50 rounded-lg transition-colors"><i data-lucide="edit-2" class="w-4 h-4"></i></button>
-                        <button onclick="window.deletePost('${post.id}')" class="p-2 text-red-600 hover:bg-red-50 rounded-lg transition-colors"><i data-lucide="trash-2" class="w-4 h-4"></i></button>
+                        <button onclick="window.editPost('${post.id}')" class="p-2 text-blue-900 hover:bg-blue-50 rounded-lg transition-colors" title="Editar"><i data-lucide="edit-2" class="w-4 h-4"></i></button>
+                        <button onclick="window.deletePost('${post.id}')" class="p-2 text-red-600 hover:bg-red-50 rounded-lg transition-colors" title="Excluir"><i data-lucide="trash-2" class="w-4 h-4"></i></button>
                     </div>
                 `;
                 list.appendChild(item);
@@ -681,7 +717,14 @@
                 const el = document.getElementById(`post-${f}`);
                 if(el) el.value = '';
             });
-            document.getElementById('type-post').checked = true; // Default para Post
+            
+            // Valores padrão: Post e Publicado
+            document.getElementById('type-post').checked = true; 
+            document.getElementById('status-published').checked = true;
+            
+            // Ocultar botão excluir se for novo post
+            document.getElementById('btn-delete-editor').classList.add('hidden');
+            
             document.getElementById('editor-title').textContent = "Nova Publicação";
             document.getElementById('dashboard-modal').classList.add('hidden');
             document.getElementById('editor-modal').classList.remove('hidden');
@@ -697,16 +740,24 @@
             if(!post) return;
             document.getElementById('edit-post-id').value = post.id;
             
-            // Marca o radio button correto
+            // Restaura as opções de Formato e Status
             if (post.type === 'page') document.getElementById('type-page').checked = true;
             else document.getElementById('type-post').checked = true;
+            
+            if (post.status === 'draft') document.getElementById('status-draft').checked = true;
+            else document.getElementById('status-published').checked = true;
 
+            // Preenche os textos
             document.getElementById('post-title').value = post.title;
             document.getElementById('post-subtitle').value = post.subtitle;
             document.getElementById('post-image').value = post.imageUrl || '';
             document.getElementById('post-youtube').value = post.youtubeUrl || '';
             document.getElementById('post-description').value = post.description;
             document.getElementById('post-fulltext').value = post.fullText;
+            
+            // Mostrar botão de excluir
+            document.getElementById('btn-delete-editor').classList.remove('hidden');
+            
             document.getElementById('editor-title').textContent = "Editar Publicação";
             document.getElementById('dashboard-modal').classList.add('hidden');
             document.getElementById('editor-modal').classList.remove('hidden');

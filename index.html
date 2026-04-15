@@ -4,69 +4,48 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     
-    <!-- Pré-conexão com os servidores do Google para acelerar o carregamento -->
     <link rel="preconnect" href="https://www.gstatic.com">
     <link rel="preconnect" href="https://firestore.googleapis.com">
     
-    <!-- Título da aba do navegador -->
     <title>Professor Luiz Henrique</title>
     
-    <!-- Metadados para Redes Sociais (WhatsApp, etc.) -->
+    <!-- Metadados para Redes Sociais -->
     <meta property="og:title" content="Professor Luiz Henrique">
     <meta property="og:description" content="Acesse as últimas notícias, artigos e atualizações.">
-    <!-- Importante: A imagem 'social-preview.png' deve estar na raiz do repositório no GitHub -->
     <meta property="og:image" content="social-preview.png">
     <meta property="og:type" content="website">
     <meta name="twitter:card" content="summary_large_image">
 
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Ícones Lucide -->
     <script src="https://unpkg.com/lucide@latest"></script>
     <style>
-        /* Estilos personalizados para a animação suave de expansão estilo FAQ */
+        /* Melhorias de Scroll e Animação */
+        html { scroll-behavior: smooth; }
+        
         .faq-content {
             display: grid;
             grid-template-rows: 0fr;
             transition: grid-template-rows 0.4s ease-out;
         }
-        .faq-content.open {
-            grid-template-rows: 1fr;
-        }
-        .faq-content-inner {
-            overflow: hidden;
-        }
+        .faq-content.open { grid-template-rows: 1fr; }
+        .faq-content-inner { overflow: hidden; }
         
-        /* Rotação do ícone ao expandir */
-        .chevron-icon {
-            transition: transform 0.3s ease;
-        }
-        .open .chevron-icon {
-            transform: rotate(180deg);
-        }
+        .chevron-icon { transition: transform 0.3s ease; }
+        .open .chevron-icon { transform: rotate(180deg); }
 
-        /* Menu Mobile Animado */
         #mobile-menu {
             transition: max-height 0.3s ease-in-out;
             max-height: 0;
             overflow: hidden;
         }
-        #mobile-menu.menu-open {
-            max-height: 400px; /* Aumentado para acomodar a pasta de categorias */
-        }
+        #mobile-menu.menu-open { max-height: 500px; }
 
-        /* Estilos do Modal Admin */
         .modal-overlay {
-            background-color: rgba(0, 0, 0, 0.5);
-            backdrop-filter: blur(4px);
+            background-color: rgba(0, 0, 0, 0.6);
+            backdrop-filter: blur(8px);
         }
         .hidden { display: none !important; }
 
-        /* Esconder o iframe click overlay após o clique inicial */
-        .yt-unlocked iframe {
-            pointer-events: auto !important;
-        }
-
-        /* Fade para troca de telas (Home vs Artigo) */
         .fade-enter {
             animation: fadeIn 0.4s ease-in-out forwards;
         }
@@ -75,265 +54,274 @@
             to { opacity: 1; transform: translateY(0); }
         }
 
-        /* Placeholder para a div editável */
         [contenteditable]:empty:before {
             content: attr(data-placeholder);
-            color: #9ca3af; /* text-gray-400 */
+            color: #9ca3af;
             pointer-events: none;
-            display: block; /* Garante que funcione em navegadores Webkit */
+            display: block;
         }
+
+        /* Definições de Temas com degradês dinâmicos */
+        .theme-light { background-color: #ffffff; color: #1f2937; }
+        .theme-polen { background-color: #f4ecd8; color: #5f4b32; }
+        .theme-cafe { background-color: #3c2f2f; color: #e7d8c9; }
+        .theme-dark { background-color: #111827; color: #f3f4f6; }
+        
+        /* Temas Degradê solicitados */
+        .theme-verde { background: linear-gradient(135deg, #065f46 0%, #064e3b 100%); color: #ffffff; }
+        .theme-azul { background: linear-gradient(135deg, #1e40af 0%, #1e3a8a 100%); color: #ffffff; }
+        .theme-vermelho { background: linear-gradient(135deg, #991b1b 0%, #7f1d1d 100%); color: #ffffff; }
+
+        .theme-verde .prose, .theme-azul .prose, .theme-vermelho .prose, .theme-dark .prose, .theme-cafe .prose {
+            color: inherit !important;
+        }
+        .theme-verde h1, .theme-azul h1, .theme-vermelho h1, .theme-verde p, .theme-azul p, .theme-vermelho p {
+            color: white !important;
+        }
+
+        /* Tamanhos de Fonte */
+        .font-normal-view { font-size: 1.125rem; line-height: 1.75rem; }
+        .font-large-view { font-size: 1.35rem; line-height: 2.1rem; }
+        .font-xlarge-view { font-size: 1.6rem; line-height: 2.4rem; }
     </style>
 </head>
 <body class="bg-gray-100 text-gray-800 font-sans antialiased min-h-screen flex flex-col">
 
-    <!-- Cabeçalho do Site -->
+    <!-- Cabeçalho Principal -->
     <header class="bg-white shadow-sm sticky top-0 z-20 flex-shrink-0">
         <div class="max-w-3xl mx-auto px-4 py-4 flex items-center justify-between">
-            <!-- Título do Site (Com link para voltar à home) -->
             <a href="#" onclick="window.clearFilter(); window.closeArticle(); return false;" class="text-xl sm:text-2xl font-bold tracking-tight text-blue-900 flex items-center gap-2 truncate hover:opacity-80 transition-opacity">
-                <i data-lucide="book-open" class="w-6 h-6 shrink-0"></i>
+                <i data-lucide="book-open" class="w-6 h-6 shrink-0 text-blue-700"></i>
                 Professor Luiz Henrique
             </a>
             
-            <!-- Botão do Menu Hambúrguer -->
-            <button onclick="window.toggleMobileMenu()" class="p-2 text-gray-600 hover:text-blue-900 focus:outline-none">
+            <button onclick="window.toggleMobileMenu()" class="p-2 text-gray-600 hover:text-blue-900 focus:outline-none rounded-lg hover:bg-gray-100 transition-colors">
                 <i data-lucide="menu" class="w-6 h-6"></i>
             </button>
         </div>
 
-        <!-- Container do Menu Mobile -->
+        <!-- Menu Mobile -->
         <div id="mobile-menu" class="bg-white border-t border-gray-100 px-4 shadow-sm overflow-y-auto">
             <nav class="flex flex-col py-4 gap-4 text-sm font-medium text-gray-600 max-w-3xl mx-auto">
-                <a href="#" onclick="window.clearFilter(); window.closeArticle(); window.toggleMobileMenu(); return false;" class="hover:text-blue-900 transition-colors">Início</a>
+                <a href="#" onclick="window.clearFilter(); window.closeArticle(); window.toggleMobileMenu(); return false;" class="hover:text-blue-900 flex items-center gap-2"><i data-lucide="home" class="w-4 h-4"></i> Início</a>
                 
-                <!-- NOVO: Pasta Artigos por Categoria -->
                 <div class="flex flex-col">
-                    <button onclick="window.toggleCategories(event)" class="flex items-center justify-between w-full text-left hover:text-blue-900 transition-colors focus:outline-none">
-                        <span>Artigos por Categoria</span>
+                    <button onclick="window.toggleCategories(event)" class="flex items-center justify-between w-full text-left hover:text-blue-900 transition-colors focus:outline-none py-1">
+                        <span class="flex items-center gap-2"><i data-lucide="folder" class="w-4 h-4"></i> Artigos por Categoria</span>
                         <i data-lucide="chevron-down" id="cat-chevron" class="w-4 h-4 transition-transform"></i>
                     </button>
-                    <div id="categories-list" class="hidden flex-col pl-4 mt-3 gap-3 text-gray-500 border-l-2 border-gray-100 ml-2">
-                        <!-- Categorias dinâmicas serão injetadas via JS -->
-                    </div>
+                    <div id="categories-list" class="hidden flex-col pl-6 mt-3 gap-3 text-gray-500 border-l-2 border-gray-100 ml-2"></div>
                 </div>
 
-                <a href="#" class="hover:text-blue-900 transition-colors">Sobre</a>
-                <a href="#" class="hover:text-blue-900 transition-colors">Contato</a>
-                <!-- Engrenagem Escondida no Menu -->
+                <a href="#" class="hover:text-blue-900 flex items-center gap-2"><i data-lucide="user" class="w-4 h-4"></i> Sobre</a>
+                <a href="#" class="hover:text-blue-900 flex items-center gap-2"><i data-lucide="mail" class="w-4 h-4"></i> Contato</a>
+                
                 <div class="border-t border-gray-100 pt-3 mt-1">
                     <a href="#" onclick="window.openAdminLogin(); return false;" class="flex items-center gap-2 text-gray-400 hover:text-blue-900 transition-colors">
-                        <i data-lucide="settings" class="w-4 h-4"></i> Painel do Professor
+                        <i data-lucide="settings" class="w-4 h-4"></i> Painel
                     </a>
                 </div>
             </nav>
         </div>
     </header>
 
-    <!-- CONTAINER DA HOME (Feed) -->
+    <!-- FEED DE NOTÍCIAS -->
     <main id="home-view" class="flex-grow max-w-3xl w-full mx-auto px-4 py-8 z-10 fade-enter">
-        
         <div class="mb-8 text-center sm:text-left" id="feed-header">
             <h2 class="text-3xl font-extrabold text-gray-900 mb-2">Novidades</h2>
-            <p class="text-gray-500">Fique por dentro das novidades, dicas e informativos.</p>
+            <p class="text-gray-500">Últimas atualizações, artigos e dicas preparatórias.</p>
         </div>
 
-        <!-- Contêiner do Feed com Skeleton Loader (Atualizado para aspecto 16:9) -->
         <div id="feed-container" class="flex flex-col gap-6">
+            <!-- Skeleton Loader -->
             <div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden animate-pulse">
                 <div class="aspect-video bg-gray-200 w-full"></div>
                 <div class="p-6">
                     <div class="h-8 bg-gray-200 rounded w-3/4 mb-3"></div>
-                    <div class="h-4 bg-gray-200 rounded w-1/3 mb-4"></div>
                     <div class="h-4 bg-gray-200 rounded w-full mb-2"></div>
-                    <div class="h-4 bg-gray-200 rounded w-5/6"></div>
+                    <div class="h-4 bg-gray-200 rounded w-1/2"></div>
                 </div>
             </div>
         </div>
     </main>
 
-    <!-- CONTAINER DO ARTIGO (Página Inteira) -->
-    <main id="article-view" class="hidden flex-grow w-full bg-white z-10">
+    <!-- VISUALIZAÇÃO DO ARTIGO -->
+    <main id="article-view" class="hidden flex-grow w-full bg-white z-10 transition-all duration-300">
         <div class="max-w-3xl mx-auto px-4 py-8 fade-enter">
-            <button onclick="window.closeArticle()" class="mb-8 flex items-center gap-2 text-blue-600 hover:text-blue-800 font-medium transition-colors group">
-                <i data-lucide="arrow-left" class="w-5 h-5 transform group-hover:-translate-x-1 transition-transform"></i> Voltar para as publicações
-            </button>
-            <article id="article-content" class="pb-10">
-                <!-- O conteúdo do artigo será injetado aqui -->
+            
+            <!-- Barra de Ferramentas de Leitura -->
+            <div class="flex flex-wrap items-center justify-between gap-4 mb-8 border-b border-gray-200/50 pb-6">
+                <button onclick="window.closeArticle()" class="flex items-center gap-2 text-blue-600 hover:text-blue-800 font-bold transition-colors group">
+                    <i data-lucide="arrow-left" class="w-5 h-5 transform group-hover:-translate-x-1 transition-transform"></i> Voltar
+                </button>
+
+                <div class="flex items-center gap-3">
+                    <button onclick="window.toggleFontSize()" class="p-2 bg-gray-100 hover:bg-gray-200 rounded-lg text-gray-700 transition-colors border border-gray-200" title="Ajustar Tamanho da Fonte">
+                        <i data-lucide="type" class="w-5 h-5"></i>
+                    </button>
+                    
+                    <!-- Seletor de Temas (Incluindo Degradês) -->
+                    <div class="flex gap-1.5 p-1.5 bg-gray-100 rounded-xl border border-gray-200 shadow-inner">
+                        <button onclick="window.setArticleTheme('light')" class="w-6 h-6 rounded-full bg-white border border-gray-300 shadow-sm" title="Claro"></button>
+                        <button onclick="window.setArticleTheme('polen')" class="w-6 h-6 rounded-full bg-[#f4ecd8] border border-gray-300" title="Polen"></button>
+                        <button onclick="window.setArticleTheme('cafe')" class="w-6 h-6 rounded-full bg-[#3c2f2f] border border-gray-600" title="Café"></button>
+                        <button onclick="window.setArticleTheme('dark')" class="w-6 h-6 rounded-full bg-gray-900 border border-black" title="Escuro"></button>
+                        <button onclick="window.setArticleTheme('verde')" class="w-6 h-6 rounded-full bg-gradient-to-br from-green-600 to-green-800 border border-green-900" title="Degradê Verde"></button>
+                        <button onclick="window.setArticleTheme('azul')" class="w-6 h-6 rounded-full bg-gradient-to-br from-blue-600 to-blue-800 border border-blue-900" title="Degradê Azul"></button>
+                        <button onclick="window.setArticleTheme('vermelho')" class="w-6 h-6 rounded-full bg-gradient-to-br from-red-600 to-red-800 border border-red-900" title="Degradê Vermelho"></button>
+                    </div>
+                </div>
+            </div>
+
+            <article id="article-content" class="pb-16">
+                <!-- Conteúdo injetado via JS -->
             </article>
         </div>
     </main>
 
-    <!-- Modais do Painel Administrativo -->
-    
-    <!-- Modal 1: Login -->
+    <!-- Modais Administrativos -->
     <div id="login-modal" class="hidden fixed inset-0 z-50 flex items-center justify-center modal-overlay px-4">
-        <div class="bg-white rounded-2xl shadow-xl w-full max-w-sm p-6 relative">
-            <button onclick="window.closeAdminLogin()" class="absolute top-4 right-4 text-gray-400 hover:text-gray-600"><i data-lucide="x" class="w-5 h-5"></i></button>
-            <h3 class="text-xl font-bold text-gray-900 mb-4 flex items-center gap-2"><i data-lucide="lock" class="w-5 h-5 text-blue-900"></i> Acesso Restrito</h3>
-            <p class="text-sm text-gray-500 mb-4">Insira a senha do professor para acessar o painel.</p>
-            <input type="password" id="admin-password" placeholder="Senha" class="w-full border border-gray-300 rounded-lg px-4 py-2 mb-4 focus:outline-none focus:ring-2 focus:ring-blue-900">
-            <button onclick="window.verifyPassword()" class="w-full bg-blue-900 hover:bg-blue-950 text-white font-medium py-2 rounded-lg transition-colors">Entrar</button>
-            <p id="login-error" class="text-red-500 text-sm mt-2 hidden">Senha incorreta.</p>
+        <div class="bg-white rounded-2xl shadow-2xl w-full max-w-sm p-8 relative">
+            <button onclick="window.closeAdminLogin()" class="absolute top-4 right-4 text-gray-400 hover:text-gray-600"><i data-lucide="x" class="w-6 h-6"></i></button>
+            <div class="text-center mb-6">
+                <div class="w-16 h-16 bg-blue-50 text-blue-600 rounded-full flex items-center justify-center mx-auto mb-4">
+                    <i data-lucide="lock" class="w-8 h-8"></i>
+                </div>
+                <h3 class="text-2xl font-bold text-gray-900">Acesso Restrito</h3>
+                <p class="text-sm text-gray-500">Apenas para o Professor Luiz Henrique.</p>
+            </div>
+            <input type="password" id="admin-password" placeholder="Sua senha secreta" class="w-full border border-gray-300 rounded-xl px-4 py-3 mb-4 focus:ring-2 focus:ring-blue-900 outline-none transition-all">
+            <button onclick="window.verifyPassword()" class="w-full bg-blue-900 hover:bg-blue-950 text-white font-bold py-3 rounded-xl shadow-lg transition-transform active:scale-95">Entrar no Painel</button>
+            <p id="login-error" class="text-red-500 text-sm mt-3 text-center hidden">Senha incorreta. Tente novamente.</p>
         </div>
     </div>
 
-    <!-- Modal 2: Dashboard -->
+    <!-- Dashboard -->
     <div id="dashboard-modal" class="hidden fixed inset-0 z-50 flex items-center justify-center modal-overlay px-4">
-        <div class="bg-white rounded-2xl shadow-xl w-full max-w-4xl max-h-[90vh] flex flex-col relative overflow-hidden">
-            <div class="p-6 border-b border-gray-100 flex justify-between items-center bg-gray-50">
-                <h3 class="text-xl font-bold text-gray-900 flex items-center gap-2"><i data-lucide="layout-dashboard" class="w-5 h-5 text-blue-900"></i> Painel de Controle</h3>
+        <div class="bg-white rounded-2xl shadow-2xl w-full max-w-4xl max-h-[90vh] flex flex-col relative overflow-hidden">
+            <div class="p-6 border-b border-gray-100 flex justify-between items-center bg-gray-50/50">
+                <h3 class="text-xl font-bold text-gray-900 flex items-center gap-2"><i data-lucide="layout-dashboard" class="w-6 h-6 text-blue-900"></i> Painel de Controle</h3>
                 <button onclick="window.closeDashboard()" class="text-gray-400 hover:text-gray-600"><i data-lucide="x" class="w-6 h-6"></i></button>
             </div>
             <div class="p-6 flex-1 overflow-y-auto">
-                <div class="flex justify-between items-center mb-6">
-                    <h4 class="text-lg font-semibold text-gray-800">Suas Publicações</h4>
-                    <button onclick="window.openEditor()" class="bg-blue-900 hover:bg-blue-950 text-white px-4 py-2 rounded-lg text-sm font-medium flex items-center gap-2 transition-colors">
-                        <i data-lucide="plus" class="w-4 h-4"></i> Nova Publicação
+                <div class="flex flex-col sm:flex-row justify-between items-center gap-4 mb-8">
+                    <h4 class="text-lg font-semibold text-gray-800">Gerenciar Publicações</h4>
+                    <button onclick="window.openEditor()" class="w-full sm:w-auto bg-blue-900 hover:bg-blue-950 text-white px-6 py-2.5 rounded-xl font-bold flex items-center justify-center gap-2 transition-colors">
+                        <i data-lucide="plus" class="w-5 h-5"></i> Nova Publicação
                     </button>
                 </div>
-                <div id="admin-posts-list" class="flex flex-col gap-3">
-                    <!-- Lista será gerada aqui -->
-                </div>
+                <div id="admin-posts-list" class="flex flex-col gap-3"></div>
             </div>
         </div>
     </div>
 
-    <!-- Modal 3: Editor -->
+    <!-- Editor -->
     <div id="editor-modal" class="hidden fixed inset-0 z-50 flex items-center justify-center modal-overlay px-4 py-4">
-        <div class="bg-white rounded-2xl shadow-xl w-full max-w-3xl max-h-full flex flex-col relative overflow-hidden">
+        <div class="bg-white rounded-2xl shadow-2xl w-full max-w-3xl max-h-full flex flex-col relative overflow-hidden">
             <div class="p-5 border-b border-gray-100 flex justify-between items-center bg-gray-50 flex-shrink-0">
                 <h3 id="editor-title" class="text-xl font-bold text-gray-900">Nova Publicação</h3>
                 <button onclick="window.closeEditor()" class="text-gray-400 hover:text-gray-600"><i data-lucide="x" class="w-6 h-6"></i></button>
             </div>
             
-            <div class="p-5 flex-1 overflow-y-auto flex flex-col gap-5">
+            <div class="p-6 flex-1 overflow-y-auto flex flex-col gap-6">
                 <input type="hidden" id="edit-post-id">
                 
-                <!-- Formato e Status da Publicação -->
                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                    <div class="bg-gray-50 p-4 rounded-lg border border-gray-200">
-                        <p class="text-sm font-semibold text-gray-900 mb-3 flex items-center gap-1"><i data-lucide="layers" class="w-4 h-4 text-blue-600"></i> Formato</p>
+                    <div class="bg-gray-50 p-4 rounded-xl border border-gray-200">
+                        <p class="text-sm font-bold text-gray-900 mb-3 flex items-center gap-1"><i data-lucide="layers" class="w-4 h-4 text-blue-600"></i> Formato</p>
                         <div class="flex flex-col gap-3">
                             <label class="flex items-center gap-2 cursor-pointer">
-                                <input type="radio" name="post_type" value="post" id="type-post" class="text-blue-900 focus:ring-blue-900 w-4 h-4" checked>
+                                <input type="radio" name="post_type" value="post" id="type-post" class="text-blue-900 w-4 h-4" checked>
                                 <span class="text-sm text-gray-700">Feed (Post Expansível)</span>
                             </label>
                             <label class="flex items-center gap-2 cursor-pointer">
-                                <input type="radio" name="post_type" value="page" id="type-page" class="text-blue-900 focus:ring-blue-900 w-4 h-4">
+                                <input type="radio" name="post_type" value="page" id="type-page" class="text-blue-900 w-4 h-4">
                                 <span class="text-sm text-gray-700">Artigo (Página Inteira)</span>
                             </label>
                         </div>
                     </div>
 
-                    <div class="bg-gray-50 p-4 rounded-lg border border-gray-200">
-                        <p class="text-sm font-semibold text-gray-900 mb-3 flex items-center gap-1"><i data-lucide="eye" class="w-4 h-4 text-blue-600"></i> Status</p>
+                    <div class="bg-gray-50 p-4 rounded-xl border border-gray-200">
+                        <p class="text-sm font-bold text-gray-900 mb-3 flex items-center gap-1"><i data-lucide="eye" class="w-4 h-4 text-blue-600"></i> Status</p>
                         <div class="flex flex-col gap-3">
                             <label class="flex items-center gap-2 cursor-pointer">
-                                <input type="radio" name="post_status" value="published" id="status-published" class="text-blue-900 focus:ring-blue-900 w-4 h-4" checked>
-                                <span class="text-sm text-gray-700">Publicado (Visível a todos)</span>
+                                <input type="radio" name="post_status" value="published" id="status-published" class="text-blue-900 w-4 h-4" checked>
+                                <span class="text-sm text-gray-700">Publicado (Visível no site)</span>
                             </label>
                             <label class="flex items-center gap-2 cursor-pointer">
-                                <input type="radio" name="post_status" value="draft" id="status-draft" class="text-blue-900 focus:ring-blue-900 w-4 h-4">
-                                <span class="text-sm text-gray-700">Rascunho (Apenas no painel)</span>
+                                <input type="radio" name="post_status" value="draft" id="status-draft" class="text-blue-900 w-4 h-4">
+                                <span class="text-sm text-gray-700">Rascunho (Oculto)</span>
                             </label>
                         </div>
                     </div>
                 </div>
 
-                <!-- Categoria -->
-                <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-1">Categoria (Opcional)</label>
-                    <input type="text" id="post-category" class="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-900" placeholder="Ex: Direito Constitucional, Dicas...">
-                    <p class="text-xs text-gray-500 mt-1">Isso criará automaticamente uma pasta no menu do site.</p>
-                </div>
-
-                <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-1">Título</label>
-                    <input type="text" id="post-title" class="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-900" placeholder="Ex: A nova lei de...">
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-sm font-bold text-gray-700 mb-1">Título</label>
+                        <input type="text" id="post-title" class="w-full border border-gray-300 rounded-xl px-4 py-2.5 focus:ring-2 focus:ring-blue-900 outline-none shadow-sm">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-bold text-gray-700 mb-1">Categoria</label>
+                        <input type="text" id="post-category" class="w-full border border-gray-300 rounded-xl px-4 py-2.5 focus:ring-2 focus:ring-blue-900 outline-none shadow-sm" placeholder="Ex: Direito Administrativo">
+                    </div>
                 </div>
                 
                 <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-1">Subtítulo</label>
-                    <input type="text" id="post-subtitle" class="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-900" placeholder="Um breve resumo para chamar atenção">
+                    <label class="block text-sm font-bold text-gray-700 mb-1">Subtítulo</label>
+                    <input type="text" id="post-subtitle" class="w-full border border-gray-300 rounded-xl px-4 py-2.5 focus:ring-2 focus:ring-blue-900 outline-none shadow-sm">
                 </div>
 
-                <div class="bg-blue-50/50 p-4 rounded-lg border border-blue-100 flex flex-col gap-3">
-                    <p class="text-xs font-semibold text-blue-950 uppercase tracking-wide">Mídia Principal (Escolha Imagem OU Vídeo)</p>
-                    
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-1 flex items-center gap-1"><i data-lucide="image" class="w-4 h-4"></i> Link da Imagem (Google Drive ou Site)</label>
-                        <input type="text" id="post-image" class="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-900 text-sm" placeholder="Cole o link do Google Drive aqui...">
-                        <p class="text-xs text-gray-500 mt-1">Lembre-se de configurar o link no Drive como "Qualquer pessoa com o link".</p>
-                    </div>
-                    
-                    <div class="relative">
-                        <div class="absolute inset-0 flex items-center"><div class="w-full border-t border-blue-200"></div></div>
-                        <div class="relative flex justify-center"><span class="px-2 bg-blue-50/50 text-xs text-blue-800 font-medium rounded-full">OU</span></div>
-                    </div>
-
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-1 flex items-center gap-1"><i data-lucide="youtube" class="w-4 h-4 text-red-500"></i> Link do Vídeo (YouTube)</label>
-                        <input type="text" id="post-youtube" class="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-900 text-sm" placeholder="https://www.youtube.com/watch?v=...">
-                    </div>
+                <div class="bg-blue-50/30 p-5 rounded-xl border border-blue-100 flex flex-col gap-4">
+                    <p class="text-xs font-bold text-blue-900 uppercase tracking-widest flex items-center gap-2"><i data-lucide="clapperboard" class="w-4 h-4"></i> Mídia de Capa (16:9)</p>
+                    <input type="text" id="post-image" class="w-full border border-gray-300 rounded-xl px-4 py-2.5 text-sm focus:ring-2 focus:ring-blue-900 outline-none bg-white" placeholder="Link da Imagem (Drive ou Site)">
+                    <div class="relative flex justify-center"><span class="px-3 bg-blue-50 text-[10px] text-blue-800 font-black rounded-full border border-blue-100">OU</span></div>
+                    <input type="text" id="post-youtube" class="w-full border border-gray-300 rounded-xl px-4 py-2.5 text-sm focus:ring-2 focus:ring-blue-900 outline-none bg-white" placeholder="Link do Vídeo (YouTube)">
                 </div>
 
                 <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-1">Descrição Curta (Aparece no menu inicial)</label>
-                    <textarea id="post-description" rows="2" class="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-900" placeholder="Resumo do artigo..."></textarea>
+                    <label class="block text-sm font-bold text-gray-700 mb-1">Descrição Curta (Resumo do Card)</label>
+                    <textarea id="post-description" rows="2" class="w-full border border-gray-300 rounded-xl px-4 py-2.5 focus:ring-2 focus:ring-blue-900 outline-none shadow-sm"></textarea>
                 </div>
 
-                <!-- NOVO: Painel de Formatação -->
                 <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-1">Conteúdo Completo</label>
-                    <div class="border border-gray-300 border-b-0 rounded-t-lg bg-gray-50 px-3 py-2 flex flex-wrap gap-2 items-center">
-                        <button type="button" onclick="document.execCommand('bold', false, null)" class="p-1.5 text-gray-600 hover:bg-gray-200 hover:text-blue-900 rounded transition-colors" title="Negrito"><i data-lucide="bold" class="w-4 h-4"></i></button>
-                        <button type="button" onclick="document.execCommand('italic', false, null)" class="p-1.5 text-gray-600 hover:bg-gray-200 hover:text-blue-900 rounded transition-colors" title="Itálico"><i data-lucide="italic" class="w-4 h-4"></i></button>
-                        <button type="button" onclick="document.execCommand('underline', false, null)" class="p-1.5 text-gray-600 hover:bg-gray-200 hover:text-blue-900 rounded transition-colors" title="Sublinhado"><i data-lucide="underline" class="w-4 h-4"></i></button>
-                        <div class="w-px h-5 bg-gray-300 mx-1"></div>
-                        <button type="button" onclick="document.execCommand('formatBlock', false, 'H2')" class="px-2 py-1 text-gray-600 hover:bg-gray-200 hover:text-blue-900 rounded transition-colors font-bold text-sm" title="Título Principal">H1</button>
-                        <button type="button" onclick="document.execCommand('formatBlock', false, 'H3')" class="px-2 py-1 text-gray-600 hover:bg-gray-200 hover:text-blue-900 rounded transition-colors font-bold text-sm" title="Subtítulo">H2</button>
-                        <button type="button" onclick="document.execCommand('formatBlock', false, 'P')" class="p-1.5 text-gray-600 hover:bg-gray-200 hover:text-blue-900 rounded transition-colors" title="Texto Normal"><i data-lucide="pilcrow" class="w-4 h-4"></i></button>
-                        <div class="w-px h-5 bg-gray-300 mx-1"></div>
-                        <button type="button" onclick="window.insertEditorImage()" class="p-1.5 text-blue-600 hover:bg-blue-100 rounded transition-colors" title="Inserir Imagem no texto"><i data-lucide="image" class="w-4 h-4"></i></button>
-                        <button type="button" onclick="window.insertEditorVideo()" class="p-1.5 text-red-600 hover:bg-red-50 rounded transition-colors" title="Inserir Vídeo (YouTube) no texto"><i data-lucide="youtube" class="w-4 h-4"></i></button>
+                    <label class="block text-sm font-bold text-gray-700 mb-1">Conteúdo do Artigo</label>
+                    <div class="border border-gray-300 border-b-0 rounded-t-xl bg-gray-50 px-3 py-2.5 flex flex-wrap gap-2 items-center">
+                        <button type="button" onclick="window.execEditor('bold')" class="p-2 hover:bg-gray-200 rounded-lg" title="Negrito"><i data-lucide="bold" class="w-4 h-4"></i></button>
+                        <button type="button" onclick="window.execEditor('italic')" class="p-2 hover:bg-gray-200 rounded-lg" title="Itálico"><i data-lucide="italic" class="w-4 h-4"></i></button>
+                        <button type="button" onclick="window.execEditor('underline')" class="p-2 hover:bg-gray-200 rounded-lg" title="Sublinhado"><i data-lucide="underline" class="w-4 h-4"></i></button>
+                        <div class="w-px h-6 bg-gray-300 mx-1"></div>
+                        <button type="button" onclick="window.execEditor('formatBlock', '<H2>')" class="px-2.5 py-1 font-black text-sm hover:bg-gray-200 rounded-lg">H1</button>
+                        <button type="button" onclick="window.execEditor('formatBlock', '<H3>')" class="px-2.5 py-1 font-black text-sm hover:bg-gray-200 rounded-lg opacity-70">H2</button>
+                        <div class="w-px h-6 bg-gray-300 mx-1"></div>
+                        <button type="button" onclick="window.insertEditorImage()" class="p-2 text-blue-600 hover:bg-blue-100 rounded-lg"><i data-lucide="image" class="w-4 h-4"></i></button>
+                        <button type="button" onclick="window.insertEditorVideo()" class="p-2 text-red-600 hover:bg-red-50 rounded-lg"><i data-lucide="youtube" class="w-4 h-4"></i></button>
                     </div>
-                    <!-- Box de Escrita Rich Text Editável (Borda ajustada) -->
-                    <div id="post-fulltext" contenteditable="true" data-placeholder="Escreva ou cole aqui o seu texto do Word... Lembre-se de clicar no campo antes de usar os botões de formatação acima." class="w-full border border-gray-300 rounded-b-lg px-4 py-4 focus:outline-none focus:ring-2 focus:ring-blue-900 min-h-[300px] bg-white overflow-y-auto prose prose-blue max-w-none cursor-text shadow-inner"></div>
+                    <div id="post-fulltext" contenteditable="true" data-placeholder="Escreva seu conhecimento aqui..." class="w-full border border-gray-300 rounded-b-xl px-5 py-5 min-h-[400px] bg-white overflow-y-auto prose prose-blue max-w-none shadow-inner outline-none focus:ring-2 focus:ring-blue-900/30"></div>
                 </div>
             </div>
             
-            <div class="p-5 border-t border-gray-100 flex justify-between items-center bg-gray-50 flex-shrink-0">
-                <!-- Botão Excluir Rápido dentro do Editor -->
-                <button id="btn-delete-editor" onclick="window.deletePost(document.getElementById('edit-post-id').value, true)" class="hidden px-4 py-2 text-red-600 font-medium hover:bg-red-50 rounded-lg transition-colors flex items-center gap-2">
-                    <i data-lucide="trash-2" class="w-4 h-4"></i> Excluir
-                </button>
+            <div class="p-6 border-t border-gray-100 flex justify-between items-center bg-gray-50/50">
+                <button id="btn-delete-editor" onclick="window.deletePost(document.getElementById('edit-post-id').value, true)" class="hidden px-5 py-2.5 text-red-600 font-bold hover:bg-red-50 rounded-xl transition-colors"><i data-lucide="trash-2" class="w-4 h-4 inline mr-2"></i> Excluir</button>
                 <div class="flex gap-3 ml-auto">
-                    <button onclick="window.closeEditor()" class="px-4 py-2 border border-gray-300 rounded-lg text-gray-700 font-medium hover:bg-gray-100 transition-colors">Cancelar</button>
-                    <button onclick="window.savePost()" id="btn-save-post" class="px-6 py-2 bg-blue-900 hover:bg-blue-950 text-white rounded-lg font-medium transition-colors flex items-center gap-2 shadow-sm">
-                        <i data-lucide="save" class="w-4 h-4"></i> Salvar Publicação
-                    </button>
+                    <button onclick="window.closeEditor()" class="px-6 py-2.5 border border-gray-300 rounded-xl font-medium bg-white hover:bg-gray-50 transition-colors">Cancelar</button>
+                    <button onclick="window.savePost()" id="btn-save-post" class="px-8 py-2.5 bg-blue-900 text-white rounded-xl font-bold shadow-lg transition-transform active:scale-95">Salvar Publicação</button>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- Toast Notification para Compartilhamento -->
-    <div id="toast" class="fixed bottom-4 right-4 bg-green-600 text-white px-6 py-3 rounded-lg shadow-lg transform transition-transform duration-300 translate-y-20 opacity-0 z-50 flex items-center gap-2 font-medium">
-        <i data-lucide="check-circle" class="w-5 h-5"></i> Link copiado com sucesso!
+    <!-- Notificações -->
+    <div id="toast" class="fixed bottom-6 right-6 bg-green-700 text-white px-8 py-4 rounded-2xl shadow-2xl transform transition-transform duration-300 translate-y-32 opacity-0 z-50 flex items-center gap-3 font-bold border-b-4 border-green-900">
+        <i data-lucide="check-circle" class="w-6 h-6"></i> Link copiado para compartilhar!
     </div>
 
-    <!-- Rodapé -->
-    <footer class="bg-white border-t border-gray-200 mt-auto py-8 text-center text-gray-500 text-sm relative z-10 flex-shrink-0">
-        <p>&copy; 2026 Professor Luiz Henrique. Todos os direitos reservados.</p>
-    </footer>
-
-    <!-- Lógica de Negócio e Banco de Dados (Firebase) -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
         import { getAuth, onAuthStateChanged, signInAnonymously, signInWithCustomToken } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
         import { getFirestore, collection, onSnapshot, addDoc, updateDoc, deleteDoc, doc } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
 
-        // ---- CONFIGURAÇÃO DO BANCO DE DADOS ----
+        // Configuração segura e robusta
         const firebaseConfig = {
             apiKey: "AIzaSyCg5aIHRDyOPHDwrP_OFYMn2AE9euWVOyw",
             authDomain: "professorluizhenrique-a9fe9.firebaseapp.com",
@@ -343,579 +331,309 @@
             appId: "1:354928637639:web:fd144793b51237618ff0e2"
         };
 
-        let currentUser = null;
+        const ADMIN_PASSWORD = "Biguidu2013@"; 
         let blogPosts = [];
         let currentCategoryFilter = null;
-        const ADMIN_PASSWORD = "Biguidu2013@"; 
+        let currentFontSize = 'normal';
         const container = document.getElementById('feed-container');
-        
-        // ---- SISTEMA DE CACHE ----
-        const cachedData = localStorage.getItem('plh_blog_cache');
-        if (cachedData) {
-            try {
-                blogPosts = JSON.parse(cachedData);
-                if(blogPosts.length > 0) {
-                    updateCategoriesMenu();
-                    renderPostsFeed();
-                }
-            } catch(e) { console.error("Erro cache:", e); }
-        }
 
-        if (!firebaseConfig || !firebaseConfig.apiKey) {
-            container.innerHTML = '<p class="text-center">Banco de dados não configurado.</p>';
-        } else {
-            const app = initializeApp(firebaseConfig);
-            const auth = getAuth(app);
-            const db = getFirestore(app);
-            const appId = typeof __app_id !== 'undefined' ? __app_id : 'plh-blog-default';
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getFirestore(app);
+        const appId = typeof __app_id !== 'undefined' ? __app_id : 'plh-blog-default';
 
-            setTimeout(() => {
-                if (container.innerHTML.includes('animate-pulse')) {
-                    container.innerHTML = `<div class="text-center p-6 bg-yellow-50 rounded-lg"><p class="text-yellow-700">Conexão lenta. Verifique sua internet.</p></div>`;
-                }
-            }, 8000); 
-
-            const initAuth = async () => {
-                try {
-                    let signedIn = false;
-                    if (typeof __initial_auth_token !== 'undefined' && __initial_auth_token) {
-                        try {
-                            await signInWithCustomToken(auth, __initial_auth_token);
-                            signedIn = true;
-                        } catch (tokenError) { }
-                    }
-                    if (!signedIn) await signInAnonymously(auth);
-                } catch (error) { 
-                    if (container.innerHTML.includes('animate-pulse')) {
-                         container.innerHTML = `<p class="text-center text-red-500">Acesso Bloqueado. Domínio não autorizado no Firebase.</p>`;
-                    }
-                }
-            };
-            initAuth();
-
+        // Inicialização com Deep Linking
+        window.onload = async () => {
+            if (typeof __initial_auth_token !== 'undefined' && __initial_auth_token) {
+                await signInWithCustomToken(auth, __initial_auth_token);
+            } else {
+                await signInAnonymously(auth);
+            }
+            
             onAuthStateChanged(auth, (user) => {
-                currentUser = user;
-                if (user) listenToPosts();
-            });
-
-            function listenToPosts() {
-                if (!currentUser) return;
-                const postsRef = collection(db, 'artifacts', appId, 'public', 'data', 'posts');
-                
-                onSnapshot(postsRef, (snapshot) => {
-                    blogPosts = [];
-                    snapshot.forEach(doc => { blogPosts.push({ id: doc.id, ...doc.data() }); });
-                    blogPosts.sort((a, b) => b.createdAt - a.createdAt);
-                    
-                    // Salva no cache e atualiza a interface
-                    localStorage.setItem('plh_blog_cache', JSON.stringify(blogPosts));
-                    updateCategoriesMenu();
-                    
-                    if (blogPosts.length === 0) {
-                        container.innerHTML = `<div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-10 text-center"><p class="text-gray-500">Nenhuma publicação encontrada no banco.</p></div>`;
-                    } else {
+                if (user) {
+                    const postsRef = collection(db, 'artifacts', appId, 'public', 'data', 'posts');
+                    onSnapshot(postsRef, (snapshot) => {
+                        blogPosts = [];
+                        snapshot.forEach(doc => { blogPosts.push({ id: doc.id, ...doc.data() }); });
+                        blogPosts.sort((a, b) => b.createdAt - a.createdAt);
+                        updateCategoriesMenu();
                         renderPostsFeed();
                         renderAdminList();
-                    }
-                });
+
+                        // Lógica de Deep Link: Verifica se veio de um compartilhamento
+                        const urlParams = new URLSearchParams(window.location.search);
+                        const sharedPostId = urlParams.get('post');
+                        if (sharedPostId) {
+                            // Limpa a URL sem recarregar a página
+                            const newUrl = window.location.protocol + "//" + window.location.host + window.location.pathname;
+                            window.history.pushState({path:newUrl},'',newUrl);
+                            window.openArticle(sharedPostId);
+                        }
+                    });
+                }
+            });
+        };
+
+        // Funções de Persistência
+        window.savePost = async () => {
+            const btn = document.getElementById('btn-save-post');
+            const id = document.getElementById('edit-post-id').value;
+            btn.disabled = true;
+            btn.textContent = "Salvando...";
+
+            const postData = {
+                type: document.querySelector('input[name="post_type"]:checked').value,
+                status: document.querySelector('input[name="post_status"]:checked').value,
+                category: document.getElementById('post-category').value.trim(),
+                title: document.getElementById('post-title').value || "Sem título",
+                subtitle: document.getElementById('post-subtitle').value || "",
+                imageUrl: document.getElementById('post-image').value || "",
+                youtubeUrl: document.getElementById('post-youtube').value || "",
+                description: document.getElementById('post-description').value || "",
+                fullText: document.getElementById('post-fulltext').innerHTML,
+            };
+
+            try {
+                if (id) {
+                    await updateDoc(doc(db, 'artifacts', appId, 'public', 'data', 'posts', id), postData);
+                } else {
+                    postData.createdAt = Date.now();
+                    await addDoc(collection(db, 'artifacts', appId, 'public', 'data', 'posts'), postData);
+                }
+                window.closeEditor();
+            } catch (e) { alert("Erro ao salvar: " + e.message); } 
+            finally { btn.disabled = false; btn.textContent = "Salvar Publicação"; }
+        };
+
+        window.deletePost = async (id, fromEditor = false) => {
+            if (confirm("Você deseja excluir esta publicação definitivamente?")) {
+                await deleteDoc(doc(db, 'artifacts', appId, 'public', 'data', 'posts', id));
+                if (fromEditor) window.closeEditor();
             }
+        };
 
-            window.savePost = async () => {
-                if (!currentUser) return;
-                const btn = document.getElementById('btn-save-post');
-                const originalHtml = btn.innerHTML;
-                btn.innerHTML = 'Salvando...'; btn.disabled = true;
-
-                const id = document.getElementById('edit-post-id').value;
-                
-                // Formato e Status
-                const typeElement = document.querySelector('input[name="post_type"]:checked');
-                const postType = typeElement ? typeElement.value : 'post';
-                
-                const statusElement = document.querySelector('input[name="post_status"]:checked');
-                const postStatus = statusElement ? statusElement.value : 'published';
-
-                const postData = {
-                    type: postType,
-                    status: postStatus,
-                    category: document.getElementById('post-category').value.trim() || '',
-                    title: document.getElementById('post-title').value || "Sem título",
-                    subtitle: document.getElementById('post-subtitle').value,
-                    imageUrl: document.getElementById('post-image').value,
-                    youtubeUrl: document.getElementById('post-youtube').value,
-                    description: document.getElementById('post-description').value,
-                    fullText: document.getElementById('post-fulltext').innerHTML,
-                };
-
-                try {
-                    if (id) {
-                        await updateDoc(doc(db, 'artifacts', appId, 'public', 'data', 'posts', id), postData);
-                    } else {
-                        postData.createdAt = Date.now();
-                        await addDoc(collection(db, 'artifacts', appId, 'public', 'data', 'posts'), postData);
-                    }
-                    window.closeEditor();
-                } catch (error) {
-                    alert("Erro ao salvar: " + error.message);
-                } finally {
-                    btn.innerHTML = originalHtml; btn.disabled = false;
-                }
-            };
-
-            // Exclusão com suporte ao editor
-            window.deletePost = async (id, fromEditor = false) => {
-                if (!currentUser) return;
-                if (!id) return;
-                
-                if (confirm("Você tem certeza que deseja excluir esta publicação definitivamente?")) {
-                    try {
-                        await deleteDoc(doc(db, 'artifacts', appId, 'public', 'data', 'posts', id));
-                        if (fromEditor) window.closeEditor();
-                    } catch (error) {
-                        alert("Erro ao apagar: " + error.message);
-                    }
-                }
-            };
-        }
-
-        // ---- FUNÇÕES AUXILIARES E DO EDITOR RICH TEXT ----
-
-        function getDriveImageUrl(url) {
-            if (!url) return ""; 
+        // Funções de UI e Auxiliares
+        window.getDriveImageUrl = (url) => {
+            if (!url) return "";
             const match = url.match(/\/d\/([a-zA-Z0-9_-]+)/) || url.match(/id=([a-zA-Z0-9_-]+)/);
-            if (match && match[1]) {
-                // Rota alternativa do Google para contornar bloqueio de imagens em sites de terceiros
-                return `https://lh3.googleusercontent.com/d/${match[1]}`;
-            }
-            return url; 
-        }
+            return match ? `https://lh3.googleusercontent.com/d/${match[1]}` : url;
+        };
 
-        function getYoutubeId(url) {
-            if (!url) return null;
+        window.getYoutubeId = (url) => {
             const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|&v=)([^#&?]*).*/;
             const match = url.match(regExp);
             return (match && match[2].length === 11) ? match[2] : null;
-        }
-
-        // Funções para inserir mídias dentro do texto (Blog Editor)
-        window.insertEditorImage = () => {
-            const url = prompt("Cole o link da imagem (Pode ser do Google Drive ou outro site):");
-            if (url) {
-                const finalUrl = getDriveImageUrl(url);
-                const html = `<br><img src="${finalUrl}" style="max-height: 400px; width: 100%; object-fit: contain; border-radius: 0.5rem; margin-top: 1rem; margin-bottom: 1rem;" /><br>`;
-                document.execCommand('insertHTML', false, html);
-            }
         };
 
-        window.insertEditorVideo = () => {
-            const url = prompt("Cole o link do vídeo do YouTube:");
-            if (url) {
-                const ytId = getYoutubeId(url);
-                if (ytId) {
-                    const html = `<br><div style="aspect-ratio: 16/9; width: 100%; border-radius: 0.5rem; overflow: hidden; margin-top: 1rem; margin-bottom: 1rem; background-color: black;"><iframe style="width: 100%; height: 100%;" src="https://www.youtube.com/embed/${ytId}" frameborder="0" allowfullscreen></iframe></div><br>`;
-                    document.execCommand('insertHTML', false, html);
-                } else {
-                    alert("Link do YouTube inválido. Tente novamente.");
-                }
-            }
-        };
-
-        function linkifyHtml(htmlString) {
-            if(!htmlString) return '';
-            const tempDiv = document.createElement('div');
-            tempDiv.innerHTML = htmlString;
-            
-            const walker = document.createTreeWalker(tempDiv, NodeFilter.SHOW_TEXT, null, false);
-            const nodesToReplace = [];
-            let node;
-            
-            while (node = walker.nextNode()) {
-                if (node.parentNode && ['A', 'SCRIPT', 'STYLE', 'BUTTON'].includes(node.parentNode.tagName)) continue; 
-                const urlRegex = /(https?:\/\/[^\s<]+)/g;
-                if (urlRegex.test(node.nodeValue)) {
-                    nodesToReplace.push(node);
-                }
-            }
-            
-            nodesToReplace.forEach(n => {
-                const span = document.createElement('span');
-                span.innerHTML = n.nodeValue.replace(/(https?:\/\/[^\s<]+)/g, '<a href="$1" target="_blank" class="text-blue-600 font-medium hover:text-blue-800 underline break-words" rel="noopener noreferrer">$1</a>');
-                n.parentNode.replaceChild(span, n);
-            });
-            
-            return tempDiv.innerHTML;
-        }
-
-        window.sharePost = async (id, title, event) => {
-            if(event) event.stopPropagation(); 
-            const url = window.location.href.split('?')[0] + '?post=' + id; 
+        window.sharePost = async (id, title, subtitle, event) => {
+            if(event) event.stopPropagation();
+            const cleanTitle = title.replace(/[^\w\sà-úÀ-Ú]/gi, '');
+            const cleanSub = subtitle.replace(/[^\w\sà-úÀ-Ú]/gi, '');
+            const url = window.location.href.split('?')[0] + '?post=' + id;
+            const inviteText = `📚 *Dica Preparatória - Prof. Luiz Henrique*\n\n*${cleanTitle}*\n_${cleanSub}_\n\nLeia o artigo completo aqui:\n${url}`;
             
             if (navigator.share) {
                 try {
-                    await navigator.share({ title: title, text: 'Confira este artigo do Prof. Luiz Henrique:', url: url });
-                } catch(e) { console.log('Share cancelado', e); }
+                    await navigator.share({ title: title, text: inviteText, url: url });
+                } catch(e) {}
             } else {
                 navigator.clipboard.writeText(url).then(() => {
                     const toast = document.getElementById('toast');
-                    toast.classList.remove('translate-y-20', 'opacity-0');
-                    setTimeout(() => toast.classList.add('translate-y-20', 'opacity-0'), 3000);
+                    toast.classList.remove('translate-y-32', 'opacity-0');
+                    setTimeout(() => toast.classList.add('translate-y-32', 'opacity-0'), 3000);
                 });
             }
         };
 
-        // ---- CONTROLE DE CATEGORIAS E FILTROS ----
+        // Gestão de Leitura
+        window.setArticleTheme = (theme) => {
+            const view = document.getElementById('article-view');
+            // Remove temas antigos sem apagar as classes base do Tailwind
+            const themes = ['theme-light', 'theme-polen', 'theme-cafe', 'theme-dark', 'theme-verde', 'theme-azul', 'theme-vermelho'];
+            view.classList.remove(...themes);
+            view.classList.add('theme-' + theme);
+        };
 
-        function updateCategoriesMenu() {
-            // Extrai categorias únicas de posts publicados
-            const categoriasUnicas = [...new Set(blogPosts.filter(p => p.status === 'published' && p.category).map(p => p.category))];
-            const list = document.getElementById('categories-list');
+        window.toggleFontSize = () => {
+            const body = document.querySelector('#text-body');
+            const sizes = ['font-normal-view', 'font-large-view', 'font-xlarge-view'];
+            body.classList.remove(...sizes);
             
-            if(categoriasUnicas.length === 0) {
-                list.innerHTML = '<span class="text-xs text-gray-400">Nenhuma categoria criada.</span>';
-            } else {
-                list.innerHTML = categoriasUnicas.map(cat => 
-                    `<a href="#" onclick="window.filterByCategory('${cat}'); return false;" class="hover:text-blue-900 transition-colors text-sm py-1 flex items-center gap-2">
-                        <i data-lucide="folder-open" class="w-3 h-3"></i> ${cat}
-                    </a>`
-                ).join('');
-            }
-            lucide.createIcons();
-        }
-
-        window.toggleCategories = (e) => {
-            if(e) e.stopPropagation();
-            const list = document.getElementById('categories-list');
-            const chevron = document.getElementById('cat-chevron');
-            list.classList.toggle('hidden');
-            list.classList.toggle('flex');
-            chevron.style.transform = list.classList.contains('hidden') ? 'rotate(0deg)' : 'rotate(180deg)';
+            if (currentFontSize === 'normal') { currentFontSize = 'large'; }
+            else if (currentFontSize === 'large') { currentFontSize = 'xlarge'; }
+            else { currentFontSize = 'normal'; }
+            
+            body.classList.add('font-' + currentFontSize + '-view');
         };
 
-        window.filterByCategory = (cat) => {
-            currentCategoryFilter = cat;
-            window.closeArticle();
-            document.getElementById('mobile-menu').classList.remove('menu-open');
-            renderPostsFeed();
-        };
-
-        window.clearFilter = () => {
-            currentCategoryFilter = null;
-            renderPostsFeed();
-        };
-
-        // ---- SISTEMA DE RENDERIZAÇÃO ----
-
+        // Renderização
         function renderPostsFeed() {
-            // Atualiza o Cabeçalho da Home
             const header = document.getElementById('feed-header');
-            if (currentCategoryFilter) {
-                header.innerHTML = `
-                    <div class="flex items-center gap-3 justify-center sm:justify-start mb-2">
-                        <button onclick="window.clearFilter()" class="p-2 bg-gray-200 hover:bg-gray-300 rounded-full transition-colors" title="Voltar para todos">
-                            <i data-lucide="arrow-left" class="w-4 h-4 text-gray-700"></i>
-                        </button>
-                        <h2 class="text-2xl sm:text-3xl font-extrabold text-gray-900">Artigos: ${currentCategoryFilter}</h2>
-                    </div>
-                    <p class="text-gray-500">Exibindo publicações desta categoria.</p>
-                `;
-            } else {
-                header.innerHTML = `
-                    <h2 class="text-3xl font-extrabold text-gray-900 mb-2">Novidades</h2>
-                    <p class="text-gray-500">Fique por dentro das novidades, dicas e informativos.</p>
-                `;
-            }
-
-            container.innerHTML = ''; 
+            header.innerHTML = currentCategoryFilter 
+                ? `<div class="flex items-center gap-3"><button onclick="window.clearFilter()" class="p-2 bg-gray-200 hover:bg-gray-300 rounded-full transition-colors"><i data-lucide="arrow-left" class="w-4 h-4"></i></button><h2 class="text-3xl font-black">Pasta: ${currentCategoryFilter}</h2></div>` 
+                : `<h2 class="text-3xl font-black text-gray-900">Novidades</h2><p class="text-gray-500">Acompanhe os estudos e atualizações.</p>`;
             
-            // Filtrar rascunhos e aplicar filtro de categoria se existir
-            let visiblePosts = blogPosts.filter(p => p.status !== 'draft');
-            if (currentCategoryFilter) {
-                visiblePosts = visiblePosts.filter(p => p.category === currentCategoryFilter);
-            }
+            container.innerHTML = '';
+            let posts = blogPosts.filter(p => p.status !== 'draft');
+            if (currentCategoryFilter) posts = posts.filter(p => p.category === currentCategoryFilter);
 
-            if (visiblePosts.length === 0) {
-                container.innerHTML = `
-                    <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-10 text-center">
-                        <i data-lucide="eye-off" class="w-12 h-12 text-gray-300 mx-auto mb-3"></i>
-                        <h3 class="text-xl font-bold text-gray-900 mb-1">Nenhum conteúdo encontrado!</h3>
-                        <p class="text-gray-500">Não há publicações disponíveis para exibir no momento.</p>
-                        ${currentCategoryFilter ? `<button onclick="window.clearFilter()" class="mt-4 text-blue-600 font-medium hover:underline">Ver todas as postagens</button>` : ''}
-                    </div>`;
-                lucide.createIcons();
-                return;
-            }
-
-            visiblePosts.forEach(post => {
+            posts.forEach(post => {
                 const article = document.createElement('article');
-                article.className = 'bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden hover:shadow-md transition-shadow duration-300';
+                article.className = 'bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden hover:shadow-xl transition-all duration-500 group';
                 
-                let mediaHtml = '';
-                const ytId = getYoutubeId(post.youtubeUrl);
-                const postType = post.type || 'post'; 
-                const catBadgeHtml = post.category ? `<span class="bg-gray-100 text-gray-600 px-2 py-0.5 rounded text-[10px] font-bold tracking-wide uppercase border border-gray-200">${post.category}</span>` : '';
+                const ytId = window.getYoutubeId(post.youtubeUrl);
+                const mediaHtml = ytId 
+                    ? `<div class="aspect-video bg-black relative"><iframe class="w-full h-full pointer-events-none" src="https://www.youtube.com/embed/${ytId}?controls=0&mute=1&autoplay=0" frameborder="0"></iframe><div class="absolute inset-0 z-10"></div></div>` 
+                    : `<div class="aspect-video bg-gray-100 overflow-hidden"><img src="${window.getDriveImageUrl(post.imageUrl)}" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"></div>`;
                 
-                // Aplicando aspect-video em todas as mídias principais (Formato 16:9 YouTube)
-                if (ytId) {
-                    mediaHtml = `
-                        <div class="aspect-video w-full overflow-hidden relative bg-black cursor-pointer group" onclick="window.enableYtControls(this, '${ytId}', event)" title="Clique para ativar som e controles">
-                            <div class="absolute inset-0 z-10 bg-gradient-to-t from-black/30 to-transparent pointer-events-none transition-opacity group-hover:bg-black/40 flex items-center justify-center">
-                                <i data-lucide="play-circle" class="w-16 h-16 text-white opacity-60 group-hover:opacity-100 transition-all duration-300 transform group-hover:scale-110 drop-shadow-md"></i>
-                            </div>
-                            <iframe class="w-full h-full pointer-events-none object-cover" src="https://www.youtube.com/embed/${ytId}?autoplay=1&mute=1&controls=0&rel=0&playsinline=1&loop=1&playlist=${ytId}" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
-                        </div>`;
-                } else if (post.imageUrl) {
-                    const finalImageUrl = getDriveImageUrl(post.imageUrl);
-                    const clickAction = postType === 'page' ? `window.openArticle('${post.id}')` : `window.togglePost('${post.id}')`;
-                    mediaHtml = `
-                        <div class="aspect-video w-full overflow-hidden relative cursor-pointer group bg-gray-100" onclick="${clickAction}">
-                            <img src="${finalImageUrl}" onerror="this.src='https://placehold.co/800x400/f3f4f6/a1a1aa?text=Imagem+Indisponível'" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105">
-                            <div class="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent pointer-events-none"></div>
-                        </div>`;
-                }
+                const clickAction = post.type === 'page' ? `window.openArticle('${post.id}')` : `window.togglePost('${post.id}')`;
 
-                if (postType === 'page') {
-                    article.innerHTML = `
-                        <div>
-                            ${mediaHtml}
-                            <div class="p-6 cursor-pointer group" onclick="window.openArticle('${post.id}')">
-                                <div class="flex items-center gap-2 mb-3">
-                                    <div class="inline-block px-3 py-1 bg-blue-100 text-blue-800 text-xs font-bold rounded-full tracking-wide">ARTIGO</div>
-                                    ${catBadgeHtml}
-                                </div>
-                                <h3 class="text-2xl font-bold text-gray-900 leading-tight mb-1 group-hover:text-blue-900 transition-colors">${post.title}</h3>
-                                <p class="text-sm font-medium text-blue-800 mb-3">${post.subtitle}</p>
-                                <p class="text-gray-600 line-clamp-2">${post.description}</p>
-                                
-                                <div class="mt-5 flex items-center justify-between border-t border-gray-50 pt-4">
-                                    <div class="flex items-center text-sm font-bold text-blue-900 gap-1 bg-gray-50 px-3 py-1.5 rounded-lg group-hover:bg-blue-50 transition-colors">
-                                        <i data-lucide="layout-template" class="w-4 h-4"></i> Ler Artigo Completo
-                                    </div>
-                                    <button onclick="window.sharePost('${post.id}', '${post.title.replace(/'/g, "\\'")}', event)" class="p-2 text-gray-400 hover:text-blue-600 hover:bg-blue-50 rounded-full transition-all" title="Compartilhar">
-                                        <i data-lucide="share-2" class="w-5 h-5"></i>
-                                    </button>
-                                </div>
-                            </div>
+                article.innerHTML = `
+                    ${mediaHtml}
+                    <div class="p-6 cursor-pointer" onclick="${clickAction}">
+                        <div class="flex gap-2 mb-3">
+                            <span class="bg-blue-900 text-white text-[9px] font-black px-2 py-0.5 rounded-full uppercase tracking-widest">${post.type === 'page' ? 'Artigo' : 'Post'}</span>
+                            ${post.category ? `<span class="bg-gray-100 text-gray-500 text-[9px] font-bold px-2 py-0.5 rounded-full uppercase tracking-tighter border border-gray-200">${post.category}</span>` : ''}
                         </div>
-                    `;
-                } else {
-                    article.innerHTML = `
-                        <div>
-                            ${mediaHtml}
-                            <div class="p-6 cursor-pointer group" onclick="window.togglePost('${post.id}')">
-                                <div class="flex items-center gap-2 mb-2">
-                                    ${catBadgeHtml}
-                                </div>
-                                <h3 class="text-2xl font-bold text-gray-900 leading-tight mb-1 group-hover:text-blue-900 transition-colors">${post.title}</h3>
-                                <p class="text-sm font-medium text-blue-800 mb-3">${post.subtitle}</p>
-                                <p class="text-gray-600 line-clamp-2">${post.description}</p>
-                                
-                                <div class="mt-5 flex items-center justify-between border-t border-gray-50 pt-4">
-                                    <div class="flex items-center text-sm font-semibold text-blue-900 gap-1 toggle-indicator-${post.id}">
-                                        <span>Ler mais</span>
-                                        <i data-lucide="chevron-down" class="w-4 h-4 chevron-icon"></i>
-                                    </div>
-                                    <button onclick="window.sharePost('${post.id}', '${post.title.replace(/'/g, "\\'")}', event)" class="p-2 text-gray-400 hover:text-blue-600 hover:bg-blue-50 rounded-full transition-all" title="Compartilhar">
-                                        <i data-lucide="share-2" class="w-5 h-5"></i>
-                                    </button>
-                                </div>
-                            </div>
+                        <h3 class="text-2xl font-black mb-2 text-gray-900 leading-tight group-hover:text-blue-900 transition-colors">${post.title}</h3>
+                        <p class="text-gray-500 text-sm line-clamp-2 mb-4">${post.description}</p>
+                        <div class="flex items-center justify-between pt-4 border-t border-gray-50">
+                            <div class="text-blue-900 font-black text-xs uppercase flex items-center gap-1 toggle-indicator-${post.id}">Ler mais <i data-lucide="chevron-right" class="w-3 h-3"></i></div>
+                            <button onclick="window.sharePost('${post.id}', '${post.title.replace(/'/g,"")}', '${post.subtitle.replace(/'/g,"")}', event)" class="p-2 text-gray-400 hover:text-green-600 hover:bg-green-50 rounded-full transition-all"><i data-lucide="share-2" class="w-5 h-5"></i></button>
                         </div>
-                        <div id="content-${post.id}" class="faq-content bg-gray-50/50 border-t border-gray-100">
-                            <div class="faq-content-inner">
-                                <div class="p-6 prose prose-blue max-w-none text-gray-700">
-                                    ${linkifyHtml(post.fullText)}
-                                </div>
-                                <div class="px-6 pb-6 pt-2">
-                                    <button onclick="window.togglePost('${post.id}')" class="text-sm bg-gray-200 hover:bg-gray-300 text-gray-800 py-2 px-4 rounded-lg font-medium transition-colors">Recolher</button>
-                                </div>
-                            </div>
-                        </div>
-                    `;
-                }
+                    </div>
+                    ${post.type === 'post' ? `<div id="content-${post.id}" class="faq-content bg-gray-50 border-t"><div class="faq-content-inner p-8 prose prose-blue max-w-none text-gray-700">${post.fullText}</div></div>` : ''}
+                `;
                 container.appendChild(article);
             });
             lucide.createIcons();
         }
 
-        window.enableYtControls = (element, ytId, event) => {
-            if (event) event.stopPropagation(); 
-            element.onclick = null; 
-            const overlay = element.querySelector('div.absolute');
-            if(overlay) overlay.remove();
-            element.classList.add('yt-unlocked');
-            const iframe = element.querySelector('iframe');
-            iframe.src = `https://www.youtube.com/embed/${ytId}?autoplay=1&mute=0&controls=1&rel=0&playsinline=1`;
-        };
-
-        window.toggleMobileMenu = () => document.getElementById('mobile-menu').classList.toggle('menu-open');
-        
-        window.togglePost = (id) => {
-            const contentDiv = document.getElementById(`content-${id}`);
-            const indicatorDiv = document.querySelector(`.toggle-indicator-${id}`);
-            contentDiv.classList.toggle('open'); indicatorDiv.classList.toggle('open');
-            indicatorDiv.querySelector('span').textContent = contentDiv.classList.contains('open') ? "Recolher" : "Ler mais";
-        };
-
         window.openArticle = (id) => {
             const post = blogPosts.find(p => p.id === id);
-            if(!post) return;
-            
+            if (!post) return;
             document.getElementById('home-view').classList.add('hidden');
             const articleView = document.getElementById('article-view');
             articleView.classList.remove('hidden');
-            window.scrollTo({ top: 0, behavior: 'smooth' });
+            window.scrollTo(0, 0);
 
-            let mediaHtml = '';
-            const ytId = getYoutubeId(post.youtubeUrl);
-            const catBadgeHtml = post.category ? `<span class="bg-gray-100 text-gray-600 px-3 py-1 rounded-full text-xs font-bold tracking-wide uppercase border border-gray-200 mb-4 inline-block">${post.category}</span>` : '';
-
-            // Aplicando aspect-video na visualização do artigo também (Formato 16:9 YouTube)
-            if (ytId) {
-                mediaHtml = `
-                    <div class="aspect-video w-full rounded-2xl overflow-hidden mb-8 shadow-md bg-black">
-                        <iframe class="w-full h-full" src="https://www.youtube.com/embed/${ytId}?autoplay=0&controls=1&rel=0" frameborder="0" allowfullscreen></iframe>
-                    </div>`;
-            } else if (post.imageUrl) {
-                mediaHtml = `
-                    <div class="aspect-video w-full rounded-2xl overflow-hidden mb-8 shadow-sm bg-gray-100">
-                        <img src="${getDriveImageUrl(post.imageUrl)}" onerror="this.src='https://placehold.co/800x400/f3f4f6/a1a1aa?text=Imagem+Indisponível'" class="w-full h-full object-cover">
-                    </div>`;
-            }
+            const ytId = window.getYoutubeId(post.youtubeUrl);
+            const mediaHtml = ytId 
+                ? `<div class="aspect-video rounded-3xl overflow-hidden mb-8 shadow-2xl bg-black"><iframe class="w-full h-full" src="https://www.youtube.com/embed/${ytId}" frameborder="0" allowfullscreen></iframe></div>` 
+                : `<div class="aspect-video rounded-3xl overflow-hidden mb-8 shadow-xl"><img src="${window.getDriveImageUrl(post.imageUrl)}" class="w-full h-full object-cover"></div>`;
 
             document.getElementById('article-content').innerHTML = `
                 ${mediaHtml}
                 <div class="px-2">
-                    ${catBadgeHtml}
-                    <h1 class="text-3xl sm:text-5xl font-extrabold text-gray-900 mb-4 tracking-tight leading-tight">${post.title}</h1>
-                    <h2 class="text-xl sm:text-2xl text-gray-500 font-medium mb-8 pb-8 border-b border-gray-100 leading-relaxed">${post.subtitle}</h2>
-                    
-                    <div class="prose prose-lg prose-blue max-w-none text-gray-800 leading-relaxed mb-12">
-                        ${linkifyHtml(post.fullText)}
+                    <h1 class="text-4xl sm:text-6xl font-black mb-6 leading-tight tracking-tight">${post.title}</h1>
+                    <p class="text-xl sm:text-2xl opacity-80 mb-10 pb-10 border-b border-gray-300/30 font-medium italic">${post.subtitle}</p>
+                    <div id="text-body" class="prose prose-lg max-w-none font-normal-view leading-relaxed">
+                        ${post.fullText}
                     </div>
-                    
-                    <div class="border-t border-gray-100 pt-10 flex justify-center">
-                        <button onclick="window.sharePost('${post.id}', '${post.title.replace(/'/g, "\\'")}', event)" class="flex items-center gap-2 bg-blue-50 text-blue-700 hover:bg-blue-100 px-6 py-3 rounded-full font-bold transition-colors shadow-sm">
-                            <i data-lucide="share-2" class="w-5 h-5"></i> Compartilhar este artigo
+                    <div class="mt-16 pt-12 border-t border-gray-200/50 flex justify-center">
+                        <button onclick="window.sharePost('${post.id}', '${post.title.replace(/'/g,"")}', '${post.subtitle.replace(/'/g,"")}', event)" class="flex items-center gap-3 bg-green-600 hover:bg-green-700 text-white px-10 py-5 rounded-full font-black shadow-2xl transition-all hover:scale-105 active:scale-95 uppercase tracking-wide">
+                            <i data-lucide="share-2" class="w-6 h-6"></i> Compartilhar no WhatsApp
                         </button>
                     </div>
                 </div>
             `;
+            window.setArticleTheme('light');
+            currentFontSize = 'normal';
             lucide.createIcons();
         };
 
-        window.closeArticle = () => {
-            const articleView = document.getElementById('article-view');
-            if(!articleView.classList.contains('hidden')) {
-                articleView.classList.add('hidden');
-                document.getElementById('home-view').classList.remove('hidden');
-                window.scrollTo({ top: 0 });
-                document.getElementById('article-content').innerHTML = ''; 
+        // Editor e Rich Text
+        window.execEditor = (cmd, val = null) => {
+            document.execCommand(cmd, false, val);
+            document.getElementById('post-fulltext').focus();
+        };
+
+        window.insertEditorImage = () => {
+            const url = prompt("Link da imagem:");
+            if (url) {
+                const final = window.getDriveImageUrl(url);
+                window.execEditor('insertHTML', `<img src="${final}" class="w-full rounded-xl my-4" />`);
             }
         };
 
-        // Funções do Painel Admin
-        window.openAdminLogin = () => { 
-            document.getElementById('mobile-menu').classList.remove('menu-open'); 
-            document.getElementById('login-modal').classList.remove('hidden'); 
-            document.getElementById('admin-password').value = ''; 
-            document.getElementById('login-error').classList.add('hidden'); 
+        window.insertEditorVideo = () => {
+            const url = prompt("Link do YouTube:");
+            const id = window.getYoutubeId(url);
+            if (id) {
+                window.execEditor('insertHTML', `<div class="aspect-video w-full rounded-xl overflow-hidden my-4"><iframe class="w-full h-full" src="https://www.youtube.com/embed/${id}" frameborder="0" allowfullscreen></iframe></div>`);
+            }
         };
-        window.closeAdminLogin = () => document.getElementById('login-modal').classList.add('hidden');
-        window.verifyPassword = () => {
-            if (document.getElementById('admin-password').value === ADMIN_PASSWORD) {
-                window.closeAdminLogin(); window.openDashboard();
-            } else { document.getElementById('login-error').classList.remove('hidden'); }
+
+        // Outros Controles
+        window.toggleMobileMenu = () => document.getElementById('mobile-menu').classList.toggle('menu-open');
+        window.closeArticle = () => {
+            document.getElementById('article-view').classList.add('hidden');
+            document.getElementById('home-view').classList.remove('hidden');
         };
-        window.openDashboard = () => { document.getElementById('dashboard-modal').classList.remove('hidden'); renderAdminList(); };
-        window.closeDashboard = () => document.getElementById('dashboard-modal').classList.add('hidden');
-        
-        function renderAdminList() {
-            const list = document.getElementById('admin-posts-list');
-            if(!list) return;
-            list.innerHTML = '';
-            if (blogPosts.length === 0) return list.innerHTML = '<p class="text-gray-500 text-sm">Nenhum post encontrado.</p>';
-
-            blogPosts.forEach(post => {
-                const item = document.createElement('div');
-                item.className = 'flex justify-between items-center p-4 border border-gray-200 rounded-lg bg-white hover:border-blue-300 transition-colors';
-                
-                // Etiquetas visuais na lista
-                const typeLabel = post.type === 'page' ? '<span class="bg-blue-100 text-blue-800 px-2 py-0.5 rounded text-[10px] font-bold mr-2 shrink-0">PÁGINA</span>' : '<span class="bg-gray-100 text-gray-800 px-2 py-0.5 rounded text-[10px] font-bold mr-2 shrink-0">POST</span>';
-                const statusLabel = post.status === 'draft' ? '<span class="bg-yellow-100 text-yellow-800 px-2 py-0.5 rounded text-[10px] font-bold mr-2 shrink-0">RASCUNHO</span>' : '<span class="bg-green-100 text-green-800 px-2 py-0.5 rounded text-[10px] font-bold mr-2 shrink-0">PUBLICADO</span>';
-                const catLabel = post.category ? `<span class="bg-purple-100 text-purple-800 px-2 py-0.5 rounded text-[10px] font-bold mr-2 shrink-0 truncate max-w-[80px] sm:max-w-[150px]">${post.category.toUpperCase()}</span>` : '';
-
-                item.innerHTML = `
-                    <div class="flex-1 min-w-0 pr-4">
-                        <h5 class="text-sm font-bold text-gray-900 truncate flex items-center">${typeLabel}${statusLabel}${catLabel}${post.title}</h5>
-                        <p class="text-xs text-gray-500 mt-1 flex items-center gap-1">
-                            ${post.youtubeUrl ? '<i data-lucide="youtube" class="w-3 h-3 text-red-500"></i> Vídeo' : '<i data-lucide="image" class="w-3 h-3 text-blue-400"></i> Imagem'}
-                        </p>
-                    </div>
-                    <div class="flex items-center gap-2 flex-shrink-0">
-                        <button onclick="window.editPost('${post.id}')" class="p-2 text-blue-900 hover:bg-blue-50 rounded-lg transition-colors" title="Editar"><i data-lucide="edit-2" class="w-4 h-4"></i></button>
-                        <button onclick="window.deletePost('${post.id}')" class="p-2 text-red-600 hover:bg-red-50 rounded-lg transition-colors" title="Excluir"><i data-lucide="trash-2" class="w-4 h-4"></i></button>
-                    </div>
-                `;
-                list.appendChild(item);
-            });
+        window.togglePost = (id) => {
+            const el = document.getElementById('content-' + id);
+            el.classList.toggle('open');
+            document.querySelector('.toggle-indicator-' + id).innerHTML = el.classList.contains('open') ? `Recolher <i data-lucide="chevron-up" class="w-3 h-3"></i>` : `Ler mais <i data-lucide="chevron-right" class="w-3 h-3"></i>`;
+            lucide.createIcons();
+        };
+        window.filterByCategory = (cat) => { currentCategoryFilter = cat; window.closeArticle(); document.getElementById('mobile-menu').classList.remove('menu-open'); renderPostsFeed(); };
+        window.clearFilter = () => { currentCategoryFilter = null; renderPostsFeed(); };
+        window.toggleCategories = (e) => { e.stopPropagation(); document.getElementById('categories-list').classList.toggle('hidden'); };
+        function updateCategoriesMenu() {
+            const cats = [...new Set(blogPosts.filter(p => p.status === 'published' && p.category).map(p => p.category))];
+            document.getElementById('categories-list').innerHTML = cats.map(c => `<a href="#" onclick="window.filterByCategory('${c}'); return false;" class="hover:text-blue-900 py-1 flex items-center gap-2 font-bold"><i data-lucide="folder-open" class="w-3 h-3"></i> ${c}</a>`).join('') || '<span class="text-xs italic text-gray-400">Sem categorias...</span>';
             lucide.createIcons();
         }
 
+        // Admin Auth
+        window.openAdminLogin = () => { document.getElementById('mobile-menu').classList.remove('menu-open'); document.getElementById('login-modal').classList.remove('hidden'); document.getElementById('admin-password').focus(); };
+        window.closeAdminLogin = () => document.getElementById('login-modal').classList.add('hidden');
+        window.verifyPassword = () => {
+            if (document.getElementById('admin-password').value === ADMIN_PASSWORD) {
+                window.closeAdminLogin(); document.getElementById('dashboard-modal').classList.remove('hidden');
+            } else { document.getElementById('login-error').classList.remove('hidden'); }
+        };
+        window.closeDashboard = () => document.getElementById('dashboard-modal').classList.add('hidden');
         window.openEditor = () => {
             document.getElementById('edit-post-id').value = '';
-            ['title', 'subtitle', 'image', 'youtube', 'description', 'category'].forEach(f => {
-                const el = document.getElementById(`post-${f}`);
-                if(el) el.value = '';
-            });
-            document.getElementById('post-fulltext').innerHTML = ''; 
-            
-            // Valores padrão: Post e Publicado
-            document.getElementById('type-post').checked = true; 
-            document.getElementById('status-published').checked = true;
-            
-            // Ocultar botão excluir se for novo post
+            ['title', 'subtitle', 'image', 'youtube', 'description', 'category'].forEach(f => document.getElementById('post-'+f).value = '');
+            document.getElementById('post-fulltext').innerHTML = '';
+            document.getElementById('editor-modal').classList.remove('hidden');
             document.getElementById('btn-delete-editor').classList.add('hidden');
-            
-            document.getElementById('editor-title').textContent = "Nova Publicação";
-            document.getElementById('dashboard-modal').classList.add('hidden');
-            document.getElementById('editor-modal').classList.remove('hidden');
         };
-
-        window.closeEditor = () => {
-            document.getElementById('editor-modal').classList.add('hidden');
-            window.openDashboard();
-        };
-
         window.editPost = (id) => {
-            const post = blogPosts.find(p => p.id === id);
-            if(!post) return;
-            document.getElementById('edit-post-id').value = post.id;
-            
-            // Restaura as opções de Formato e Status
-            if (post.type === 'page') document.getElementById('type-page').checked = true;
-            else document.getElementById('type-post').checked = true;
-            
-            if (post.status === 'draft') document.getElementById('status-draft').checked = true;
-            else document.getElementById('status-published').checked = true;
-
-            // Preenche os textos
-            document.getElementById('post-title').value = post.title;
-            document.getElementById('post-subtitle').value = post.subtitle;
-            document.getElementById('post-category').value = post.category || '';
-            document.getElementById('post-image').value = post.imageUrl || '';
-            document.getElementById('post-youtube').value = post.youtubeUrl || '';
-            document.getElementById('post-description').value = post.description;
-            document.getElementById('post-fulltext').innerHTML = post.fullText || ''; 
-            
-            // Mostrar botão de excluir
-            document.getElementById('btn-delete-editor').classList.remove('hidden');
-            
-            document.getElementById('editor-title').textContent = "Editar Publicação";
-            document.getElementById('dashboard-modal').classList.add('hidden');
+            const p = blogPosts.find(x => x.id === id);
+            document.getElementById('edit-post-id').value = p.id;
+            document.getElementById('post-title').value = p.title;
+            document.getElementById('post-subtitle').value = p.subtitle;
+            document.getElementById('post-category').value = p.category || '';
+            document.getElementById('post-image').value = p.imageUrl || '';
+            document.getElementById('post-youtube').value = p.youtubeUrl || '';
+            document.getElementById('post-description').value = p.description;
+            document.getElementById('post-fulltext').innerHTML = p.fullText;
             document.getElementById('editor-modal').classList.remove('hidden');
+            document.getElementById('btn-delete-editor').classList.remove('hidden');
         };
+        window.closeEditor = () => { document.getElementById('editor-modal').classList.add('hidden'); };
 
-        // Disparar criação de ícones
+        function renderAdminList() {
+            const list = document.getElementById('admin-posts-list');
+            list.innerHTML = blogPosts.map(p => `
+                <div class="flex justify-between items-center p-4 border rounded-2xl bg-white hover:border-blue-200 transition-colors shadow-sm">
+                    <div class="truncate mr-4 flex items-center gap-3">
+                        <span class="text-[10px] font-black px-2 py-0.5 rounded-full ${p.status === 'draft' ? 'bg-yellow-100 text-yellow-800' : 'bg-green-100 text-green-800'}">${p.status.toUpperCase()}</span>
+                        <span class="font-black text-gray-800">${p.title}</span>
+                    </div>
+                    <div class="flex gap-2 shrink-0">
+                        <button onclick="window.editPost('${p.id}')" class="p-2.5 bg-blue-50 text-blue-900 rounded-xl hover:bg-blue-100 transition-colors"><i data-lucide="edit-3" class="w-5 h-5"></i></button>
+                        <button onclick="window.deletePost('${p.id}')" class="p-2.5 bg-red-50 text-red-600 rounded-xl hover:bg-red-100 transition-colors"><i data-lucide="trash-2" class="w-5 h-5"></i></button>
+                    </div>
+                </div>
+            `).join('');
+            lucide.createIcons();
+        }
+
         lucide.createIcons();
     </script>
 </body>

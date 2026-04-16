@@ -207,9 +207,9 @@
             <div class="flex flex-col gap-2 mt-2">
                 <p class="text-[10px] font-black uppercase tracking-widest sys-text-secondary mb-2 pl-1">Explorar</p>
                 <div class="flex flex-col gap-3">
-                    <!-- BOTÃO PASTAS QUE EXPANDE -->
+                    <!-- BOTÃO PASTAS/CATEGORIAS QUE EXPANDE -->
                     <button onclick="window.toggleCategories(event)" class="flex items-center justify-between w-full text-left sys-text-primary hover:sys-text-accent font-bold text-lg transition-colors">
-                        <span class="flex items-center gap-4"><div class="p-2 sys-bg-body rounded-lg sys-border border"><i data-lucide="folder" class="w-5 h-5"></i></div> Pastas</span>
+                        <span class="flex items-center gap-4"><div class="p-2 sys-bg-body rounded-lg sys-border border"><i data-lucide="folder" class="w-5 h-5"></i></div> Categorias</span>
                         <i data-lucide="chevron-down" id="cat-chevron" class="w-4 h-4 transition-transform duration-300"></i>
                     </button>
                     <div id="categories-list" class="hidden flex-col pl-14 mt-1 gap-4 sys-text-secondary border-l-2 sys-border ml-[22px] pb-2">
@@ -270,6 +270,7 @@
     <main id="article-view" class="hidden flex-grow w-full z-10 transition-all duration-300 pb-28 sm:pb-8">
         <div class="max-w-3xl mx-auto px-4 py-8 fade-enter">
             <div class="mb-8 sys-border border-b pb-6">
+                <!-- Alterado para showHome() sem limpar o filtro, garantindo a navegação perfeita -->
                 <button onclick="window.showHome()" class="flex items-center gap-2 sys-text-accent font-bold group hover:opacity-80 transition-all">
                     <i data-lucide="arrow-left" class="w-5 h-5 transform group-hover:-translate-x-1 transition-transform"></i> Voltar
                 </button>
@@ -304,11 +305,11 @@
             </button>
             
             <!-- BOTÃO COMUNIDADE EM VERDE PARA DESTAQUE/CONVERSÃO -->
-            <a href="https://chat.whatsapp.com/DgwfvBpeVZIIzHZLgiIlCk" target="_blank" class="flex flex-col items-center justify-center w-full h-full text-green-600 hover:text-green-700 transition-all group">
-                <div class="p-1.5 rounded-2xl bg-green-50 group-hover:bg-green-100 transition-colors mb-0.5">
-                    <i data-lucide="message-circle" class="w-[22px] h-[22px]"></i>
+            <a href="https://chat.whatsapp.com/DgwfvBpeVZIIzHZLgiIlCk" target="_blank" class="flex flex-col items-center justify-center w-full h-full sys-text-secondary transition-all group">
+                <div class="p-2 rounded-2xl bg-green-600 text-white group-hover:bg-green-700 transition-colors mb-0.5 shadow-md">
+                    <i data-lucide="message-circle" class="w-[20px] h-[20px]"></i>
                 </div>
-                <span class="text-[10px] font-bold">Comunidade</span>
+                <span class="text-[10px] font-black text-green-700">Comunidade</span>
             </a>
         </div>
     </nav>
@@ -317,7 +318,7 @@
     <div id="categories-modal" onclick="if(event.target === this) window.toggleCategoriesModal()" class="hidden fixed inset-0 z-50 flex items-end justify-center modal-overlay sm:hidden">
         <div class="sys-bg-surface rounded-t-3xl shadow-2xl w-full p-6 relative transform transition-transform translate-y-full slide-up-animation pb-safe border-t sys-border">
             <div class="flex justify-between items-center mb-6 border-b sys-border pb-4">
-                <h3 class="text-xl font-black sys-text-primary flex items-center gap-2"><i data-lucide="layout-grid" class="w-6 h-6 sys-text-accent"></i> Pastas</h3>
+                <h3 class="text-xl font-black sys-text-primary flex items-center gap-2"><i data-lucide="layout-grid" class="w-6 h-6 sys-text-accent"></i> Categorias</h3>
                 <button onclick="window.toggleCategoriesModal()" class="sys-text-secondary hover:sys-text-primary bg-gray-100 p-2 rounded-full"><i data-lucide="x" class="w-5 h-5"></i></button>
             </div>
             <div id="bottom-categories-list" class="flex flex-col gap-3 max-h-[60vh] overflow-y-auto pb-4"></div>
@@ -670,14 +671,17 @@
         };
 
         window.updateCategoriesMenu = () => {
-            const cats = siteCategories.map(c => c.name); 
+            const dbCats = siteCategories.map(c => c.name);
+            const postCats = blogPosts.map(p => p.category).filter(c => c && c.trim() !== '');
+            const allCats = [...new Set([...dbCats, ...postCats])].sort();
+            
             const sidebarList = document.getElementById('categories-list');
             if(sidebarList) {
-                sidebarList.innerHTML = cats.map(c => `<a href="#" onclick="window.filterByCategory('${c}'); window.toggleMobileMenu(); return false;" class="hover:sys-text-accent py-2 flex items-center gap-3 font-bold text-base transition-colors"><i data-lucide="folder-open" class="w-4 h-4"></i> ${c}</a>`).join('') || '<span class="text-xs italic sys-text-secondary">Nenhuma pasta encontrada.</span>'; 
+                sidebarList.innerHTML = allCats.map(c => `<a href="#" onclick="window.filterByCategory('${c}'); window.toggleMobileMenu(); return false;" class="hover:sys-text-accent py-2 flex items-center gap-3 font-bold text-base transition-colors"><i data-lucide="folder-open" class="w-4 h-4"></i> ${c}</a>`).join('') || '<span class="text-xs italic sys-text-secondary">Nenhuma pasta encontrada.</span>'; 
             }
             const bottomList = document.getElementById('bottom-categories-list');
             if(bottomList) {
-                bottomList.innerHTML = cats.map(c => `<button onclick="window.filterByCategory('${c}'); window.toggleCategoriesModal();" class="w-full text-left px-5 py-4 sys-bg-body sys-text-primary hover:sys-text-accent font-black rounded-2xl transition-colors flex items-center gap-3 border sys-border shadow-sm"><i data-lucide="folder-open" class="w-5 h-5"></i> ${c}</button>`).join('') || '<p class="text-sm sys-text-secondary text-center py-4">Nenhuma pasta encontrada.</p>';
+                bottomList.innerHTML = allCats.map(c => `<button onclick="window.filterByCategory('${c}'); window.toggleCategoriesModal();" class="w-full text-left px-5 py-4 sys-bg-body sys-text-primary hover:sys-text-accent font-black rounded-2xl transition-colors flex items-center gap-3 border sys-border shadow-sm"><i data-lucide="folder-open" class="w-5 h-5"></i> ${c}</button>`).join('') || '<p class="text-sm sys-text-secondary text-center py-4">Nenhuma pasta encontrada.</p>';
             }
             lucide.createIcons(); 
         };
@@ -743,6 +747,7 @@
             document.getElementById('home-view').classList.remove('hidden');
             currentOpenBookId = null;
             window.renderPostsFeed();
+            window.scrollTo(0,0);
         };
 
         window.showLibrary = () => {
@@ -777,6 +782,16 @@
             } else {
                 inner.classList.add('translate-y-full'); setTimeout(() => modal.classList.add('hidden'), 300);
             }
+        };
+
+        window.filterByCategory = (cat) => { 
+            currentCategoryFilter = cat; 
+            window.showHome(); 
+        };
+
+        window.clearFilter = () => { 
+            currentCategoryFilter = null; 
+            window.showHome(); 
         };
 
         window.createCategory = async () => {
@@ -1132,7 +1147,9 @@
             
             container.innerHTML = '';
             let posts = blogPosts.filter(p => p.status !== 'draft');
-            if (currentCategoryFilter) posts = posts.filter(p => p.category === currentCategoryFilter);
+            if (currentCategoryFilter) {
+                posts = posts.filter(p => (p.category || '').trim().toLowerCase() === currentCategoryFilter.trim().toLowerCase());
+            }
             if (posts.length === 0) { container.innerHTML = `<p class="text-center py-20 sys-text-secondary opacity-70">Nenhuma reflexão aqui.</p>`; lucide.createIcons(); return; }
 
             posts.forEach(post => {
@@ -1141,7 +1158,7 @@
                 
                 const mediaHtml = ytId 
                     ? `<div class="aspect-video bg-black relative overflow-hidden group">
-                           <iframe class="absolute inset-0 w-full h-full pointer-events-none transform scale-150" src="https://www.youtube.com/embed/${ytId}?autoplay=1&mute=1&controls=0&showinfo=0&rel=0&loop=1&playlist=${ytId}" frameborder="0" allow="autoplay; encrypted-media"></iframe>
+                           <iframe class="absolute inset-0 w-full h-full pointer-events-none transform scale-[1.35]" src="https://www.youtube.com/embed/${ytId}?autoplay=1&mute=1&controls=0&modestbranding=1&rel=0&loop=1&playlist=${ytId}&playsinline=1" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
                            <div class="absolute inset-0 z-10 flex items-center justify-center bg-black/20 group-hover:bg-black/10 transition-colors cursor-pointer">
                                <div class="w-16 h-16 bg-white/20 backdrop-blur-md rounded-full flex items-center justify-center border border-white/30 group-hover:bg-white/30 transition-all shadow-2xl group-hover:scale-110">
                                    <svg class="w-7 h-7 text-white ml-1 shadow-sm" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
@@ -1181,15 +1198,29 @@
         
         window.openEditor = () => { 
             window.currentEditorId = 'post-fulltext';
+            
+            const dbCats = siteCategories.map(c => c.name);
+            const postCats = blogPosts.map(p => p.category).filter(c => c && c.trim() !== '');
+            const allCats = [...new Set([...dbCats, ...postCats])].sort();
+
             const catSelect = document.getElementById('post-category');
-            catSelect.innerHTML = '<option value="">Sem Categoria</option>' + siteCategories.map(c => `<option value="${c.name}">${c.name}</option>`).join('');
+            catSelect.innerHTML = '<option value="">Sem Categoria</option>' + allCats.map(c => `<option value="${c}">${c}</option>`).join('');
+            
             document.getElementById('edit-post-id').value = ''; ['title', 'subtitle', 'image', 'youtube'].forEach(f => document.getElementById('post-'+f).value = ''); 
             catSelect.value = ''; document.getElementById('post-fulltext').innerHTML = ''; document.getElementById('editor-modal').classList.remove('hidden'); document.getElementById('btn-delete-editor').classList.add('hidden'); 
         };
+        
         window.editPost = (id) => { 
             window.currentEditorId = 'post-fulltext';
-            const p = blogPosts.find(x => x.id === id); const catSelect = document.getElementById('post-category');
-            catSelect.innerHTML = '<option value="">Sem Categoria</option>' + siteCategories.map(c => `<option value="${c.name}">${c.name}</option>`).join('');
+            const p = blogPosts.find(x => x.id === id); 
+            
+            const dbCats = siteCategories.map(c => c.name);
+            const postCats = blogPosts.map(post => post.category).filter(c => c && c.trim() !== '');
+            const allCats = [...new Set([...dbCats, ...postCats])].sort();
+
+            const catSelect = document.getElementById('post-category');
+            catSelect.innerHTML = '<option value="">Sem Categoria</option>' + allCats.map(c => `<option value="${c}">${c}</option>`).join('');
+            
             document.getElementById('edit-post-id').value = p.id; document.getElementById('post-title').value = p.title; document.getElementById('post-subtitle').value = p.subtitle; 
             catSelect.value = p.category || ''; document.getElementById('post-image').value = p.imageUrl || ''; document.getElementById('post-youtube').value = p.youtubeUrl || ''; document.getElementById('post-fulltext').innerHTML = p.fullText; 
             document.getElementById('editor-modal').classList.remove('hidden'); document.getElementById('btn-delete-editor').classList.remove('hidden'); 

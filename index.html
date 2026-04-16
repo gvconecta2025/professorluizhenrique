@@ -208,7 +208,7 @@
     <!-- OVERLAY DO SIDEBAR -->
     <div id="sidebar-overlay" onclick="window.toggleMobileMenu()" class="fixed inset-0 bg-black/50 backdrop-blur-sm z-40 hidden transition-opacity opacity-0 duration-300"></div>
 
-    <!-- MENU LATERAL (SIDEBAR) - Agora desliza da Esquerda (-translate-x-full) -->
+    <!-- MENU LATERAL (SIDEBAR) - Desliza da Esquerda (-translate-x-full) -->
     <aside id="sidebar-menu" class="fixed top-0 left-0 h-full w-[280px] sys-bg-surface shadow-2xl z-50 transform -translate-x-full transition-transform duration-300 ease-in-out flex flex-col border-r sys-border">
         <div class="p-6 flex justify-between items-center sys-border border-b bg-gray-50/5 sys-bg-body">
             <span class="font-black text-xl sys-text-primary flex items-center gap-2"><i data-lucide="compass" class="w-6 h-6 sys-text-accent"></i> Menu</span>
@@ -246,7 +246,7 @@
                 </a>
             </div>
 
-            <!-- Rodapé Invisível de Acesso Restrito (Apenas a Engrenagem Translúcida) -->
+            <!-- Rodapé Invisível de Acesso Restrito (Engrenagem Translúcida) -->
             <div class="mt-auto pt-6 border-t sys-border pb-safe flex justify-end px-2">
                 <a href="#" onclick="window.openAdminLogin(); return false;" class="p-3 sys-text-secondary hover:sys-text-accent transition-all opacity-10 hover:opacity-100 rounded-full" title="Sistema">
                     <i data-lucide="settings" class="w-5 h-5"></i>
@@ -285,7 +285,7 @@
         </div>
     </main>
 
-    <!-- MENU INFERIOR MOBILE (Limpo, Apenas 3 Botões Principais) -->
+    <!-- MENU INFERIOR MOBILE -->
     <nav class="fixed bottom-0 w-full sys-bg-surface sys-border border-t shadow-[0_-10px_40px_rgba(0,0,0,0.06)] z-30 sm:hidden pb-safe">
         <div class="flex justify-around items-center h-[72px] px-2">
             <button onclick="window.clearFilter(); window.closeArticle(); window.scrollTo(0,0);" class="flex flex-col items-center justify-center w-full h-full sys-text-secondary hover:sys-text-accent transition-all group">
@@ -311,7 +311,7 @@
         </div>
     </nav>
 
-    <!-- MODAL DE CATEGORIAS (Para o Menu Inferior) -->
+    <!-- MODAL DE CATEGORIAS -->
     <div id="categories-modal" onclick="if(event.target === this) window.toggleCategoriesModal()" class="hidden fixed inset-0 z-50 flex items-end justify-center modal-overlay sm:hidden">
         <div class="sys-bg-surface rounded-t-3xl shadow-2xl w-full p-6 relative transform transition-transform translate-y-full slide-up-animation pb-safe border-t sys-border">
             <div class="flex justify-between items-center mb-6 border-b sys-border pb-4">
@@ -343,7 +343,7 @@
         </div>
     </div>
 
-    <!-- PAINEL DASHBOARD COM ABAS (Reflexões / Categorias) -->
+    <!-- PAINEL DASHBOARD -->
     <div id="dashboard-modal" class="hidden fixed inset-0 z-50 flex items-center justify-center modal-overlay px-4">
         <div class="bg-white rounded-2xl shadow-2xl w-full max-w-4xl max-h-[90vh] flex flex-col relative overflow-hidden">
             <div class="p-6 border-b border-gray-100 flex justify-between items-center bg-gray-50/50">
@@ -351,14 +351,12 @@
                 <button onclick="window.closeDashboard()" class="text-gray-400 hover:text-gray-600"><i data-lucide="x" class="w-6 h-6"></i></button>
             </div>
             
-            <!-- Navegação das Abas -->
             <div class="px-6 pt-4 border-b border-gray-100 bg-white flex gap-6">
                 <button onclick="window.switchAdminTab('posts')" id="tab-btn-posts" class="pb-3 text-sm font-black text-blue-900 border-b-2 border-blue-900 transition-colors focus:outline-none">Reflexões</button>
                 <button onclick="window.switchAdminTab('categories')" id="tab-btn-categories" class="pb-3 text-sm font-bold text-gray-400 border-b-2 border-transparent hover:text-gray-600 transition-colors focus:outline-none">Categorias</button>
             </div>
 
             <div class="p-6 flex-1 overflow-y-auto">
-                <!-- VIEW 1: REFLEXÕES -->
                 <div id="admin-view-posts">
                     <div class="flex flex-col sm:flex-row justify-between items-center gap-4 mb-6">
                         <h4 class="text-lg font-semibold text-gray-800">Suas Reflexões</h4>
@@ -371,7 +369,6 @@
                     </div>
                 </div>
 
-                <!-- VIEW 2: GESTÃO DE CATEGORIAS -->
                 <div id="admin-view-categories" class="hidden">
                     <div class="flex flex-col sm:flex-row gap-3 mb-6 bg-gray-50 p-4 rounded-2xl border border-gray-100">
                         <input type="text" id="new-category-input" placeholder="Nome da nova categoria..." class="flex-1 border border-gray-300 rounded-xl px-4 py-2.5 outline-none focus:ring-2 focus:ring-blue-900 text-gray-900 bg-white">
@@ -381,7 +378,7 @@
                     </div>
                     <h4 class="text-sm font-bold text-gray-500 uppercase tracking-widest mb-4 pl-1">Categorias Ativas</h4>
                     <div id="admin-categories-list" class="flex flex-col gap-2">
-                        <!-- Categorias Injetadas Via JS -->
+                        <!-- Categorias Injetadas -->
                     </div>
                 </div>
             </div>
@@ -433,7 +430,6 @@
                     <label class="block text-sm font-bold text-gray-700 mb-1">Categoria (Obrigatória)</label>
                     <select id="post-category" class="w-full border border-gray-300 bg-white rounded-xl px-4 py-2.5 outline-none focus:ring-2 focus:ring-blue-900 text-gray-900 cursor-pointer">
                         <option value="">Sem Categoria</option>
-                        <!-- Injetado via JS pelo painel canônico -->
                     </select>
                 </div>
                 <div class="bg-blue-50/30 p-5 rounded-xl border border-blue-100 flex flex-col gap-4">
@@ -447,8 +443,10 @@
                         <button type="button" onclick="window.execEditor('bold')" class="p-2 hover:bg-gray-200 rounded"><i data-lucide="bold" class="w-4 h-4"></i></button>
                         <button type="button" onclick="window.execEditor('italic')" class="p-2 hover:bg-gray-200 rounded"><i data-lucide="italic" class="w-4 h-4"></i></button>
                         <button type="button" onclick="window.execEditor('formatBlock', '<H2>')" class="px-2 font-bold text-sm">H1</button>
-                        <button type="button" onclick="window.insertEditorImage()" class="p-2 text-blue-600"><i data-lucide="image" class="w-4 h-4"></i></button>
-                        <button type="button" onclick="window.insertEditorVideo()" class="p-2 text-red-600"><i data-lucide="youtube" class="w-4 h-4"></i></button>
+                        <button type="button" onclick="window.insertEditorImage()" class="p-2 text-blue-600" title="Inserir Imagem"><i data-lucide="image" class="w-4 h-4"></i></button>
+                        <button type="button" onclick="window.insertEditorVideo()" class="p-2 text-red-600" title="Inserir Vídeo"><i data-lucide="youtube" class="w-4 h-4"></i></button>
+                        <!-- NOVO BOTÃO DE COMPRA/LINK -->
+                        <button type="button" onclick="window.insertEditorButton()" class="p-2 text-green-700 hover:bg-gray-200 rounded" title="Inserir Botão (Call to Action)"><i data-lucide="link" class="w-4 h-4"></i></button>
                     </div>
                     <div id="post-fulltext" contenteditable="true" class="w-full border border-gray-300 rounded-b-xl px-5 py-5 min-h-[300px] bg-white overflow-y-auto prose prose-blue max-w-none shadow-inner outline-none"></div>
                 </div>
@@ -484,7 +482,7 @@
 
         const ADMIN_PASSWORD = "Biguidu2013@"; 
         let blogPosts = [];
-        let siteCategories = []; // Array centralizado de categorias do banco
+        let siteCategories = [];
         let currentCategoryFilter = null;
         const container = document.getElementById('feed-container');
 
@@ -511,7 +509,6 @@
             
             onAuthStateChanged(auth, (user) => {
                 if (user) {
-                    // Escuta Ativa das Reflexões
                     const postsRef = collection(db, 'artifacts', appId, 'public', 'data', 'posts');
                     onSnapshot(postsRef, (snapshot) => {
                         blogPosts = [];
@@ -527,7 +524,6 @@
                         checkDeepLink();
                     }, (err) => console.error("Firebase Error:", err));
 
-                    // Escuta Ativa das Categorias Canônicas
                     const catsRef = collection(db, 'artifacts', appId, 'public', 'data', 'categories');
                     onSnapshot(catsRef, (snapshot) => {
                         siteCategories = [];
@@ -553,7 +549,6 @@
             }
         }
 
-        /* MOTOR DE SISTEMA DE TEMAS E FONTE */
         window.toggleThemeMenu = (e) => {
             if(e) e.stopPropagation();
             document.getElementById('theme-menu').classList.toggle('hidden');
@@ -585,7 +580,6 @@
             }
         });
 
-        /* FUNÇÕES DE MENUS E MODAIS */
         window.toggleMobileMenu = () => {
             const sidebar = document.getElementById('sidebar-menu');
             const overlay = document.getElementById('sidebar-overlay');
@@ -613,7 +607,6 @@
             }
         };
 
-        /* LÓGICA DE GESTÃO CANÔNICA DE CATEGORIAS (CRUD) */
         window.createCategory = async () => {
             const input = document.getElementById('new-category-input');
             const name = input.value.trim();
@@ -636,7 +629,6 @@
                 const finalName = newName.trim();
                 await updateDoc(doc(db, 'artifacts', appId, 'public', 'data', 'categories', id), { name: finalName });
                 
-                // Engenharia ZIG: Atualização em Lote de Artigos Existentes
                 blogPosts.forEach(async p => {
                     if(p.category === oldName) {
                         await updateDoc(doc(db, 'artifacts', appId, 'public', 'data', 'posts', p.id), { category: finalName });
@@ -664,7 +656,6 @@
             lucide.createIcons();
         };
 
-        /* MUDANÇA DE ABAS NO PAINEL ADMIN */
         window.switchAdminTab = (tab) => {
             const vPosts = document.getElementById('admin-view-posts');
             const vCats = document.getElementById('admin-view-categories');
@@ -684,7 +675,6 @@
             }
         };
 
-        /* OPERAÇÕES DE DADOS DE POSTS (FIREBASE) */
         window.savePost = async () => {
             const btn = document.getElementById('btn-save-post');
             const id = document.getElementById('edit-post-id').value;
@@ -753,7 +743,6 @@
             return (match && match[2].length === 11) ? match[2] : null;
         };
 
-        /* RENDERIZAÇÃO DA INTERFACE */
         window.renderPostsFeed = () => {
             const header = document.getElementById('feed-header');
             if (currentCategoryFilter) {
@@ -874,7 +863,6 @@
         window.toggleCategories = (e) => { e.stopPropagation(); document.getElementById('categories-list').classList.toggle('hidden'); };
         
         function updateCategoriesMenu() { 
-            // Agora a lista do site e menus obedece fielmente ao banco canônico de categorias
             const cats = siteCategories.map(c => c.name); 
             
             document.getElementById('categories-list').innerHTML = cats.map(c => `<a href="#" onclick="window.filterByCategory('${c}'); return false;" class="hover:sys-text-accent py-2 flex items-center gap-3 font-bold text-base transition-colors"><i data-lucide="folder-open" class="w-4 h-4"></i> ${c}</a>`).join('') || '<span class="text-xs italic sys-text-secondary">Nenhuma categoria.</span>'; 
@@ -889,12 +877,25 @@
         window.execEditor = (cmd, val = null) => { document.execCommand(cmd, false, val); document.getElementById('post-fulltext').focus(); };
         window.insertEditorImage = () => { const url = prompt("Link da imagem:"); if (url) window.execEditor('insertHTML', `<img src="${window.getDriveImageUrl(url)}" class="w-full rounded-xl my-4" />`); };
         window.insertEditorVideo = () => { const url = prompt("Link do YouTube:"); const id = window.getYoutubeId(url); if (id) window.execEditor('insertHTML', `<div class="aspect-video w-full rounded-xl overflow-hidden my-4"><iframe class="w-full h-full" src="https://www.youtube.com/embed/${id}" frameborder="0" allowfullscreen></iframe></div>`); };
+        
+        // NOVO: Função que cria o Botão (CTA) no Editor
+        window.insertEditorButton = () => {
+            const text = prompt("Texto do botão (ex: Comprar Livro):");
+            if (!text) return;
+            const url = prompt("Link de destino (URL da Amazon, etc.):");
+            if (!url) return;
+            const safeUrl = url.startsWith('http') ? url : 'https://' + url;
+            
+            // HTML injetado com formatação de alta conversão, resistente ao CSS do editor (Prose)
+            const btnHtml = `<div class="my-8 flex justify-center"><a href="${safeUrl}" target="_blank" class="sys-bg-accent font-black text-sm sm:text-base py-4 px-10 rounded-full shadow-2xl transition-all hover:scale-105 uppercase tracking-wide" style="color: #ffffff !important; text-decoration: none !important;">${text}</a></div><p><br></p>`;
+            window.execEditor('insertHTML', btnHtml);
+        };
+
         window.openAdminLogin = () => { if(!document.getElementById('sidebar-menu').classList.contains('-translate-x-full')) window.toggleMobileMenu(); document.getElementById('login-modal').classList.remove('hidden'); document.getElementById('admin-password').value = ''; };
         window.closeAdminLogin = () => document.getElementById('login-modal').classList.add('hidden');
         window.verifyPassword = () => { if (document.getElementById('admin-password').value === ADMIN_PASSWORD) { window.closeAdminLogin(); document.getElementById('dashboard-modal').classList.remove('hidden'); window.switchAdminTab('posts'); } else { document.getElementById('login-error').classList.remove('hidden'); } };
         window.closeDashboard = () => document.getElementById('dashboard-modal').classList.add('hidden');
         
-        // Popula o <select> do Editor usando as categorias canônicas
         window.openEditor = () => { 
             const catSelect = document.getElementById('post-category');
             catSelect.innerHTML = '<option value="">Sem Categoria</option>' + siteCategories.map(c => `<option value="${c.name}">${c.name}</option>`).join('');

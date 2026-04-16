@@ -9,7 +9,6 @@
     
     <title>PLH - Reflexões</title>
     
-    <!-- Metadados para Redes Sociais (Open Graph / WhatsApp) -->
     <meta property="og:title" content="PLH - Reflexões de Fé">
     <meta property="og:description" content="Estudos e aprendizados sobre a Fé. Palavras e reflexões diárias.">
     <meta property="og:url" content="https://professorluizhenrique.vercel.app/">
@@ -18,18 +17,13 @@
     <meta property="og:type" content="website">
     <meta name="twitter:card" content="summary_large_image">
     
-    <!-- Ícone da Aba do Navegador -->
     <link rel="icon" type="image/png" href="./foto-compartilhamento.png">
-    
-    <!-- Cor da barra de status no mobile -->
     <meta name="theme-color" content="#1e3a8a">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <link rel="apple-touch-icon" href="./foto-compartilhamento.png">
 
-    <!-- Memória do Sistema e Motor PWA -->
     <script>
-        // ZIG: Alteração para o Tema Pólen como padrão absoluto inicial.
         const savedTheme = localStorage.getItem('site-theme') || 'polen';
         const savedFontSize = localStorage.getItem('site-font-size') || 'normal';
         document.documentElement.classList.add('theme-' + savedTheme);
@@ -132,7 +126,6 @@
 </head>
 <body class="sys-bg-body sys-text-primary font-sans antialiased min-h-screen flex flex-col">
 
-    <!-- Cabeçalho -->
     <header class="sys-bg-surface shadow-sm sticky top-0 z-20 flex-shrink-0 sys-border border-b">
         <div class="max-w-4xl mx-auto px-4 py-4 flex items-center justify-between">
             <div class="flex items-center gap-2 sm:gap-4">
@@ -169,10 +162,8 @@
         </div>
     </header>
 
-    <!-- Sidebar Overlay -->
     <div id="sidebar-overlay" onclick="window.toggleMobileMenu()" class="fixed inset-0 bg-black/50 backdrop-blur-sm z-40 hidden transition-opacity opacity-0 duration-300"></div>
 
-    <!-- Sidebar Menu -->
     <aside id="sidebar-menu" class="fixed top-0 left-0 h-full w-[280px] sys-bg-surface shadow-2xl z-50 transform -translate-x-full transition-transform duration-300 ease-in-out flex flex-col border-r sys-border">
         <div class="p-6 flex justify-between items-center sys-border border-b bg-gray-50/5 sys-bg-body">
             <span class="font-black text-xl sys-text-primary flex items-center gap-2"><i data-lucide="compass" class="w-6 h-6 sys-text-accent"></i> Menu</span>
@@ -191,7 +182,7 @@
                 <div id="categories-list" class="hidden flex-col pl-10 mt-1 gap-3 sys-text-secondary border-l-2 sys-border ml-2"></div>
             </div>
             
-            <a href="https://chat.whatsapp.com/DgwfvBpeVZIIzHZLgiIlCk" target="_blank" class="flex items-center gap-4 font-bold text-lg text-green-600 hover:text-green-700 transition-colors mt-2"><i data-lucide="message-circle" class="w-5 h-5"></i> Comunidade</a>
+            <a href="#" onclick="window.showCommunity(); window.toggleMobileMenu(); return false;" class="flex items-center gap-4 font-bold text-lg text-green-600 hover:text-green-700 transition-colors mt-2"><i data-lucide="message-circle" class="w-5 h-5"></i> Comunidade</a>
             
             <div class="mt-auto pt-6 border-t sys-border flex justify-end">
                 <button onclick="window.openAdminLogin()" class="p-3 sys-text-secondary opacity-10 hover:opacity-100 transition-all"><i data-lucide="settings" class="w-5 h-5"></i></button>
@@ -199,7 +190,6 @@
         </div>
     </aside>
 
-    <!-- Main Content: Home (Posts) -->
     <main id="home-view" class="flex-grow max-w-3xl w-full mx-auto px-4 py-8 pb-28 sm:pb-8 z-10 fade-enter">
         <div class="mb-8 border-b sys-border pb-6" id="feed-header">
             <h2 class="text-3xl font-black sys-text-primary mb-1">Reflexões</h2>
@@ -208,7 +198,6 @@
         <div id="feed-container" class="flex flex-col gap-6"></div>
     </main>
 
-    <!-- Main Content: Library Gallery -->
     <main id="library-view" class="hidden flex-grow max-w-4xl w-full mx-auto px-4 py-8 pb-28 sm:pb-8 z-10 fade-enter">
         <div class="mb-8 border-b sys-border pb-6 text-center sm:text-left">
             <h2 class="text-3xl font-black sys-text-primary mb-2 flex items-center justify-center sm:justify-start gap-3"><i data-lucide="book-open" class="w-8 h-8 sys-text-accent"></i> Biblioteca</h2>
@@ -217,7 +206,6 @@
         <div id="library-container" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4 sm:gap-6"></div>
     </main>
 
-    <!-- Main Content: Book Detail (Funil de Vendas e Social Proof) -->
     <main id="book-detail-view" class="hidden flex-grow max-w-4xl w-full mx-auto px-4 py-8 pb-28 sm:pb-8 z-10 fade-enter">
         <div class="mb-6 border-b sys-border pb-4">
             <button onclick="window.showLibrary()" class="flex items-center gap-2 sys-text-accent font-bold group hover:opacity-80 transition-all">
@@ -227,7 +215,6 @@
         <div id="book-detail-content"></div>
     </main>
 
-    <!-- Main Content: Article Detail -->
     <main id="article-view" class="hidden flex-grow w-full z-10 transition-all duration-300 pb-28 sm:pb-8">
         <div class="max-w-3xl mx-auto px-4 py-8 fade-enter">
             <div class="mb-8 sys-border border-b pb-6">
@@ -239,7 +226,49 @@
         </div>
     </main>
 
-    <!-- Bottom Nav -->
+    <main id="community-view" class="hidden flex-grow max-w-3xl w-full mx-auto px-4 py-8 pb-28 sm:pb-8 z-10 fade-enter">
+        <div class="text-center mb-10">
+            <div class="w-20 h-20 bg-green-100 text-green-600 rounded-full flex items-center justify-center mx-auto mb-6 shadow-sm border-4 border-white ring-1 ring-green-200">
+                <i data-lucide="users" class="w-10 h-10"></i>
+            </div>
+            <h2 class="text-3xl sm:text-4xl font-black sys-text-primary mb-3">Comunidade Vida Plena</h2>
+            <p class="text-lg sys-text-secondary max-w-xl mx-auto">Um espaço seguro e focado para o seu desenvolvimento.</p>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-10">
+            <div class="sys-bg-surface p-6 rounded-2xl border sys-border shadow-sm">
+                <div class="flex items-center gap-3 mb-3 text-blue-600">
+                    <i data-lucide="check-circle-2" class="w-6 h-6"></i>
+                    <h3 class="font-bold text-lg sys-text-primary">O que é?</h3>
+                </div>
+                <p class="text-sm sys-text-secondary leading-relaxed">Uma comunidade de irmãos em busca de estudos. Todos têm suas denominações, igrejas e pastores. Não queremos concorrer com as igrejas, apenas reunir-nos em torno do estudo fiel e focado, dirigido, idealizado e coordenado pelo professor Luiz Henrique. É um projeto interdenominacional focado na coluna vertebral da fé: Jesus.</p>
+            </div>
+            
+            <div class="flex flex-col gap-4">
+                <div class="sys-bg-surface p-6 rounded-2xl border sys-border shadow-sm">
+                    <div class="flex items-center gap-3 mb-3 text-red-500">
+                        <i data-lucide="x-circle" class="w-6 h-6"></i>
+                        <h3 class="font-bold text-lg sys-text-primary">O que não é?</h3>
+                    </div>
+                    <p class="text-sm sys-text-secondary leading-relaxed">Não somos uma nova igreja, não somos uma nova denominação e não somos um movimento de rebelião.</p>
+                </div>
+                <div class="sys-bg-surface p-6 rounded-2xl border sys-border shadow-sm bg-gradient-to-br from-yellow-50 to-transparent">
+                    <div class="flex items-center gap-3 mb-2 text-yellow-600">
+                        <i data-lucide="shield-check" class="w-6 h-6"></i>
+                        <h3 class="font-bold text-lg sys-text-primary">A Regra de Ouro</h3>
+                    </div>
+                    <p class="text-sm sys-text-secondary leading-relaxed"><strong>Grupo silencioso.</strong> Sem spam, sem correntes de 'bom dia'. Apenas avisos de novos artigos, e-books e reflexões estratégicas.</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="border-t sys-border pt-10">
+            <h3 class="text-2xl font-black sys-text-primary mb-6 text-center">Selecione um grupo disponível:</h3>
+            <div id="community-groups-list" class="flex flex-col gap-4 max-w-lg mx-auto">
+                </div>
+        </div>
+    </main>
+
     <nav class="fixed bottom-0 w-full sys-bg-surface sys-border border-t shadow-[0_-10px_40px_rgba(0,0,0,0.06)] z-30 sm:hidden pb-safe">
         <div class="flex justify-around items-center h-[72px] px-1">
             <button onclick="window.clearFilter(); window.showHome(); window.scrollTo(0,0);" class="flex flex-col items-center justify-center w-full h-full sys-text-secondary hover:sys-text-accent transition-all group">
@@ -254,14 +283,14 @@
                 <div class="p-1.5 rounded-2xl group-hover:bg-gray-100/50 transition-colors mb-0.5"><i data-lucide="layout-grid" class="w-[22px] h-[22px]"></i></div>
                 <span class="text-[10px] font-bold">Pastas</span>
             </button>
-            <a href="https://chat.whatsapp.com/DgwfvBpeVZIIzHZLgiIlCk" target="_blank" class="flex flex-col items-center justify-center w-full h-full text-green-600 hover:text-green-700 transition-all group">
+            
+            <button onclick="window.showCommunity(); window.scrollTo(0,0);" class="flex flex-col items-center justify-center w-full h-full text-green-600 hover:text-green-700 transition-all group">
                 <div class="p-2 rounded-2xl bg-green-600 text-white shadow-md mb-0.5"><i data-lucide="message-circle" class="w-[20px] h-[20px]"></i></div>
                 <span class="text-[10px] font-black text-green-700">Comunidade</span>
-            </a>
+            </button>
         </div>
     </nav>
 
-    <!-- Categories Modal (Bottom) -->
     <div id="categories-modal" onclick="if(event.target === this) window.toggleCategoriesModal()" class="hidden fixed inset-0 z-50 flex items-end justify-center modal-overlay sm:hidden">
         <div class="sys-bg-surface rounded-t-3xl shadow-2xl w-full p-6 relative transform transition-transform translate-y-full slide-up-animation pb-safe border-t sys-border">
             <div class="flex justify-between items-center mb-6 border-b sys-border pb-4">
@@ -272,12 +301,10 @@
         </div>
     </div>
 
-    <!-- Floating Button (Desktop) -->
-    <a href="https://chat.whatsapp.com/DgwfvBpeVZIIzHZLgiIlCk" target="_blank" class="hidden sm:flex floating-btn bg-green-600 text-white px-5 py-3 rounded-full shadow-2xl items-center gap-2 font-bold text-sm border-b-4 border-green-800 active:translate-y-1 active:border-b-0 hover:bg-green-700 transition-all">
-        <i data-lucide="users" class="w-5 h-5"></i> Seja Notificado
-    </a>
+    <button onclick="window.showCommunity(); window.scrollTo(0,0);" class="hidden sm:flex floating-btn bg-green-600 text-white px-5 py-3 rounded-full shadow-2xl items-center gap-2 font-bold text-sm border-b-4 border-green-800 active:translate-y-1 active:border-b-0 hover:bg-green-700 transition-all">
+        <i data-lucide="users" class="w-5 h-5"></i> Comunidade PLH
+    </button>
 
-    <!-- Admin Login Modal -->
     <div id="login-modal" class="hidden fixed inset-0 z-50 flex items-center justify-center modal-overlay px-4">
         <div class="bg-white rounded-2xl shadow-2xl w-full max-w-sm p-8 relative">
             <button onclick="window.closeAdminLogin()" class="absolute top-4 right-4 text-gray-400 hover:text-gray-600"><i data-lucide="x" class="w-6 h-6"></i></button>
@@ -288,9 +315,8 @@
         </div>
     </div>
 
-    <!-- Admin Dashboard -->
     <div id="dashboard-modal" class="hidden fixed inset-0 z-50 flex items-center justify-center modal-overlay px-4">
-        <div class="bg-white rounded-2xl shadow-2xl w-full max-w-4xl max-h-[90vh] flex flex-col relative overflow-hidden">
+        <div class="bg-white rounded-2xl shadow-2xl w-full max-w-5xl max-h-[90vh] flex flex-col relative overflow-hidden">
             <div class="p-6 border-b border-gray-100 flex justify-between items-center bg-gray-50/50">
                 <h3 class="text-xl font-bold text-gray-900 flex items-center gap-2"><i data-lucide="layout-dashboard" class="w-6 h-6 text-blue-900"></i> Painel de Controle</h3>
                 <button onclick="window.closeDashboard()" class="text-gray-400 hover:text-gray-600"><i data-lucide="x" class="w-6 h-6"></i></button>
@@ -299,7 +325,9 @@
                 <button onclick="window.switchAdminTab('posts')" id="tab-btn-posts" class="pb-3 text-sm font-black text-blue-900 border-b-2 border-blue-900 focus:outline-none whitespace-nowrap">Reflexões</button>
                 <button onclick="window.switchAdminTab('books')" id="tab-btn-books" class="pb-3 text-sm font-bold text-gray-400 border-b-2 border-transparent focus:outline-none whitespace-nowrap">Biblioteca</button>
                 <button onclick="window.switchAdminTab('categories')" id="tab-btn-categories" class="pb-3 text-sm font-bold text-gray-400 border-b-2 border-transparent focus:outline-none whitespace-nowrap">Pastas</button>
+                <button onclick="window.switchAdminTab('community')" id="tab-btn-community" class="pb-3 text-sm font-bold text-gray-400 border-b-2 border-transparent focus:outline-none whitespace-nowrap">Comunidade</button>
             </div>
+            
             <div class="p-6 flex-1 overflow-y-auto bg-gray-50/30">
                 <div id="admin-view-posts">
                     <div class="flex justify-between items-center mb-6"><h4 class="text-lg font-semibold text-gray-800">Suas Reflexões</h4><button onclick="window.openEditor()" class="bg-blue-900 text-white px-6 py-2.5 rounded-xl font-bold flex items-center gap-2"><i data-lucide="plus" class="w-5 h-5"></i> Nova Reflexão</button></div>
@@ -314,11 +342,48 @@
                     <h4 class="text-sm font-bold text-gray-500 uppercase tracking-widest mb-4 pl-1">Pastas Ativas</h4>
                     <div id="admin-categories-list" class="flex flex-col gap-2"></div>
                 </div>
+                <div id="admin-view-community" class="hidden">
+                    <div class="flex justify-between items-center mb-6"><h4 class="text-lg font-semibold text-gray-800">Grupos de WhatsApp</h4><button onclick="window.openGroupEditor()" class="bg-green-600 text-white px-6 py-2.5 rounded-xl font-bold flex items-center gap-2"><i data-lucide="plus" class="w-5 h-5"></i> Novo Grupo</button></div>
+                    <div id="admin-groups-list" class="flex flex-col gap-3"></div>
+                </div>
             </div>
         </div>
     </div>
 
-    <!-- Editor de Reflexões -->
+    <div id="group-editor-modal" class="hidden fixed inset-0 z-50 flex items-center justify-center modal-overlay px-4 py-4">
+        <div class="bg-white rounded-2xl shadow-2xl w-full max-w-md flex flex-col relative overflow-hidden text-gray-900">
+            <div class="p-5 border-b border-gray-100 flex justify-between items-center bg-gray-50">
+                <h3 id="group-editor-title" class="text-xl font-bold text-gray-900">Novo Grupo</h3>
+                <button onclick="window.closeGroupEditor()" class="text-gray-400 hover:text-gray-600"><i data-lucide="x" class="w-6 h-6"></i></button>
+            </div>
+            <div class="p-6 flex flex-col gap-5">
+                <input type="hidden" id="edit-group-id">
+                <div>
+                    <label class="block text-sm font-bold text-gray-700 mb-1">Nome do Grupo (Ex: Grupo 04)</label>
+                    <input type="text" id="group-name" class="w-full border border-gray-300 bg-white rounded-xl px-4 py-2.5 outline-none focus:ring-2 focus:ring-green-600">
+                </div>
+                <div>
+                    <label class="block text-sm font-bold text-gray-700 mb-1">Link de Convite do WhatsApp</label>
+                    <input type="text" id="group-link" placeholder="https://chat.whatsapp.com/..." class="w-full border border-gray-300 bg-white rounded-xl px-4 py-2.5 outline-none focus:ring-2 focus:ring-green-600">
+                </div>
+                <div class="bg-gray-50 p-4 rounded-xl border border-gray-200 mt-2">
+                    <p class="text-sm font-bold text-gray-900 mb-3">Status do Grupo</p>
+                    <div class="flex flex-col gap-3">
+                        <label class="flex items-center gap-2 cursor-pointer text-sm font-bold text-green-700"><input type="radio" name="group_status" value="open" id="group-status-open" class="w-4 h-4" checked> 🟢 Vagas Abertas</label>
+                        <label class="flex items-center gap-2 cursor-pointer text-sm font-bold text-gray-500"><input type="radio" name="group_status" value="full" id="group-status-full" class="w-4 h-4"> 🔒 Lotação Máxima (Lotado)</label>
+                    </div>
+                </div>
+            </div>
+            <div class="p-6 border-t border-gray-100 bg-gray-50 flex justify-between">
+                <button id="btn-delete-group" onclick="window.deleteGroup(document.getElementById('edit-group-id').value)" class="hidden text-red-600 font-bold px-4 hover:bg-red-50 rounded-xl py-2">Excluir</button>
+                <div class="flex gap-3 ml-auto">
+                    <button onclick="window.closeGroupEditor()" class="px-6 py-2.5 border border-gray-300 rounded-xl font-medium hover:bg-gray-100">Cancelar</button>
+                    <button onclick="window.saveGroup()" id="btn-save-group" class="px-8 py-2.5 bg-green-600 text-white rounded-xl font-bold shadow-lg hover:bg-green-700">Salvar Grupo</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <div id="editor-modal" class="hidden fixed inset-0 z-50 flex items-center justify-center modal-overlay px-4 py-4">
         <div class="bg-white rounded-2xl shadow-2xl w-full max-w-4xl max-h-full flex flex-col relative overflow-hidden text-gray-900">
             <div class="p-5 border-b border-gray-100 flex justify-between items-center bg-gray-50"><h3 id="editor-title" class="text-xl font-bold text-gray-900">Nova Reflexão</h3><button onclick="window.closeEditor()" class="text-gray-400 hover:text-gray-600"><i data-lucide="x" class="w-6 h-6"></i></button></div>
@@ -348,24 +413,19 @@
         </div>
     </div>
 
-    <!-- Editor de Livros (Formatos Independentes) -->
     <div id="book-editor-modal" class="hidden fixed inset-0 z-50 flex items-center justify-center modal-overlay px-4 py-4">
         <div class="bg-white rounded-2xl shadow-2xl w-full max-w-4xl max-h-full flex flex-col relative overflow-hidden text-gray-900">
             <div class="p-5 border-b flex justify-between items-center bg-green-50/50"><h3 id="book-editor-title" class="text-xl font-bold text-green-900">Livro</h3><button onclick="window.closeBookEditor()" class="text-gray-400"><i data-lucide="x" class="w-6 h-6"></i></button></div>
             <div class="p-6 flex-1 overflow-y-auto flex flex-col gap-6">
                 <input type="hidden" id="edit-book-id">
-                
                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <input type="text" id="book-title" placeholder="Título da Obra" class="border border-gray-300 rounded-xl px-4 py-2.5 outline-none focus:ring-2 focus:ring-green-700">
                     <input type="text" id="book-subtitle" placeholder="Subtítulo (Aparece na Galeria)" class="border border-gray-300 rounded-xl px-4 py-2.5 outline-none focus:ring-2 focus:ring-green-700">
                 </div>
-                
                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <input type="text" id="book-cover" placeholder="Link da Capa (Imagem 2:3)" class="border border-gray-300 rounded-xl px-4 py-2.5 outline-none focus:ring-2 focus:ring-green-700">
                     <input type="number" id="book-pages" placeholder="Quantidade de Páginas" class="border border-gray-300 rounded-xl px-4 py-2.5 outline-none focus:ring-2 focus:ring-green-700">
                 </div>
-
-                <!-- Engenharia ZIG: Formatos Independentes -->
                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-6 border-t border-gray-200 pt-6">
                     <div class="bg-gray-50 p-4 rounded-xl border border-gray-200">
                         <label class="flex items-center gap-2 font-bold mb-3"><input type="checkbox" id="book-has-physical" class="w-4 h-4" onchange="window.toggleBookFormats()"> Livro Físico</label>
@@ -378,15 +438,13 @@
                     <div class="bg-blue-50/50 p-4 rounded-xl border border-blue-100">
                         <label class="flex items-center gap-2 font-bold mb-3"><input type="checkbox" id="book-has-ebook" class="w-4 h-4" onchange="window.toggleBookFormats()"> E-book (Digital)</label>
                         <div id="book-ebook-fields" class="flex flex-col gap-2 opacity-50 pointer-events-none">
-                            <input type="text" id="book-price-ebook" class="border border-gray-300 rounded-lg px-3 py-2 text-sm" placeholder="Preço (Ex: R$ 19,90 ou Gratuito)" disabled>
+                            <input type="text" id="book-price-ebook" class="border border-gray-300 rounded-lg px-3 py-2 text-sm" placeholder="Preço ou 'Gratuito'" disabled>
                             <input type="text" id="book-btn-ebook" class="border border-gray-300 rounded-lg px-3 py-2 text-sm" placeholder="Texto Botão E-book (Ex: Baixar E-book)" disabled>
                             <input type="text" id="book-link-ebook" class="border border-gray-300 rounded-lg px-3 py-2 text-sm" placeholder="Link de Venda/Download E-book" disabled>
                         </div>
                     </div>
                 </div>
-
                 <input type="text" id="book-sample" placeholder="Link para PDF de Amostra Grátis (Opcional)" class="w-full border border-gray-300 rounded-xl px-4 py-2.5 outline-none focus:ring-2 focus:ring-green-700">
-
                 <div>
                     <label class="block text-sm font-bold mb-1">Sinopse da Página de Vendas</label>
                     <div class="border border-gray-300 border-b-0 rounded-t-xl bg-gray-50 px-4 py-3 flex flex-wrap gap-2">
@@ -395,23 +453,16 @@
                     </div>
                     <div id="book-fulltext" contenteditable="true" class="w-full border border-gray-300 rounded-b-xl px-6 py-6 min-h-[250px] bg-white overflow-y-auto prose prose-green max-w-none shadow-inner outline-none"></div>
                 </div>
-
-                <!-- Moderação e Métricas -->
                 <div class="border-t border-gray-200 pt-6 mt-2">
                     <h4 class="text-sm font-bold text-gray-900 mb-4"><i data-lucide="shield-alert" class="w-4 h-4 inline mr-1 text-red-600"></i> Moderação e Métricas</h4>
                     <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-4">
-                        <div>
-                            <label class="block text-xs font-bold text-gray-500 uppercase tracking-wider mb-1">Total de Curtidas</label>
-                            <input type="number" id="book-likes" class="w-full border border-gray-300 bg-white rounded-xl px-4 py-2.5 outline-none focus:ring-2 focus:ring-green-700" value="0">
-                        </div>
+                        <div><label class="block text-xs font-bold text-gray-500 uppercase tracking-wider mb-1">Total de Curtidas</label><input type="number" id="book-likes" class="w-full border border-gray-300 bg-white rounded-xl px-4 py-2.5 outline-none focus:ring-2 focus:ring-green-700" value="0"></div>
                     </div>
                     <div id="book-moderation-section" class="hidden">
                         <label class="block text-xs font-bold text-gray-500 uppercase tracking-wider mb-2">Comentários Ativos</label>
-                        <div id="book-comments-moderation" class="flex flex-col gap-2 max-h-[250px] overflow-y-auto bg-gray-50 p-3 rounded-xl border border-gray-200 shadow-inner">
-                        </div>
+                        <div id="book-comments-moderation" class="flex flex-col gap-2 max-h-[250px] overflow-y-auto bg-gray-50 p-3 rounded-xl border border-gray-200 shadow-inner"></div>
                     </div>
                 </div>
-
             </div>
             <div class="p-6 border-t bg-gray-50 flex justify-between"><button id="btn-delete-book" onclick="window.deleteBook(document.getElementById('edit-book-id').value)" class="hidden px-5 py-2.5 text-red-600 font-bold hover:bg-red-50 rounded-xl transition-colors"><i data-lucide="trash-2" class="w-4 h-4 inline mr-2"></i> Excluir</button><div class="flex gap-3 ml-auto"><button onclick="window.closeBookEditor()" class="px-6 py-2.5 border rounded-xl font-medium hover:bg-gray-100">Cancelar</button><button onclick="window.saveBook()" id="btn-save-book" class="px-8 py-2.5 bg-green-700 text-white rounded-xl font-bold shadow-lg hover:bg-green-800">Salvar Livro</button></div></div>
         </div>
@@ -429,73 +480,29 @@
         const firebaseConfig = { apiKey: "AIzaSyCg5aIHRDyOPHDwrP_OFYMn2AE9euWVOyw", authDomain: "professorluizhenrique-a9fe9.firebaseapp.com", projectId: "professorluizhenrique-a9fe9", storageBucket: "professorluizhenrique-a9fe9.firebasestorage.app", messagingSenderId: "354928637639", appId: "1:354928637639:web:fd144793b51237618ff0e2" };
         const ADMIN_PASSWORD = "Biguidu2013@"; 
         
-        window.blogPosts = [];
-        window.siteCategories = [];
-        window.siteBooks = []; 
-        window.currentCategoryFilter = null;
-        window.currentOpenBookId = null;
-        window.currentEditorId = 'post-fulltext';
-        window.deepLinkChecked = false;
+        window.blogPosts = []; window.siteCategories = []; window.siteBooks = []; window.siteGroups = [];
+        window.currentCategoryFilter = null; window.currentOpenBookId = null; window.currentEditorId = 'post-fulltext'; window.deepLinkChecked = false;
 
-        const app = initializeApp(firebaseConfig);
-        const auth = getAuth(app);
-        const db = getFirestore(app);
-        const appId = typeof __app_id !== 'undefined' ? __app_id : 'plh-blog-default';
+        const app = initializeApp(firebaseConfig); const auth = getAuth(app); const db = getFirestore(app); const appId = typeof __app_id !== 'undefined' ? __app_id : 'plh-blog-default';
 
-        window.checkDeepLink = () => {
-            const urlParams = new URLSearchParams(window.location.search);
-            if (urlParams.get('post')) {
-                window.history.replaceState({}, '', window.location.origin + window.location.pathname);
-                window.openArticle(urlParams.get('post'));
-            }
-        };
+        window.checkDeepLink = () => { const urlParams = new URLSearchParams(window.location.search); if (urlParams.get('post')) { window.history.replaceState({}, '', window.location.origin + window.location.pathname); window.openArticle(urlParams.get('post')); } };
 
         window.updateCategoriesMenu = () => {
-            const dbCats = window.siteCategories.map(c => c.name);
-            const postCats = window.blogPosts.map(p => p.category).filter(c => c && c.trim() !== '');
+            const dbCats = window.siteCategories.map(c => c.name); const postCats = window.blogPosts.map(p => p.category).filter(c => c && c.trim() !== '');
             const allCats = [...new Set([...dbCats, ...postCats])].sort();
-            
-            const sidebarList = document.getElementById('categories-list');
-            if(sidebarList) sidebarList.innerHTML = allCats.map(c => `<a href="#" onclick="window.filterByCategory('${c.replace(/'/g, "\\'")}'); window.toggleMobileMenu(); return false;" class="hover:sys-text-accent py-2 flex items-center gap-3 font-bold text-base transition-colors"><i data-lucide="folder-open" class="w-4 h-4"></i> ${c}</a>`).join('') || '<span class="text-xs italic sys-text-secondary">Nenhuma pasta encontrada.</span>'; 
-            
-            const bottomList = document.getElementById('bottom-categories-list');
-            if(bottomList) bottomList.innerHTML = allCats.map(c => `<button onclick="window.filterByCategory('${c.replace(/'/g, "\\'")}'); window.toggleCategoriesModal(true);" class="w-full text-left px-5 py-4 sys-bg-body sys-text-primary hover:sys-text-accent font-black rounded-2xl transition-colors flex items-center gap-3 border sys-border shadow-sm"><i data-lucide="folder-open" class="w-5 h-5"></i> ${c}</button>`).join('') || '<p class="text-sm sys-text-secondary text-center py-4">Nenhuma pasta encontrada.</p>';
-            
+            const sList = document.getElementById('categories-list'); if(sList) sList.innerHTML = allCats.map(c => `<a href="#" onclick="window.filterByCategory('${c.replace(/'/g, "\\'")}'); window.toggleMobileMenu(); return false;" class="hover:sys-text-accent py-2 flex items-center gap-3 font-bold text-base transition-colors"><i data-lucide="folder-open" class="w-4 h-4"></i> ${c}</a>`).join('') || '<span class="text-xs italic sys-text-secondary">Nenhuma pasta encontrada.</span>'; 
+            const bList = document.getElementById('bottom-categories-list'); if(bList) bList.innerHTML = allCats.map(c => `<button onclick="window.filterByCategory('${c.replace(/'/g, "\\'")}'); window.toggleCategoriesModal(true);" class="w-full text-left px-5 py-4 sys-bg-body sys-text-primary hover:sys-text-accent font-black rounded-2xl transition-colors flex items-center gap-3 border sys-border shadow-sm"><i data-lucide="folder-open" class="w-5 h-5"></i> ${c}</button>`).join('') || '<p class="text-sm sys-text-secondary text-center py-4">Nenhuma pasta encontrada.</p>';
             lucide.createIcons(); 
         };
 
         window.onload = async () => {
-            try {
-                if (typeof __initial_auth_token !== 'undefined' && __initial_auth_token) {
-                    try { await signInWithCustomToken(auth, __initial_auth_token); } 
-                    catch (tokenError) { await signInAnonymously(auth); }
-                } else { await signInAnonymously(auth); }
-            } catch (err) {}
-            
+            try { if (typeof __initial_auth_token !== 'undefined' && __initial_auth_token) { try { await signInWithCustomToken(auth, __initial_auth_token); } catch (e) { await signInAnonymously(auth); } } else { await signInAnonymously(auth); } } catch (err) {}
             onAuthStateChanged(auth, (user) => {
                 if (user) {
-                    onSnapshot(collection(db, 'artifacts', appId, 'public', 'data', 'posts'), (snapshot) => {
-                        window.blogPosts = []; snapshot.forEach(doc => { window.blogPosts.push({ id: doc.id, ...doc.data() }); });
-                        window.blogPosts.sort((a, b) => (b.createdAt || 0) - (a.createdAt || 0));
-                        window.updateCategoriesMenu(); window.renderPostsFeed();
-                        if (!document.getElementById('dashboard-modal').classList.contains('hidden') && !document.getElementById('admin-view-posts').classList.contains('hidden')) window.renderAdminList();
-                        if(!window.deepLinkChecked) { window.checkDeepLink(); window.deepLinkChecked = true; }
-                    });
-
-                    onSnapshot(collection(db, 'artifacts', appId, 'public', 'data', 'categories'), (snapshot) => {
-                        window.siteCategories = []; snapshot.forEach(doc => { window.siteCategories.push({ id: doc.id, ...doc.data() }); });
-                        window.siteCategories.sort((a, b) => (a.createdAt || 0) - (b.createdAt || 0));
-                        window.updateCategoriesMenu();
-                        if (!document.getElementById('dashboard-modal').classList.contains('hidden') && !document.getElementById('admin-view-categories').classList.contains('hidden')) window.renderAdminCategories();
-                    });
-
-                    onSnapshot(collection(db, 'artifacts', appId, 'public', 'data', 'books'), (snapshot) => {
-                        window.siteBooks = []; snapshot.forEach(doc => { window.siteBooks.push({ id: doc.id, ...doc.data() }); });
-                        window.siteBooks.sort((a, b) => (b.createdAt || 0) - (a.createdAt || 0)); 
-                        window.renderLibrary();
-                        if(window.currentOpenBookId && !document.getElementById('book-detail-view').classList.contains('hidden')) window.renderBookDetailContent(window.currentOpenBookId);
-                        if (!document.getElementById('dashboard-modal').classList.contains('hidden') && !document.getElementById('admin-view-books').classList.contains('hidden')) window.renderAdminBooks();
-                    });
+                    onSnapshot(collection(db, 'artifacts', appId, 'public', 'data', 'posts'), (snapshot) => { window.blogPosts = []; snapshot.forEach(doc => { window.blogPosts.push({ id: doc.id, ...doc.data() }); }); window.blogPosts.sort((a, b) => (b.createdAt || 0) - (a.createdAt || 0)); window.updateCategoriesMenu(); window.renderPostsFeed(); if (!document.getElementById('dashboard-modal').classList.contains('hidden') && !document.getElementById('admin-view-posts').classList.contains('hidden')) window.renderAdminList(); if(!window.deepLinkChecked) { window.checkDeepLink(); window.deepLinkChecked = true; } });
+                    onSnapshot(collection(db, 'artifacts', appId, 'public', 'data', 'categories'), (snapshot) => { window.siteCategories = []; snapshot.forEach(doc => { window.siteCategories.push({ id: doc.id, ...doc.data() }); }); window.siteCategories.sort((a, b) => (a.createdAt || 0) - (b.createdAt || 0)); window.updateCategoriesMenu(); if (!document.getElementById('dashboard-modal').classList.contains('hidden') && !document.getElementById('admin-view-categories').classList.contains('hidden')) window.renderAdminCategories(); });
+                    onSnapshot(collection(db, 'artifacts', appId, 'public', 'data', 'books'), (snapshot) => { window.siteBooks = []; snapshot.forEach(doc => { window.siteBooks.push({ id: doc.id, ...doc.data() }); }); window.siteBooks.sort((a, b) => (b.createdAt || 0) - (a.createdAt || 0)); window.renderLibrary(); if(window.currentOpenBookId && !document.getElementById('book-detail-view').classList.contains('hidden')) window.renderBookDetailContent(window.currentOpenBookId); if (!document.getElementById('dashboard-modal').classList.contains('hidden') && !document.getElementById('admin-view-books').classList.contains('hidden')) window.renderAdminBooks(); });
+                    onSnapshot(collection(db, 'artifacts', appId, 'public', 'data', 'groups'), (snapshot) => { window.siteGroups = []; snapshot.forEach(doc => { window.siteGroups.push({ id: doc.id, ...doc.data() }); }); window.siteGroups.sort((a, b) => (a.createdAt || 0) - (b.createdAt || 0)); window.renderCommunityGroups(); if (!document.getElementById('dashboard-modal').classList.contains('hidden') && !document.getElementById('admin-view-community').classList.contains('hidden')) window.renderAdminGroups(); });
                 }
             });
         };
@@ -505,9 +512,10 @@
         window.cycleFontSize = () => { const html = document.documentElement; let newSize = html.classList.contains('font-size-normal') ? 'large' : (html.classList.contains('font-size-large') ? 'xlarge' : 'normal'); html.className = html.className.replace(/font-size-\w+/g, '') + ' font-size-' + newSize; localStorage.setItem('site-font-size', newSize); };
         document.addEventListener('click', (e) => { const menu = document.getElementById('theme-menu'); if (menu && !menu.classList.contains('hidden') && !e.target.closest('.relative')) menu.classList.add('hidden'); });
 
-        window.showHome = () => { ['article-view','library-view','book-detail-view'].forEach(id=>document.getElementById(id).classList.add('hidden')); document.getElementById('home-view').classList.remove('hidden'); window.currentOpenBookId = null; window.renderPostsFeed(); window.scrollTo(0,0); };
-        window.showLibrary = () => { ['home-view','article-view','book-detail-view'].forEach(id=>document.getElementById(id).classList.add('hidden')); document.getElementById('library-view').classList.remove('hidden'); window.currentOpenBookId = null; window.scrollTo(0,0); };
-        
+        window.showHome = () => { ['article-view','library-view','book-detail-view','community-view'].forEach(id=>document.getElementById(id).classList.add('hidden')); document.getElementById('home-view').classList.remove('hidden'); window.currentOpenBookId = null; window.renderPostsFeed(); window.scrollTo(0,0); };
+        window.showLibrary = () => { ['home-view','article-view','book-detail-view','community-view'].forEach(id=>document.getElementById(id).classList.add('hidden')); document.getElementById('library-view').classList.remove('hidden'); window.currentOpenBookId = null; window.scrollTo(0,0); };
+        window.showCommunity = () => { ['home-view','article-view','book-detail-view','library-view'].forEach(id=>document.getElementById(id).classList.add('hidden')); document.getElementById('community-view').classList.remove('hidden'); window.currentOpenBookId = null; window.renderCommunityGroups(); window.scrollTo(0,0); };
+
         window.toggleMobileMenu = () => { const sidebar = document.getElementById('sidebar-menu'); const overlay = document.getElementById('sidebar-overlay'); if (sidebar.classList.contains('-translate-x-full')) { sidebar.classList.remove('-translate-x-full'); overlay.classList.remove('hidden'); setTimeout(() => overlay.classList.remove('opacity-0'), 10); } else { sidebar.classList.add('-translate-x-full'); overlay.classList.add('opacity-0'); setTimeout(() => overlay.classList.add('hidden'), 300); } };
         window.toggleCategories = (e) => { if(e) e.stopPropagation(); const list = document.getElementById('categories-list'); const chevron = document.getElementById('cat-chevron'); if(list) list.classList.toggle('hidden'); if(chevron) chevron.classList.toggle('rotate-180'); };
         window.toggleCategoriesModal = (forceClose) => { const modal = document.getElementById('categories-modal'); const inner = modal.querySelector('.slide-up-animation'); if(modal.classList.contains('hidden') && !forceClose) { modal.classList.remove('hidden'); setTimeout(() => inner.classList.remove('translate-y-full'), 10); } else { inner.classList.add('translate-y-full'); setTimeout(() => modal.classList.add('hidden'), 300); } };
@@ -518,342 +526,213 @@
         window.createCategory = async () => { const input = document.getElementById('new-category-input'); const name = input.value.trim(); if(name) { await addDoc(collection(db, 'artifacts', appId, 'public', 'data', 'categories'), { name, createdAt: Date.now() }); input.value = ''; } };
         window.deleteCategory = async (id) => { if(confirm("Excluir definitivamente?")) await deleteDoc(doc(db, 'artifacts', appId, 'public', 'data', 'categories', id)); };
         window.editCategory = async (id, oldName) => { const newName = prompt("Renomear para:", oldName); if(newName && newName.trim() !== "" && newName !== oldName) { await updateDoc(doc(db, 'artifacts', appId, 'public', 'data', 'categories', id), { name: newName.trim() }); window.blogPosts.forEach(async p => { if(p.category === oldName) await updateDoc(doc(db, 'artifacts', appId, 'public', 'data', 'posts', p.id), { category: newName.trim() }); }); } };
+        window.renderAdminCategories = () => { const list = document.getElementById('admin-categories-list'); list.innerHTML = window.siteCategories.map(c => `<div class="flex justify-between items-center p-4 border border-gray-200 rounded-xl bg-white shadow-sm"><span class="font-bold text-gray-800">${c.name}</span><div class="flex gap-2"><button onclick="window.editCategory('${c.id}', '${c.name.replace(/'/g, "\\'")}')" class="p-2 bg-blue-50 text-blue-900 rounded-lg"><i data-lucide="edit-3" class="w-4 h-4"></i></button><button onclick="window.deleteCategory('${c.id}')" class="p-2 bg-red-50 text-red-600 rounded-lg"><i data-lucide="trash-2" class="w-4 h-4"></i></button></div></div>`).join('') || '<p class="text-center text-gray-400 py-6">Vazio.</p>'; lucide.createIcons(); };
+
+        /* ================= GESTÃO DE GRUPOS DA COMUNIDADE ================= */
+        window.openGroupEditor = () => {
+            document.getElementById('edit-group-id').value = '';
+            document.getElementById('group-name').value = '';
+            document.getElementById('group-link').value = '';
+            document.getElementById('group-status-open').checked = true;
+            document.getElementById('group-editor-title').innerText = "Novo Grupo";
+            document.getElementById('btn-delete-group').classList.add('hidden');
+            document.getElementById('group-editor-modal').classList.remove('hidden');
+        };
+        window.closeGroupEditor = () => document.getElementById('group-editor-modal').classList.add('hidden');
+        window.saveGroup = async () => {
+            const btn = document.getElementById('btn-save-group'); btn.disabled = true;
+            const id = document.getElementById('edit-group-id').value;
+            const data = {
+                name: document.getElementById('group-name').value || "Grupo Vida Plena",
+                link: document.getElementById('group-link').value || "#",
+                status: document.querySelector('input[name="group_status"]:checked').value
+            };
+            try { if (id) { await updateDoc(doc(db, 'artifacts', appId, 'public', 'data', 'groups', id), data); } else { await addDoc(collection(db, 'artifacts', appId, 'public', 'data', 'groups'), { ...data, createdAt: Date.now() }); } window.closeGroupEditor(); } catch (e) { alert("Erro: " + e.message); } finally { btn.disabled = false; }
+        };
+        window.editGroup = (id) => {
+            const g = window.siteGroups.find(x => x.id === id);
+            document.getElementById('edit-group-id').value = g.id;
+            document.getElementById('group-name').value = g.name || '';
+            document.getElementById('group-link').value = g.link || '';
+            if(g.status === 'full') document.getElementById('group-status-full').checked = true; else document.getElementById('group-status-open').checked = true;
+            document.getElementById('group-editor-title').innerText = "Editar Grupo";
+            document.getElementById('btn-delete-group').classList.remove('hidden');
+            document.getElementById('group-editor-modal').classList.remove('hidden');
+        };
+        window.deleteGroup = async (id) => { if (confirm("Deseja remover este grupo?")) { await deleteDoc(doc(db, 'artifacts', appId, 'public', 'data', 'groups', id)); window.closeGroupEditor(); } };
         
-        window.renderAdminCategories = () => {
-            const list = document.getElementById('admin-categories-list');
-            list.innerHTML = window.siteCategories.map(c => `
-                <div class="flex justify-between items-center p-4 border border-gray-200 rounded-xl bg-white shadow-sm">
-                    <span class="font-bold text-gray-800">${c.name}</span>
-                    <div class="flex gap-2"><button onclick="window.editCategory('${c.id}', '${c.name.replace(/'/g, "\\'")}')" class="p-2 bg-blue-50 text-blue-900 rounded-lg"><i data-lucide="edit-3" class="w-4 h-4"></i></button><button onclick="window.deleteCategory('${c.id}')" class="p-2 bg-red-50 text-red-600 rounded-lg"><i data-lucide="trash-2" class="w-4 h-4"></i></button></div>
+        window.renderAdminGroups = () => {
+            const list = document.getElementById('admin-groups-list');
+            list.innerHTML = window.siteGroups.map(g => `
+                <div class="flex items-center justify-between p-4 border border-gray-200 rounded-xl bg-white shadow-sm">
+                    <div class="flex items-center gap-3">
+                        <div class="w-3 h-3 rounded-full ${g.status === 'open' ? 'bg-green-500' : 'bg-gray-400'}"></div>
+                        <div><p class="font-bold text-gray-900">${g.name}</p><p class="text-xs text-gray-500 truncate max-w-[200px]">${g.link}</p></div>
+                    </div>
+                    <div class="flex gap-2">
+                        <button onclick="window.editGroup('${g.id}')" class="p-2 bg-blue-50 text-blue-900 rounded-lg"><i data-lucide="edit-3" class="w-4 h-4"></i></button>
+                    </div>
                 </div>
-            `).join('') || '<p class="text-center text-gray-400 py-6">Vazio.</p>';
+            `).join('') || '<p class="text-center text-gray-400 py-6">Nenhum grupo configurado.</p>';
             lucide.createIcons();
         };
 
+        window.renderCommunityGroups = () => {
+            const list = document.getElementById('community-groups-list');
+            if(!list) return;
+            if(window.siteGroups.length === 0) { list.innerHTML = `<p class="text-center sys-text-secondary py-10 italic">Nenhum grupo aberto no momento. Fique atento!</p>`; return; }
+            list.innerHTML = window.siteGroups.map(g => {
+                if (g.status === 'full') {
+                    return `<div class="flex items-center justify-between p-4 sys-bg-surface border sys-border rounded-2xl opacity-60 grayscale"><div class="flex items-center gap-4"><div class="w-10 h-10 rounded-full bg-gray-200 flex items-center justify-center shrink-0"><i data-lucide="lock" class="w-5 h-5 text-gray-500"></i></div><div><p class="font-black sys-text-primary">${g.name}</p><p class="text-xs sys-text-secondary font-bold uppercase tracking-wider">Lotação Máxima</p></div></div><button class="bg-gray-200 text-gray-500 px-4 py-2 rounded-xl font-bold text-xs uppercase cursor-not-allowed">Lotado</button></div>`;
+                } else {
+                    const safeLink = g.link.startsWith('http') ? g.link : 'https://'+g.link;
+                    return `<div class="flex items-center justify-between p-4 sys-bg-surface border-2 border-green-500 rounded-2xl shadow-lg ring-4 ring-green-500/10 transform transition-all hover:scale-[1.02]"><div class="flex items-center gap-4"><div class="w-10 h-10 rounded-full bg-green-100 flex items-center justify-center shrink-0 animate-pulse"><i data-lucide="unlock" class="w-5 h-5 text-green-600"></i></div><div><p class="font-black sys-text-primary">${g.name}</p><p class="text-xs text-green-600 font-black uppercase tracking-wider">Vagas Abertas</p></div></div><a href="${safeLink}" target="_blank" class="bg-green-600 text-white hover:bg-green-700 px-5 py-2.5 rounded-xl font-black text-xs sm:text-sm uppercase tracking-wide transition-colors shadow-md">Entrar</a></div>`;
+                }
+            }).join('');
+            lucide.createIcons();
+        };
+        /* ================= FIM GESTÃO COMUNIDADE ================= */
+
         window.toggleBookFormats = () => {
-            const hasPhys = document.getElementById('book-has-physical').checked;
-            const hasEb = document.getElementById('book-has-ebook').checked;
-            const physBlock = document.getElementById('book-physical-fields');
-            const ebBlock = document.getElementById('book-ebook-fields');
-            
-            if(hasPhys) { physBlock.classList.remove('opacity-50', 'pointer-events-none'); document.getElementById('book-price-physical').disabled = false; document.getElementById('book-btn-physical').disabled = false; document.getElementById('book-link-physical').disabled = false; }
-            else { physBlock.classList.add('opacity-50', 'pointer-events-none'); document.getElementById('book-price-physical').disabled = true; document.getElementById('book-btn-physical').disabled = true; document.getElementById('book-link-physical').disabled = true; }
-            
-            if(hasEb) { ebBlock.classList.remove('opacity-50', 'pointer-events-none'); document.getElementById('book-price-ebook').disabled = false; document.getElementById('book-btn-ebook').disabled = false; document.getElementById('book-link-ebook').disabled = false; }
-            else { ebBlock.classList.add('opacity-50', 'pointer-events-none'); document.getElementById('book-price-ebook').disabled = true; document.getElementById('book-btn-ebook').disabled = true; document.getElementById('book-link-ebook').disabled = true; }
+            const hasPhys = document.getElementById('book-has-physical').checked; const hasEb = document.getElementById('book-has-ebook').checked;
+            const physBlock = document.getElementById('book-physical-fields'); const ebBlock = document.getElementById('book-ebook-fields');
+            if(hasPhys) { physBlock.classList.remove('opacity-50', 'pointer-events-none'); document.getElementById('book-price-physical').disabled = false; document.getElementById('book-btn-physical').disabled = false; document.getElementById('book-link-physical').disabled = false; } else { physBlock.classList.add('opacity-50', 'pointer-events-none'); document.getElementById('book-price-physical').disabled = true; document.getElementById('book-btn-physical').disabled = true; document.getElementById('book-link-physical').disabled = true; }
+            if(hasEb) { ebBlock.classList.remove('opacity-50', 'pointer-events-none'); document.getElementById('book-price-ebook').disabled = false; document.getElementById('book-btn-ebook').disabled = false; document.getElementById('book-link-ebook').disabled = false; } else { ebBlock.classList.add('opacity-50', 'pointer-events-none'); document.getElementById('book-price-ebook').disabled = true; document.getElementById('book-btn-ebook').disabled = true; document.getElementById('book-link-ebook').disabled = true; }
         };
 
         window.openBookEditor = () => {
-            window.currentEditorId = 'book-fulltext'; 
-            document.getElementById('edit-book-id').value = '';
-            
-            document.getElementById('book-has-physical').checked = false;
-            document.getElementById('book-has-ebook').checked = true;
-            window.toggleBookFormats();
-
-            ['title', 'subtitle', 'pages', 'cover', 'price-physical', 'btn-physical', 'link-physical', 'price-ebook', 'btn-ebook', 'link-ebook', 'sample', 'likes'].forEach(f => {
-                const el = document.getElementById('book-'+f);
-                if(el) {
-                    if (f==='likes') el.value = '0';
-                    else if (f==='btn-physical') el.value = 'Comprar Livro Físico';
-                    else if (f==='btn-ebook') el.value = 'Comprar E-book';
-                    else el.value = '';
-                }
-            });
-            
-            document.getElementById('book-fulltext').innerHTML = '';
-            document.getElementById('book-moderation-section').classList.add('hidden');
-            document.getElementById('book-comments-moderation').innerHTML = '';
-            
-            document.getElementById('book-editor-title').innerText = "Adicionar Livro / Isca";
-            document.getElementById('btn-delete-book').classList.add('hidden');
-            document.getElementById('book-editor-modal').classList.remove('hidden');
+            window.currentEditorId = 'book-fulltext'; document.getElementById('edit-book-id').value = ''; document.getElementById('book-has-physical').checked = false; document.getElementById('book-has-ebook').checked = true; window.toggleBookFormats();
+            ['title', 'subtitle', 'pages', 'cover', 'price-physical', 'btn-physical', 'link-physical', 'price-ebook', 'btn-ebook', 'link-ebook', 'sample', 'likes'].forEach(f => { const el = document.getElementById('book-'+f); if(el) { if (f==='likes') el.value = '0'; else if (f==='btn-physical') el.value = 'Comprar Livro Físico'; else if (f==='btn-ebook') el.value = 'Comprar E-book'; else el.value = ''; } });
+            document.getElementById('book-fulltext').innerHTML = ''; document.getElementById('book-moderation-section').classList.add('hidden'); document.getElementById('book-comments-moderation').innerHTML = '';
+            document.getElementById('book-editor-title').innerText = "Adicionar Livro / Isca"; document.getElementById('btn-delete-book').classList.add('hidden'); document.getElementById('book-editor-modal').classList.remove('hidden');
         };
 
         window.closeBookEditor = () => document.getElementById('book-editor-modal').classList.add('hidden');
         
         window.saveBook = async () => {
-            const btn = document.getElementById('btn-save-book'); btn.disabled = true;
-            const id = document.getElementById('edit-book-id').value;
-            
-            const hasPhysical = document.getElementById('book-has-physical').checked;
-            const hasEbook = document.getElementById('book-has-ebook').checked;
-
+            const btn = document.getElementById('btn-save-book'); btn.disabled = true; const id = document.getElementById('edit-book-id').value;
+            const hasPhysical = document.getElementById('book-has-physical').checked; const hasEbook = document.getElementById('book-has-ebook').checked;
             if(!hasPhysical && !hasEbook) { alert("Selecione pelo menos um formato (Físico ou E-book)."); btn.disabled = false; return; }
-
             const likesCount = parseInt(document.getElementById('book-likes').value) || 0;
-
-            const data = {
-                title: document.getElementById('book-title').value || "Livro sem título",
-                subtitle: document.getElementById('book-subtitle').value || "",
-                pages: document.getElementById('book-pages').value || "",
-                cover: document.getElementById('book-cover').value || "",
-                sampleLink: document.getElementById('book-sample').value || "",
-                fullText: document.getElementById('book-fulltext').innerHTML || "",
-                likes: likesCount,
-                
-                hasPhysical: hasPhysical,
-                pricePhysical: hasPhysical ? document.getElementById('book-price-physical').value : "",
-                btnPhysical: hasPhysical ? (document.getElementById('book-btn-physical').value || "Comprar Físico") : "",
-                linkPhysical: hasPhysical ? document.getElementById('book-link-physical').value : "",
-                
-                hasEbook: hasEbook,
-                priceEbook: hasEbook ? document.getElementById('book-price-ebook').value : "",
-                btnEbook: hasEbook ? (document.getElementById('book-btn-ebook').value || "Comprar E-book") : "",
-                linkEbook: hasEbook ? document.getElementById('book-link-ebook').value : ""
-            };
-
-            try {
-                if (id) { await updateDoc(doc(db, 'artifacts', appId, 'public', 'data', 'books', id), data); } 
-                else { await addDoc(collection(db, 'artifacts', appId, 'public', 'data', 'books'), { ...data, comments: [], createdAt: Date.now() }); }
-                window.closeBookEditor();
-            } catch (e) { alert("Erro: " + e.message); } finally { btn.disabled = false; }
+            const data = { title: document.getElementById('book-title').value || "Livro", subtitle: document.getElementById('book-subtitle').value || "", pages: document.getElementById('book-pages').value || "", cover: document.getElementById('book-cover').value || "", sampleLink: document.getElementById('book-sample').value || "", fullText: document.getElementById('book-fulltext').innerHTML || "", likes: likesCount, hasPhysical: hasPhysical, pricePhysical: hasPhysical ? document.getElementById('book-price-physical').value : "", btnPhysical: hasPhysical ? (document.getElementById('book-btn-physical').value || "Comprar Físico") : "", linkPhysical: hasPhysical ? document.getElementById('book-link-physical').value : "", hasEbook: hasEbook, priceEbook: hasEbook ? document.getElementById('book-price-ebook').value : "", btnEbook: hasEbook ? (document.getElementById('book-btn-ebook').value || "Comprar E-book") : "", linkEbook: hasEbook ? document.getElementById('book-link-ebook').value : "" };
+            try { if (id) { await updateDoc(doc(db, 'artifacts', appId, 'public', 'data', 'books', id), data); } else { await addDoc(collection(db, 'artifacts', appId, 'public', 'data', 'books'), { ...data, comments: [], createdAt: Date.now() }); } window.closeBookEditor(); } catch (e) { alert("Erro: " + e.message); } finally { btn.disabled = false; }
         };
 
         window.editBook = (id) => {
-            window.currentEditorId = 'book-fulltext'; 
-            const b = window.siteBooks.find(x => x.id === id);
-            document.getElementById('edit-book-id').value = b.id;
-
-            // ZIG: Retrocompatibilidade transparente para livros antigos que usavam priceMode
-            const legacyIsFree = b.priceMode === 'free';
-            const legacyHasPhys = b.format === 'Físico' || b.format === 'Físico e E-book' || (!legacyIsFree && b.hasPhysical === undefined);
-            const legacyHasEb = b.format === 'E-book' || b.format === 'Físico e E-book' || legacyIsFree;
-
-            document.getElementById('book-has-physical').checked = b.hasPhysical !== undefined ? b.hasPhysical : legacyHasPhys;
-            document.getElementById('book-has-ebook').checked = b.hasEbook !== undefined ? b.hasEbook : legacyHasEb;
-            window.toggleBookFormats();
-
-            document.getElementById('book-title').value = b.title || '';
-            document.getElementById('book-subtitle').value = b.subtitle || '';
-            document.getElementById('book-pages').value = b.pages || '';
-            document.getElementById('book-cover').value = b.cover || '';
-            document.getElementById('book-sample').value = b.sampleLink || '';
-            document.getElementById('book-likes').value = b.likes || 0;
-            
-            document.getElementById('book-price-physical').value = b.pricePhysical || (!legacyIsFree && legacyHasPhys ? b.price : '');
-            document.getElementById('book-btn-physical').value = b.btnPhysical || (!legacyIsFree && legacyHasPhys ? b.btnText : 'Comprar Livro Físico');
-            document.getElementById('book-link-physical').value = b.linkPhysical || (!legacyIsFree && legacyHasPhys ? b.link : '');
-            
-            document.getElementById('book-price-ebook').value = b.priceEbook || (legacyIsFree ? 'Gratuito' : '');
-            document.getElementById('book-btn-ebook').value = b.btnEbook || (legacyIsFree ? (b.btnText||'Baixar E-book') : 'Comprar E-book');
-            document.getElementById('book-link-ebook').value = b.linkEbook || (legacyIsFree ? b.link : '');
-
+            window.currentEditorId = 'book-fulltext'; const b = window.siteBooks.find(x => x.id === id); document.getElementById('edit-book-id').value = b.id;
+            const legacyIsFree = b.priceMode === 'free'; const legacyHasPhys = b.format === 'Físico' || b.format === 'Físico e E-book' || (!legacyIsFree && b.hasPhysical === undefined); const legacyHasEb = b.format === 'E-book' || b.format === 'Físico e E-book' || legacyIsFree;
+            document.getElementById('book-has-physical').checked = b.hasPhysical !== undefined ? b.hasPhysical : legacyHasPhys; document.getElementById('book-has-ebook').checked = b.hasEbook !== undefined ? b.hasEbook : legacyHasEb; window.toggleBookFormats();
+            document.getElementById('book-title').value = b.title || ''; document.getElementById('book-subtitle').value = b.subtitle || ''; document.getElementById('book-pages').value = b.pages || ''; document.getElementById('book-cover').value = b.cover || ''; document.getElementById('book-sample').value = b.sampleLink || ''; document.getElementById('book-likes').value = b.likes || 0;
+            document.getElementById('book-price-physical').value = b.pricePhysical || (!legacyIsFree && legacyHasPhys ? b.price : ''); document.getElementById('book-btn-physical').value = b.btnPhysical || (!legacyIsFree && legacyHasPhys ? b.btnText : 'Comprar Livro Físico'); document.getElementById('book-link-physical').value = b.linkPhysical || (!legacyIsFree && legacyHasPhys ? b.link : '');
+            document.getElementById('book-price-ebook').value = b.priceEbook || (legacyIsFree ? 'Gratuito' : ''); document.getElementById('book-btn-ebook').value = b.btnEbook || (legacyIsFree ? (b.btnText||'Baixar E-book') : 'Comprar E-book'); document.getElementById('book-link-ebook').value = b.linkEbook || (legacyIsFree ? b.link : '');
             document.getElementById('book-fulltext').innerHTML = b.fullText || b.desc || ''; 
-            
-            const modSec = document.getElementById('book-moderation-section');
-            const modCont = document.getElementById('book-comments-moderation');
-            if(b.comments && b.comments.length > 0) {
-                modSec.classList.remove('hidden');
-                modCont.innerHTML = b.comments.map(c => `
-                    <div class="flex justify-between items-center bg-white p-3 rounded-lg border border-gray-200 shadow-sm gap-3">
-                        <div class="truncate flex-1">
-                            <p class="text-xs font-black text-gray-800 mb-0.5">${c.name.replace(/</g, "&lt;")}</p>
-                            <p class="text-xs text-gray-600 truncate">${c.text.replace(/</g, "&lt;")}</p>
-                        </div>
-                        <button type="button" onclick="window.deleteBookComment('${b.id}', ${c.date})" class="p-2 bg-red-50 text-red-600 rounded-lg hover:bg-red-100 transition-colors shrink-0" title="Apagar Comentário">
-                            <i data-lucide="trash-2" class="w-4 h-4"></i>
-                        </button>
-                    </div>
-                `).reverse().join('');
-            } else {
-                modSec.classList.add('hidden');
-                modCont.innerHTML = '';
-            }
-            
-            document.getElementById('book-editor-title').innerText = "Editar Livro / Página de Vendas";
-            document.getElementById('btn-delete-book').classList.remove('hidden');
-            document.getElementById('book-editor-modal').classList.remove('hidden');
-            lucide.createIcons();
+            const modSec = document.getElementById('book-moderation-section'); const modCont = document.getElementById('book-comments-moderation');
+            if(b.comments && b.comments.length > 0) { modSec.classList.remove('hidden'); modCont.innerHTML = b.comments.map(c => `<div class="flex justify-between items-center bg-white p-3 rounded-lg border border-gray-200 shadow-sm gap-3"><div class="truncate flex-1"><p class="text-xs font-black text-gray-800 mb-0.5">${c.name.replace(/</g, "&lt;")}</p><p class="text-xs text-gray-600 truncate">${c.text.replace(/</g, "&lt;")}</p></div><button type="button" onclick="window.deleteBookComment('${b.id}', ${c.date})" class="p-2 bg-red-50 text-red-600 rounded-lg hover:bg-red-100 transition-colors shrink-0"><i data-lucide="trash-2" class="w-4 h-4"></i></button></div>`).reverse().join(''); } else { modSec.classList.add('hidden'); modCont.innerHTML = ''; }
+            document.getElementById('book-editor-title').innerText = "Editar Livro"; document.getElementById('btn-delete-book').classList.remove('hidden'); document.getElementById('book-editor-modal').classList.remove('hidden'); lucide.createIcons();
         };
 
-        window.deleteBook = async (id) => { if (confirm("Deseja remover este livro da biblioteca?")) { await deleteDoc(doc(db, 'artifacts', appId, 'public', 'data', 'books', id)); window.closeBookEditor(); } };
+        window.deleteBook = async (id) => { if (confirm("Remover este livro?")) { await deleteDoc(doc(db, 'artifacts', appId, 'public', 'data', 'books', id)); window.closeBookEditor(); } };
 
         window.deleteBookComment = async (bookId, commentDate) => {
-            if(!confirm("Tem certeza que deseja apagar este comentário? Esta ação é irreversível.")) return;
-            const b = window.siteBooks.find(x => x.id === bookId);
-            if(!b) return;
+            if(!confirm("Apagar este comentário?")) return; const b = window.siteBooks.find(x => x.id === bookId); if(!b) return;
             const commentToRemove = b.comments.find(c => c.date === commentDate);
-            if(commentToRemove) {
-                try {
-                    await updateDoc(doc(db, 'artifacts', appId, 'public', 'data', 'books', bookId), { comments: arrayRemove(commentToRemove) });
-                    window.showToast("Comentário apagado.");
-                    window.closeBookEditor();
-                    setTimeout(() => window.editBook(bookId), 100);
-                } catch(e) { console.error(e); }
-            }
+            if(commentToRemove) { try { await updateDoc(doc(db, 'artifacts', appId, 'public', 'data', 'books', bookId), { comments: arrayRemove(commentToRemove) }); window.showToast("Comentário apagado."); window.closeBookEditor(); setTimeout(() => window.editBook(bookId), 100); } catch(e) { console.error(e); } }
         };
 
         window.renderAdminBooks = () => {
             const list = document.getElementById('admin-books-list');
             list.innerHTML = window.siteBooks.map(b => {
-                let badge = '';
-                const hasPhys = b.hasPhysical !== undefined ? b.hasPhysical : (b.format === 'Físico' || b.format === 'Físico e E-book' || b.priceMode === 'paid');
-                const hasEb = b.hasEbook !== undefined ? b.hasEbook : (b.format === 'E-book' || b.format === 'Físico e E-book' || b.priceMode === 'free');
+                let badge = ''; const hasPhys = b.hasPhysical !== undefined ? b.hasPhysical : (b.format === 'Físico' || b.format === 'Físico e E-book' || b.priceMode === 'paid'); const hasEb = b.hasEbook !== undefined ? b.hasEbook : (b.format === 'E-book' || b.format === 'Físico e E-book' || b.priceMode === 'free');
                 if(hasPhys && hasEb) badge = 'Físico e E-book'; else if(hasPhys) badge = 'Físico'; else badge = 'E-book';
-                return `
-                <div class="flex items-center gap-4 p-3 border border-gray-200 rounded-xl bg-white shadow-sm cursor-pointer hover:border-green-600 transition-colors" onclick="window.editBook('${b.id}')">
-                    <img src="${window.getDriveImageUrl(b.cover)}" class="w-12 h-16 object-cover rounded bg-gray-100" onerror="this.src='https://via.placeholder.com/48x64?text=Livro'">
-                    <div class="flex-1 truncate">
-                        <p class="font-bold text-gray-900 text-sm truncate">${b.title}</p>
-                        <p class="text-xs text-blue-600 mt-0.5 font-bold uppercase tracking-wider">${badge}</p>
-                    </div>
-                    <div class="flex gap-2 shrink-0">
-                        <button class="p-2 bg-blue-50 text-blue-900 rounded-lg"><i data-lucide="edit-3" class="w-4 h-4"></i></button>
-                    </div>
-                </div>`;
-            }).join('') || '<p class="col-span-full text-center text-gray-400 py-6">Nenhum livro cadastrado.</p>';
+                return `<div class="flex items-center gap-4 p-3 border border-gray-200 rounded-xl bg-white shadow-sm cursor-pointer hover:border-green-600 transition-colors" onclick="window.editBook('${b.id}')"><img src="${window.getDriveImageUrl(b.cover)}" class="w-12 h-16 object-cover rounded bg-gray-100" onerror="this.src='https://via.placeholder.com/48x64?text=Livro'"><div class="flex-1 truncate"><p class="font-bold text-gray-900 text-sm truncate">${b.title}</p><p class="text-xs text-blue-600 mt-0.5 font-bold uppercase tracking-wider">${badge}</p></div><div class="flex gap-2 shrink-0"><button class="p-2 bg-blue-50 text-blue-900 rounded-lg"><i data-lucide="edit-3" class="w-4 h-4"></i></button></div></div>`;
+            }).join('') || '<p class="col-span-full text-center text-gray-400 py-6">Nenhum livro.</p>';
             lucide.createIcons();
         };
 
         window.renderLibrary = () => {
             const container = document.getElementById('library-container');
-            if(window.siteBooks.length === 0) {
-                container.innerHTML = `<div class="col-span-full py-20 text-center flex flex-col items-center justify-center opacity-60"><i data-lucide="library" class="w-12 h-12 sys-text-secondary mb-4"></i><p class="sys-text-secondary font-bold">A biblioteca está sendo organizada.</p></div>`;
-                lucide.createIcons(); return;
-            }
+            if(window.siteBooks.length === 0) { container.innerHTML = `<div class="col-span-full py-20 text-center flex flex-col items-center justify-center opacity-60"><i data-lucide="library" class="w-12 h-12 sys-text-secondary mb-4"></i><p class="sys-text-secondary font-bold">Biblioteca em organização.</p></div>`; lucide.createIcons(); return; }
             container.innerHTML = window.siteBooks.map(b => {
-                const hasPhys = b.hasPhysical !== undefined ? b.hasPhysical : (b.format === 'Físico' || b.format === 'Físico e E-book' || b.priceMode === 'paid');
-                const hasEb = b.hasEbook !== undefined ? b.hasEbook : (b.format === 'E-book' || b.format === 'Físico e E-book' || b.priceMode === 'free');
-                const pEb = b.priceEbook || (b.priceMode === 'free' ? 'Gratuito' : '');
-                
+                const hasPhys = b.hasPhysical !== undefined ? b.hasPhysical : (b.format === 'Físico' || b.format === 'Físico e E-book' || b.priceMode === 'paid'); const hasEb = b.hasEbook !== undefined ? b.hasEbook : (b.format === 'E-book' || b.format === 'Físico e E-book' || b.priceMode === 'free'); const pEb = b.priceEbook || (b.priceMode === 'free' ? 'Gratuito' : '');
                 let badgeFormat = ''; if(hasPhys && hasEb) badgeFormat = 'FÍSICO E E-BOOK'; else if(hasPhys) badgeFormat = 'LIVRO FÍSICO'; else badgeFormat = 'E-BOOK';
                 let isFree = hasEb && (pEb.toLowerCase().includes('grat') || pEb.toLowerCase().includes('grátis'));
                 let topBadge = isFree ? `<div class="absolute top-2 right-2 bg-blue-600 text-white text-[10px] sm:text-xs font-black px-2 py-1 rounded-lg shadow-md tracking-wide uppercase">GRATUITO</div>` : '';
-                
-                return `
-                <div onclick="window.openBookDetail('${b.id}')" class="flex flex-col group sys-bg-surface rounded-2xl shadow-sm sys-border border overflow-hidden hover:shadow-xl transition-all duration-300 cursor-pointer">
-                    <div class="aspect-[2/3] bg-gray-100 relative overflow-hidden border-b sys-border">
-                        <img src="${window.getDriveImageUrl(b.cover)}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" onerror="this.src='https://via.placeholder.com/400x600?text=Capa'">
-                        ${topBadge}
-                    </div>
-                    <div class="p-4 flex flex-col flex-grow items-center text-center">
-                        <h3 class="font-black sys-text-primary text-sm sm:text-base leading-snug mb-1 group-hover:sys-text-accent transition-colors line-clamp-2">${b.title}</h3>
-                        <p class="text-xs sys-text-secondary line-clamp-2 mt-1 opacity-80">${b.subtitle || ''}</p>
-                        <p class="text-[10px] sys-text-secondary font-bold uppercase tracking-wider mt-auto pt-3 border-t sys-border border-dashed w-full">${badgeFormat}</p>
-                    </div>
-                </div>`;
+                return `<div onclick="window.openBookDetail('${b.id}')" class="flex flex-col group sys-bg-surface rounded-2xl shadow-sm sys-border border overflow-hidden hover:shadow-xl transition-all duration-300 cursor-pointer"><div class="aspect-[2/3] bg-gray-100 relative overflow-hidden border-b sys-border"><img src="${window.getDriveImageUrl(b.cover)}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" onerror="this.src='https://via.placeholder.com/400x600?text=Capa'">${topBadge}</div><div class="p-4 flex flex-col flex-grow items-center text-center"><h3 class="font-black sys-text-primary text-sm sm:text-base leading-snug mb-1 group-hover:sys-text-accent transition-colors line-clamp-2">${b.title}</h3><p class="text-xs sys-text-secondary line-clamp-2 mt-1 opacity-80">${b.subtitle || ''}</p><p class="text-[10px] sys-text-secondary font-bold uppercase tracking-wider mt-auto pt-3 border-t sys-border border-dashed w-full">${badgeFormat}</p></div></div>`;
             }).join('');
             lucide.createIcons();
         };
 
         window.openBookDetail = (id) => {
-            window.currentOpenBookId = id;
-            ['home-view','library-view','article-view'].forEach(i=>document.getElementById(i).classList.add('hidden'));
-            document.getElementById('book-detail-view').classList.remove('hidden'); window.scrollTo(0, 0);
-            window.renderBookDetailContent(id);
+            window.currentOpenBookId = id; ['home-view','library-view','article-view','community-view'].forEach(i=>document.getElementById(i).classList.add('hidden')); document.getElementById('book-detail-view').classList.remove('hidden'); window.scrollTo(0, 0); window.renderBookDetailContent(id);
         };
 
         window.renderBookDetailContent = (id) => {
             const b = window.siteBooks.find(x => x.id === id); if (!b) return;
-
-            const hasPhys = b.hasPhysical !== undefined ? b.hasPhysical : (b.format === 'Físico' || b.format === 'Físico e E-book' || b.priceMode === 'paid');
-            const hasEb = b.hasEbook !== undefined ? b.hasEbook : (b.format === 'E-book' || b.format === 'Físico e E-book' || b.priceMode === 'free');
-            const pPhys = b.pricePhysical || (!hasEb && b.priceMode !== 'free' ? b.price : '');
-            const pEb = b.priceEbook || (b.priceMode === 'free' ? 'Gratuito' : '');
-            const lPhys = (b.linkPhysical || (b.priceMode !== 'free' ? b.link : '#')).trim();
-            const lEb = (b.linkEbook || (b.priceMode === 'free' ? b.link : '#')).trim();
-            const safeLPhys = lPhys.startsWith('http') ? lPhys : 'https://'+lPhys;
-            const safeLEb = lEb.startsWith('http') ? lEb : 'https://'+lEb;
+            const hasPhys = b.hasPhysical !== undefined ? b.hasPhysical : (b.format === 'Físico' || b.format === 'Físico e E-book' || b.priceMode === 'paid'); const hasEb = b.hasEbook !== undefined ? b.hasEbook : (b.format === 'E-book' || b.format === 'Físico e E-book' || b.priceMode === 'free');
+            const pPhys = b.pricePhysical || (!hasEb && b.priceMode !== 'free' ? b.price : ''); const pEb = b.priceEbook || (b.priceMode === 'free' ? 'Gratuito' : '');
+            const lPhys = (b.linkPhysical || (b.priceMode !== 'free' ? b.link : '#')).trim(); const lEb = (b.linkEbook || (b.priceMode === 'free' ? b.link : '#')).trim();
+            const safeLPhys = lPhys.startsWith('http') ? lPhys : 'https://'+lPhys; const safeLEb = lEb.startsWith('http') ? lEb : 'https://'+lEb;
             const safeSample = b.sampleLink ? (b.sampleLink.startsWith('http') ? b.sampleLink : 'https://' + b.sampleLink) : '';
-            const likesCount = b.likes || 0;
-            const commentsList = b.comments || [];
+            const likesCount = b.likes || 0; const commentsList = b.comments || [];
 
-            let tableRows = '';
-            let buttonsHtml = '';
-
+            let tableRows = ''; let buttonsHtml = '';
             if(hasPhys) {
                 tableRows += `<tr class="border-b sys-border"><td class="p-3 font-medium flex items-center gap-2"><i data-lucide="book" class="w-4 h-4"></i> Livro Físico</td><td class="p-3 font-black sys-text-accent">${pPhys || '-'}</td></tr>`;
-                let txt = b.btnPhysical || 'Comprar Físico';
-                buttonsHtml += `<a href="${safeLPhys}" target="_blank" class="w-full flex justify-center items-center gap-2 sys-bg-accent text-white py-4 px-6 rounded-xl font-black text-sm uppercase tracking-wide hover:opacity-90 shadow-xl transition-all hover:-translate-y-1 mb-3">${txt} <i data-lucide="shopping-cart" class="w-4 h-4"></i></a>`;
+                let txt = b.btnPhysical || 'Comprar Físico'; buttonsHtml += `<a href="${safeLPhys}" target="_blank" class="w-full flex justify-center items-center gap-2 sys-bg-accent text-white py-4 px-6 rounded-xl font-black text-sm uppercase tracking-wide hover:opacity-90 shadow-xl transition-all hover:-translate-y-1 mb-3">${txt} <i data-lucide="shopping-cart" class="w-4 h-4"></i></a>`;
             }
             if(hasEb) {
-                let isFree = pEb.toLowerCase().includes('grat') || pEb.toLowerCase().includes('grátis');
-                let colorClass = isFree ? 'text-green-600' : 'sys-text-accent';
+                let isFree = pEb.toLowerCase().includes('grat') || pEb.toLowerCase().includes('grátis'); let colorClass = isFree ? 'text-green-600' : 'sys-text-accent';
                 tableRows += `<tr><td class="p-3 font-medium flex items-center gap-2"><i data-lucide="smartphone" class="w-4 h-4"></i> E-book</td><td class="p-3 font-black ${colorClass}">${pEb || '-'}</td></tr>`;
-                
-                let bgClass = isFree ? 'bg-blue-700 hover:bg-blue-800' : 'sys-bg-accent hover:opacity-90';
-                let icn = isFree ? 'download' : 'shopping-cart';
-                let txt = b.btnEbook || (isFree ? 'Baixar E-book Grátis' : 'Comprar E-book');
+                let bgClass = isFree ? 'bg-blue-700 hover:bg-blue-800' : 'sys-bg-accent hover:opacity-90'; let icn = isFree ? 'download' : 'shopping-cart'; let txt = b.btnEbook || (isFree ? 'Baixar E-book Grátis' : 'Comprar E-book');
                 buttonsHtml += `<a href="${safeLEb}" target="_blank" class="w-full flex justify-center items-center gap-2 ${bgClass} text-white py-4 px-6 rounded-xl font-black text-sm uppercase tracking-wide shadow-xl transition-all hover:-translate-y-1 mb-3"><i data-lucide="${icn}" class="w-4 h-4"></i> ${txt}</a>`;
             }
-            if (safeSample) {
-                buttonsHtml += `<a href="${safeSample}" target="_blank" class="w-full flex justify-center items-center gap-2 sys-bg-surface sys-text-primary border-2 sys-border py-4 px-6 rounded-xl font-bold text-sm uppercase tracking-wide hover:bg-gray-50 transition-all mb-3"><i data-lucide="file-text" class="w-4 h-4"></i> Ler Amostra Grátis</a>`;
-            }
+            if (safeSample && !pEb.toLowerCase().includes('grat')) { buttonsHtml += `<a href="${safeSample}" target="_blank" class="w-full flex justify-center items-center gap-2 sys-bg-surface sys-text-primary border-2 sys-border py-4 px-6 rounded-xl font-bold text-sm uppercase tracking-wide hover:bg-gray-50 transition-all mb-3"><i data-lucide="file-text" class="w-4 h-4"></i> Ler Amostra Grátis</a>`; }
 
             const tableHtml = tableRows ? `<div class="border sys-border rounded-xl overflow-hidden mb-6"><table class="w-full text-left text-sm"><thead class="sys-bg-body border-b sys-border"><tr><th class="p-3 font-bold text-gray-500 uppercase tracking-widest text-[10px]">Formato</th><th class="p-3 font-bold text-gray-500 uppercase tracking-widest text-[10px]">Valor</th></tr></thead><tbody>${tableRows}</tbody></table></div>` : '';
 
-            const html = `
+            document.getElementById('book-detail-content').innerHTML = `
                 <div class="flex flex-col md:flex-row gap-8 lg:gap-12 mb-12">
                     <div class="w-full md:w-1/3 flex flex-col gap-6">
-                        <div class="aspect-[2/3] w-[90%] mx-auto md:w-full rounded-2xl overflow-hidden shadow-2xl sys-border border">
-                            <img src="${window.getDriveImageUrl(b.cover)}" class="w-full h-full object-cover" onerror="this.src='https://via.placeholder.com/400x600?text=Capa'">
-                        </div>
+                        <div class="aspect-[2/3] w-[90%] mx-auto md:w-full rounded-2xl overflow-hidden shadow-2xl sys-border border"><img src="${window.getDriveImageUrl(b.cover)}" class="w-full h-full object-cover" onerror="this.src='https://via.placeholder.com/400x600?text=Capa'"></div>
                         <div class="flex items-center justify-center gap-6 sys-bg-surface p-4 rounded-2xl sys-border border shadow-sm w-[90%] mx-auto md:w-full">
-                            <button onclick="window.likeBook('${b.id}')" class="flex flex-col items-center gap-1 text-red-500 hover:scale-110 active:scale-95 transition-transform" title="Curtir Obra">
-                                <i data-lucide="heart" class="w-6 h-6 fill-current"></i>
-                                <span class="text-xs font-black">${likesCount}</span>
-                            </button>
-                            <div class="w-px h-8 bg-gray-200"></div>
-                            <div class="flex flex-col items-center gap-1 sys-text-secondary">
-                                <i data-lucide="message-square" class="w-6 h-6"></i>
-                                <span class="text-xs font-black">${commentsList.length}</span>
-                            </div>
+                            <button onclick="window.likeBook('${b.id}')" class="flex flex-col items-center gap-1 text-red-500 hover:scale-110 active:scale-95 transition-transform" title="Curtir Obra"><i data-lucide="heart" class="w-6 h-6 fill-current"></i><span class="text-xs font-black">${likesCount}</span></button>
+                            <div class="w-px h-8 bg-gray-200"></div><div class="flex flex-col items-center gap-1 sys-text-secondary"><i data-lucide="message-square" class="w-6 h-6"></i><span class="text-xs font-black">${commentsList.length}</span></div>
                         </div>
                     </div>
-
                     <div class="w-full md:w-2/3 flex flex-col">
                         <h1 class="text-3xl sm:text-4xl font-black sys-text-primary leading-tight mb-2">${b.title}</h1>
                         ${b.pages ? `<p class="sys-text-secondary font-bold text-sm mb-6">${b.pages} Páginas</p>` : '<div class="mb-4"></div>'}
                         ${tableHtml}
-                        <div class="prose max-w-none sys-text-primary text-base sm:text-lg opacity-90 leading-relaxed mb-8">${b.fullText || b.desc || 'Sem detalhes disponíveis.'}</div>
+                        <div class="prose max-w-none sys-text-primary text-base sm:text-lg opacity-90 leading-relaxed mb-8 whitespace-pre-wrap">${b.fullText || b.desc || 'Sem sinopse disponível.'}</div>
                         <div class="flex flex-col mt-auto border-t sys-border pt-8">${buttonsHtml}</div>
                     </div>
                 </div>
-
                 <div class="border-t sys-border pt-10">
                     <h3 class="text-2xl font-black sys-text-primary mb-6 flex items-center gap-2"><i data-lucide="message-square" class="w-6 h-6 sys-text-accent"></i> Comentários</h3>
-                    <div class="sys-bg-surface p-5 sm:p-6 rounded-2xl sys-border border shadow-sm mb-8">
-                        <div class="flex flex-col gap-3">
-                            <input type="text" id="comment-name-${b.id}" placeholder="Seu nome" class="w-full border border-gray-300 rounded-xl px-4 py-3 outline-none focus:ring-2 focus:ring-blue-900 bg-white text-gray-900 text-sm">
-                            <textarea id="comment-text-${b.id}" rows="3" placeholder="O que você achou desta obra?" class="w-full border border-gray-300 rounded-xl px-4 py-3 outline-none focus:ring-2 focus:ring-blue-900 bg-white text-gray-900 resize-none text-sm"></textarea>
-                            <button onclick="window.submitBookComment('${b.id}')" class="self-end bg-blue-900 hover:bg-blue-950 text-white px-6 py-2.5 rounded-xl font-bold text-sm transition-colors flex items-center gap-2">Enviar <i data-lucide="send" class="w-4 h-4"></i></button>
-                        </div>
-                    </div>
-                    <div class="flex flex-col gap-4">
-                        ${commentsList.length > 0 ? commentsList.map(c => `
-                            <div class="flex gap-4 p-4 sys-bg-body rounded-2xl border sys-border">
-                                <div class="w-10 h-10 rounded-full sys-bg-surface flex items-center justify-center border sys-border shrink-0"><i data-lucide="user" class="w-5 h-5 sys-text-secondary"></i></div>
-                                <div class="flex-1">
-                                    <div class="flex items-center gap-2 mb-1"><p class="font-bold sys-text-primary text-sm">${c.name.replace(/</g, "&lt;")}</p><span class="text-[10px] sys-text-secondary">${new Date(c.date).toLocaleDateString('pt-BR')}</span></div>
-                                    <p class="sys-text-secondary text-sm leading-relaxed">${c.text.replace(/</g, "&lt;")}</p>
-                                </div>
-                            </div>
-                        `).reverse().join('') : '<p class="text-center sys-text-secondary py-8 italic opacity-70">Seja o primeiro a comentar.</p>'}
-                    </div>
+                    <div class="sys-bg-surface p-5 sm:p-6 rounded-2xl sys-border border shadow-sm mb-8"><div class="flex flex-col gap-3"><input type="text" id="comment-name-${b.id}" placeholder="Seu nome" class="w-full border border-gray-300 rounded-xl px-4 py-3 outline-none focus:ring-2 focus:ring-blue-900 bg-white text-gray-900 text-sm"><textarea id="comment-text-${b.id}" rows="3" placeholder="O que você achou desta obra?" class="w-full border border-gray-300 rounded-xl px-4 py-3 outline-none focus:ring-2 focus:ring-blue-900 bg-white text-gray-900 resize-none text-sm"></textarea><button onclick="window.submitBookComment('${b.id}')" class="self-end bg-blue-900 hover:bg-blue-950 text-white px-6 py-2.5 rounded-xl font-bold text-sm transition-colors flex items-center gap-2">Enviar <i data-lucide="send" class="w-4 h-4"></i></button></div></div>
+                    <div class="flex flex-col gap-4">${commentsList.length > 0 ? commentsList.map(c => `<div class="flex gap-4 p-4 sys-bg-body rounded-2xl border sys-border"><div class="w-10 h-10 rounded-full sys-bg-surface flex items-center justify-center border sys-border shrink-0"><i data-lucide="user" class="w-5 h-5 sys-text-secondary"></i></div><div class="flex-1"><div class="flex items-center gap-2 mb-1"><p class="font-bold sys-text-primary text-sm">${c.name.replace(/</g, "&lt;")}</p><span class="text-[10px] sys-text-secondary">${new Date(c.date).toLocaleDateString('pt-BR')}</span></div><p class="sys-text-secondary text-sm leading-relaxed">${c.text.replace(/</g, "&lt;")}</p></div></div>`).reverse().join('') : '<p class="text-center sys-text-secondary py-8 italic opacity-70">Seja o primeiro a comentar.</p>'}</div>
                 </div>
             `;
-            document.getElementById('book-detail-content').innerHTML = html;
             lucide.createIcons();
         };
 
         window.likeBook = async (id) => {
             let likedBooks = JSON.parse(localStorage.getItem('plh_liked_books') || '[]');
             if (likedBooks.includes(id)) { window.showToast("Você já curtiu esta obra!"); return; }
-            try { await updateDoc(doc(db, 'artifacts', appId, 'public', 'data', 'books', id), { likes: increment(1) }); likedBooks.push(id); localStorage.setItem('plh_liked_books', JSON.stringify(likedBooks)); window.showToast("Curtida registrada com sucesso!"); } catch (e) { console.error(e); }
+            try { await updateDoc(doc(db, 'artifacts', appId, 'public', 'data', 'books', id), { likes: increment(1) }); likedBooks.push(id); localStorage.setItem('plh_liked_books', JSON.stringify(likedBooks)); window.showToast("Curtida registrada!"); } catch (e) { console.error(e); }
         };
 
         window.submitBookComment = async (id) => {
             const nameInput = document.getElementById(`comment-name-${id}`); const textInput = document.getElementById(`comment-text-${id}`);
-            const name = nameInput.value.trim() || 'Leitor Anônimo'; const text = textInput.value.trim();
+            const name = nameInput.value.trim() || 'Leitor'; const text = textInput.value.trim();
             if (!text) { alert("Escreva um comentário."); return; }
-            try { window.showToast("Comentário enviado!"); await updateDoc(doc(db, 'artifacts', appId, 'public', 'data', 'books', id), { comments: arrayUnion({ name, text, date: Date.now() }) }); textInput.value = ''; nameInput.value = ''; } catch (e) {}
+            try { window.showToast("Enviado!"); await updateDoc(doc(db, 'artifacts', appId, 'public', 'data', 'books', id), { comments: arrayUnion({ name, text, date: Date.now() }) }); textInput.value = ''; nameInput.value = ''; } catch (e) {}
         };
 
         window.showToast = (msg) => { document.getElementById('toast-msg').innerText = msg; const toast = document.getElementById('toast'); toast.classList.remove('translate-y-32', 'opacity-0'); setTimeout(() => toast.classList.add('translate-y-32', 'opacity-0'), 3000); };
 
         window.switchAdminTab = (tab) => {
-            ['posts', 'books', 'categories'].forEach(t => {
+            ['posts', 'books', 'categories', 'community'].forEach(t => {
                 document.getElementById('admin-view-'+t).classList.add('hidden');
                 document.getElementById('tab-btn-'+t).className = "pb-3 text-sm font-bold text-gray-400 border-b-2 border-transparent hover:text-gray-600 transition-colors focus:outline-none whitespace-nowrap";
             });
@@ -862,26 +741,18 @@
             if(tab === 'posts') window.renderAdminList();
             if(tab === 'books') window.renderAdminBooks();
             if(tab === 'categories') window.renderAdminCategories();
+            if(tab === 'community') window.renderAdminGroups();
         };
 
         window.savePost = async () => {
             const btn = document.getElementById('btn-save-post'); const id = document.getElementById('edit-post-id').value; btn.disabled = true;
-            const data = {
-                type: document.querySelector('input[name="post_type"]:checked').value, status: document.querySelector('input[name="post_status"]:checked').value,
-                category: document.getElementById('post-category').value.trim(), title: document.getElementById('post-title').value || "Reflexão",
-                subtitle: document.getElementById('post-subtitle').value || "", imageUrl: document.getElementById('post-image').value || "",
-                youtubeUrl: document.getElementById('post-youtube').value || "", fullText: document.getElementById('post-fulltext').innerHTML,
-            };
+            const data = { type: document.querySelector('input[name="post_type"]:checked').value, status: document.querySelector('input[name="post_status"]:checked').value, category: document.getElementById('post-category').value.trim(), title: document.getElementById('post-title').value || "Reflexão", subtitle: document.getElementById('post-subtitle').value || "", imageUrl: document.getElementById('post-image').value || "", youtubeUrl: document.getElementById('post-youtube').value || "", fullText: document.getElementById('post-fulltext').innerHTML };
             try { if (id) await updateDoc(doc(db, 'artifacts', appId, 'public', 'data', 'posts', id), data); else await addDoc(collection(db, 'artifacts', appId, 'public', 'data', 'posts'), { ...data, createdAt: Date.now() }); window.closeEditor(); } catch (e) { alert("Erro: " + e.message); } finally { btn.disabled = false; }
         };
 
         window.deletePost = async (id, fromEditor = false) => { if (confirm("Excluir reflexão?")) { await deleteDoc(doc(db, 'artifacts', appId, 'public', 'data', 'posts', id)); if (fromEditor) window.closeEditor(); } };
-        window.sharePost = async (id, title, subtitle, event) => {
-            if(event) event.stopPropagation(); const safeTitle = (title || "Reflexão").replace(/["]/g, ""); const url = window.location.origin + window.location.pathname + '?post=' + id;
-            const text = `🙏 *Reflexão - PLH*\n\n*${safeTitle}*\n${subtitle ? `_${subtitle}_` : ""}\n\nLeia aqui:\n${url}`;
-            if (navigator.share) { try { await navigator.share({ title: safeTitle, text }); } catch(e) { window.copyToClipboard(url); } } else { window.copyToClipboard(url); }
-        };
-        window.copyToClipboard = (text) => { const el = document.createElement('textarea'); el.value = text; document.body.appendChild(el); el.select(); document.execCommand('copy'); document.body.removeChild(el); window.showToast("Link copiado para compartilhar!"); };
+        window.sharePost = async (id, title, subtitle, event) => { if(event) event.stopPropagation(); const safeTitle = (title || "Reflexão").replace(/["]/g, ""); const url = window.location.origin + window.location.pathname + '?post=' + id; const text = `🙏 *Reflexão - PLH*\n\n*${safeTitle}*\n${subtitle ? `_${subtitle}_` : ""}\n\nLeia aqui:\n${url}`; if (navigator.share) { try { await navigator.share({ title: safeTitle, text }); } catch(e) { window.copyToClipboard(url); } } else { window.copyToClipboard(url); } };
+        window.copyToClipboard = (text) => { const el = document.createElement('textarea'); el.value = text; document.body.appendChild(el); el.select(); document.execCommand('copy'); document.body.removeChild(el); window.showToast("Link copiado!"); };
         window.getDriveImageUrl = (url) => { if (!url) return ""; const match = url.match(/\/d\/([a-zA-Z0-9_-]+)/) || url.match(/id=([a-zA-Z0-9_-]+)/); return match ? `https://lh3.googleusercontent.com/d/${match[1]}` : url; };
         window.getYoutubeId = (url) => { const match = url.match(/^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|&v=)([^#&?]*).*/); return (match && match[2].length === 11) ? match[2] : null; };
 
@@ -897,7 +768,7 @@
             posts.forEach(post => {
                 const article = document.createElement('article'); article.className = 'sys-bg-surface rounded-2xl shadow-sm sys-border border overflow-hidden hover:shadow-xl transition-all duration-500 group cursor-pointer';
                 const ytId = window.getYoutubeId(post.youtubeUrl);
-                const mediaHtml = ytId ? `<div class="aspect-video bg-black relative overflow-hidden group"><iframe class="absolute inset-0 w-full h-full pointer-events-none transform scale-[1.35]" src="https://www.youtube.com/embed/${ytId}?autoplay=1&mute=1&controls=0&modestbranding=1&rel=0&loop=1&playlist=${ytId}&playsinline=1" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe><div class="absolute inset-0 z-10 flex items-center justify-center bg-black/20 group-hover:bg-black/10 transition-colors cursor-pointer"><div class="w-16 h-16 bg-white/20 backdrop-blur-md rounded-full flex items-center justify-center border border-white/30 group-hover:bg-white/30 transition-all shadow-2xl group-hover:scale-110"><svg class="w-7 h-7 text-white ml-1 shadow-sm" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></div></div></div>` : `<div class="aspect-video bg-gray-100 overflow-hidden"><img src="${window.getDriveImageUrl(post.imageUrl)}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"></div>`;
+                const mediaHtml = ytId ? `<div class="aspect-video bg-black relative overflow-hidden group"><iframe class="absolute inset-0 w-full h-full pointer-events-none transform scale-[1.35]" src="https://www.youtube.com/embed/${ytId}?autoplay=1&mute=1&controls=0&modestbranding=1&rel=0&loop=1&playlist=${ytId}&playsinline=1" frameborder="0" allow="autoplay; encrypted-media"></iframe><div class="absolute inset-0 z-10 flex items-center justify-center bg-black/20 group-hover:bg-black/10 transition-colors cursor-pointer"><div class="w-16 h-16 bg-white/20 backdrop-blur-md rounded-full flex items-center justify-center border border-white/30 group-hover:bg-white/30 transition-all shadow-2xl group-hover:scale-110"><svg class="w-7 h-7 text-white ml-1 shadow-sm" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></div></div></div>` : `<div class="aspect-video bg-gray-100 overflow-hidden"><img src="${window.getDriveImageUrl(post.imageUrl)}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"></div>`;
                 const isPage = post.type === 'page'; const safeTitle = (post.title || "").replace(/'/g, "\\'"); const safeSubtitle = (post.subtitle || "").replace(/'/g, "\\'");
                 article.innerHTML = `<div onclick="window.${isPage ? 'openArticle' : 'togglePost'}('${post.id}')">${mediaHtml}<div class="p-6"><div class="flex gap-2 mb-3"><span class="sys-bg-accent text-white text-[9px] font-black px-2 py-0.5 rounded-full uppercase tracking-widest">${isPage ? 'Artigo' : 'Mensagem'}</span>${post.category ? `<span class="sys-bg-body sys-text-secondary text-[9px] font-bold px-2 py-0.5 rounded-full uppercase sys-border border">${post.category}</span>` : ''}</div><h3 class="text-2xl font-black mb-2 sys-text-primary leading-tight group-hover:sys-text-accent transition-colors">${post.title}</h3><p class="sys-text-secondary text-sm line-clamp-2">${post.subtitle}</p><div class="flex items-center justify-between pt-4 mt-4 sys-border border-t"><div class="sys-text-accent font-black text-xs uppercase flex items-center gap-1 toggle-indicator-${post.id}">Ler mais <i data-lucide="chevron-right" class="w-3 h-3"></i></div><button onclick="window.sharePost('${post.id}', '${safeTitle}', '${safeSubtitle}', event)" class="p-2 sys-text-secondary hover:text-green-600 transition-all"><i data-lucide="share-2" class="w-5 h-5"></i></button></div></div></div>${!isPage ? `<div id="content-${post.id}" class="faq-content sys-bg-body sys-border border-t"><div class="faq-content-inner p-8 prose max-w-none sys-text-primary">${post.fullText}</div></div>` : ''}`;
                 container.appendChild(article);

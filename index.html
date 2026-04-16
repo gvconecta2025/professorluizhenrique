@@ -9,129 +9,144 @@
     
     <title>Professor Luiz Henrique - Reflexões</title>
     
-    <!-- Metadados para Redes Sociais --><!DOCTYPE html>
-<html lang="pt-BR">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    
-    <link rel="preconnect" href="https://www.gstatic.com">
-    <link rel="preconnect" href="https://firestore.googleapis.com">
-    
-    <title>Professor Luiz Henrique - Reflexões</title>
-    
     <meta property="og:title" content="Professor Luiz Henrique - Reflexões de Fé">
     <meta property="og:description" content="Estudos e aprendizados sobre a Fé. Palavras e reflexões diárias.">
-    <meta property="og:url" content="https://PROFESSORLUIZHENRIQUE.vercel.app/">
-    <meta property="og:image" content="https://professorluizhenrique.vercel.app/foto-compartilhamento.png">
-    <meta property="og:image:type" content="image/png">
+    <meta property="og:url" content="https://SEU-DOMINIO-AQUI.vercel.app/">
+    <meta property="og:image" content="https://SEU-DOMINIO-AQUI.vercel.app/foto-compartilhamento.jpg">
+    <meta property="og:image:type" content="image/jpeg">
     <meta property="og:type" content="website">
     <meta name="twitter:card" content="summary_large_image">
     
-    <link rel="icon" type="image/png" href="./foto-compartilhamento.png">
+    <link rel="icon" type="image/jpeg" href="./foto-compartilhamento.jpg">
+
+    <script>
+        const savedTheme = localStorage.getItem('site-theme') || 'light';
+        const savedFontSize = localStorage.getItem('site-font-size') || 'normal';
+        document.documentElement.classList.add('theme-' + savedTheme);
+        document.documentElement.classList.add('font-size-' + savedFontSize);
+    </script>
 
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/lucide@latest"></script>
     <style>
         html { scroll-behavior: smooth; }
         
-        .faq-content {
-            display: grid;
-            grid-template-rows: 0fr;
-            transition: grid-template-rows 0.4s ease-out;
+        /* * ENGENHARIA DE TEMAS: Variáveis Globais de Cores
+         * Isso permite que o Tailwind mude de cor dinamicamente sem reescrever HTML.
+         */
+        :root, html.theme-light {
+            --sys-bg-body: #f3f4f6;
+            --sys-bg-surface: #ffffff;
+            --sys-text-primary: #111827;
+            --sys-text-secondary: #6b7280;
+            --sys-border: #e5e7eb;
+            --sys-accent: #1e3a8a;
         }
+        html.theme-dark {
+            --sys-bg-body: #111827; --sys-bg-surface: #1f2937; --sys-text-primary: #f9fafb; --sys-text-secondary: #9ca3af; --sys-border: #374151; --sys-accent: #60a5fa;
+        }
+        html.theme-polen {
+            --sys-bg-body: #e8e0c5; --sys-bg-surface: #f4ecd8; --sys-text-primary: #453521; --sys-text-secondary: #7a6347; --sys-border: #d1c4a5; --sys-accent: #92400e;
+        }
+        html.theme-cafe {
+            --sys-bg-body: #2b2121; --sys-bg-surface: #3c2f2f; --sys-text-primary: #e7d8c9; --sys-text-secondary: #bda792; --sys-border: #524040; --sys-accent: #fcd34d;
+        }
+        html.theme-verde {
+            --sys-bg-body: #022c22; --sys-bg-surface: #064e3b; --sys-text-primary: #ffffff; --sys-text-secondary: #a7f3d0; --sys-border: #065f46; --sys-accent: #34d399;
+        }
+        html.theme-azul {
+            --sys-bg-body: #172554; --sys-bg-surface: #1e3a8a; --sys-text-primary: #ffffff; --sys-text-secondary: #bfdbfe; --sys-border: #1e40af; --sys-accent: #93c5fd;
+        }
+        html.theme-vermelho {
+            --sys-bg-body: #450a0a; --sys-bg-surface: #7f1d1d; --sys-text-primary: #ffffff; --sys-text-secondary: #fecaca; --sys-border: #991b1b; --sys-accent: #fca5a5;
+        }
+
+        /* Classes de Utilitários de Tema */
+        .sys-bg-body { background-color: var(--sys-bg-body); transition: background-color 0.4s ease; }
+        .sys-bg-surface { background-color: var(--sys-bg-surface); transition: background-color 0.4s ease; }
+        .sys-text-primary { color: var(--sys-text-primary); transition: color 0.4s ease; }
+        .sys-text-secondary { color: var(--sys-text-secondary); transition: color 0.4s ease; }
+        .sys-border { border-color: var(--sys-border); transition: border-color 0.4s ease; }
+        .sys-text-accent { color: var(--sys-accent); transition: color 0.4s ease; }
+        .sys-bg-accent { background-color: var(--sys-accent); color: #fff; transition: background-color 0.4s ease; }
+
+        /* Integração com Prose (Texto do Artigo) */
+        .prose, .prose h1, .prose h2, .prose h3, .prose h4, .prose blockquote, .prose strong, .prose b { color: var(--sys-text-primary) !important; }
+        .prose a { color: var(--sys-accent) !important; }
+
+        /* ENGENHARIA DE ESCALA: Tamanho de Fonte Global */
+        html.font-size-normal { font-size: 16px; transition: font-size 0.3s ease; }
+        html.font-size-large { font-size: 18px; transition: font-size 0.3s ease; }
+        html.font-size-xlarge { font-size: 20px; transition: font-size 0.3s ease; }
+
+        /* Componentes Funcionais */
+        .faq-content { display: grid; grid-template-rows: 0fr; transition: grid-template-rows 0.4s ease-out; }
         .faq-content.open { grid-template-rows: 1fr; }
         .faq-content-inner { overflow: hidden; }
-        
-        .chevron-icon { transition: transform 0.3s ease; }
-        .open .chevron-icon { transform: rotate(180deg); }
-
-        #mobile-menu {
-            transition: max-height 0.3s ease-in-out;
-            max-height: 0;
-            overflow: hidden;
-        }
+        #mobile-menu { transition: max-height 0.3s ease-in-out; max-height: 0; overflow: hidden; }
         #mobile-menu.menu-open { max-height: 500px; }
-
-        .modal-overlay {
-            background-color: rgba(0, 0, 0, 0.6);
-            backdrop-filter: blur(8px);
-        }
+        .modal-overlay { background-color: rgba(0, 0, 0, 0.6); backdrop-filter: blur(8px); }
         .hidden { display: none !important; }
+        .fade-enter { animation: fadeIn 0.4s ease-in-out forwards; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
-        .fade-enter {
-            animation: fadeIn 0.4s ease-in-out forwards;
-        }
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        /* Temas de Leitura Corrigidos para Contraste */
-        .theme-light { background-color: #ffffff; color: #1f2937; }
-        .theme-polen { background-color: #f4ecd8; color: #5f4b32; }
-        .theme-cafe { background-color: #3c2f2f; color: #e7d8c9; }
-        .theme-dark { background-color: #111827; color: #f3f4f6; }
-        
-        .theme-verde { background: linear-gradient(135deg, #064e3b 0%, #065f46 100%); color: #ffffff; }
-        .theme-azul { background: linear-gradient(135deg, #1e3a8a 0%, #1e40af 100%); color: #ffffff; }
-        .theme-vermelho { background: linear-gradient(135deg, #7f1d1d 0%, #991b1b 100%); color: #ffffff; }
-
-        .theme-verde .prose, .theme-azul .prose, .theme-vermelho .prose, .theme-dark .prose, .theme-cafe .prose {
-            color: inherit !important;
-        }
-        .theme-verde .prose h1, .theme-azul .prose h1, .theme-vermelho .prose h1,
-        .theme-verde .prose h2, .theme-azul .prose h2, .theme-vermelho .prose h2 {
-            color: #ffffff !important;
-        }
-
-        /* Tamanhos de Fonte */
-        .font-normal-view { font-size: 1.125rem; line-height: 1.75rem; }
-        .font-large-view { font-size: 1.35rem; line-height: 2.1rem; }
-        .font-xlarge-view { font-size: 1.6rem; line-height: 2.4rem; }
-
-        /* Botão Flutuante */
-        .floating-btn {
-            position: fixed;
-            bottom: 24px;
-            right: 24px;
-            z-index: 40;
-            transition: all 0.3s ease;
-        }
+        .floating-btn { position: fixed; bottom: 24px; right: 24px; z-index: 40; transition: all 0.3s ease; }
         .floating-btn:hover { transform: translateY(-4px); box-shadow: 0 10px 20px rgba(0,0,0,0.2); }
     </style>
 </head>
-<body class="bg-gray-100 text-gray-800 font-sans antialiased min-h-screen flex flex-col">
+<body class="sys-bg-body sys-text-primary font-sans antialiased min-h-screen flex flex-col">
 
-    <header class="bg-white shadow-sm sticky top-0 z-20 flex-shrink-0">
+    <header class="sys-bg-surface shadow-sm sticky top-0 z-20 flex-shrink-0 sys-border border-b">
         <div class="max-w-3xl mx-auto px-4 py-4 flex items-center justify-between">
-            <a href="#" onclick="window.clearFilter(); window.closeArticle(); return false;" class="text-xl sm:text-2xl font-bold tracking-tight text-blue-900 flex items-center gap-2 truncate hover:opacity-80 transition-opacity">
-                <img src="./foto-compartilhamento.jpg" alt="Foto do Professor Luiz Henrique" class="w-8 h-8 rounded-full object-cover border-2 border-blue-900 shrink-0">
+            <a href="#" onclick="window.clearFilter(); window.closeArticle(); return false;" class="text-xl sm:text-2xl font-bold tracking-tight sys-text-accent flex items-center gap-2 truncate hover:opacity-80 transition-opacity">
+                <img src="./foto-compartilhamento.jpg" alt="Foto do Professor Luiz Henrique" class="w-8 h-8 rounded-full object-cover border-2 sys-border shrink-0">
                 Professor Luiz Henrique
             </a>
             
-            <button onclick="window.toggleMobileMenu()" class="p-2 text-gray-600 hover:text-blue-900 focus:outline-none rounded-lg hover:bg-gray-100 transition-colors">
-                <i data-lucide="menu" class="w-6 h-6"></i>
-            </button>
+            <div class="flex items-center gap-1 sm:gap-2">
+                <button onclick="window.cycleFontSize()" class="p-2 sys-text-secondary hover:sys-text-accent focus:outline-none rounded-lg transition-colors" title="Ajustar Tamanho da Fonte">
+                    <i data-lucide="type" class="w-5 h-5"></i>
+                </button>
+                
+                <div class="relative">
+                    <button onclick="window.toggleThemeMenu(event)" class="p-2 sys-text-secondary hover:sys-text-accent focus:outline-none rounded-lg transition-colors" title="Escolher Tema">
+                        <i data-lucide="palette" class="w-5 h-5"></i>
+                    </button>
+                    <div id="theme-menu" class="hidden absolute right-0 mt-2 w-48 sys-bg-surface sys-border border rounded-xl shadow-2xl py-2 z-50">
+                        <p class="px-4 py-2 text-xs font-bold uppercase tracking-wider sys-text-secondary border-b sys-border mb-2">Temas de Leitura</p>
+                        <button onclick="window.setSiteTheme('light')" class="w-full text-left px-4 py-2 text-sm sys-text-primary hover:opacity-70 flex items-center gap-3"><div class="w-4 h-4 rounded-full border border-gray-300 bg-[#f3f4f6]"></div> Claro</button>
+                        <button onclick="window.setSiteTheme('dark')" class="w-full text-left px-4 py-2 text-sm sys-text-primary hover:opacity-70 flex items-center gap-3"><div class="w-4 h-4 rounded-full bg-[#111827] border border-gray-500"></div> Escuro</button>
+                        <button onclick="window.setSiteTheme('polen')" class="w-full text-left px-4 py-2 text-sm sys-text-primary hover:opacity-70 flex items-center gap-3"><div class="w-4 h-4 rounded-full border border-gray-400 bg-[#f4ecd8]"></div> Pólen</button>
+                        <button onclick="window.setSiteTheme('cafe')" class="w-full text-left px-4 py-2 text-sm sys-text-primary hover:opacity-70 flex items-center gap-3"><div class="w-4 h-4 rounded-full border border-gray-500 bg-[#3c2f2f]"></div> Café</button>
+                        <button onclick="window.setSiteTheme('verde')" class="w-full text-left px-4 py-2 text-sm sys-text-primary hover:opacity-70 flex items-center gap-3"><div class="w-4 h-4 rounded-full border border-gray-500 bg-[#064e3b]"></div> Verde</button>
+                        <button onclick="window.setSiteTheme('azul')" class="w-full text-left px-4 py-2 text-sm sys-text-primary hover:opacity-70 flex items-center gap-3"><div class="w-4 h-4 rounded-full border border-gray-500 bg-[#1e3a8a]"></div> Azul</button>
+                        <button onclick="window.setSiteTheme('vermelho')" class="w-full text-left px-4 py-2 text-sm sys-text-primary hover:opacity-70 flex items-center gap-3"><div class="w-4 h-4 rounded-full border border-gray-500 bg-[#7f1d1d]"></div> Vermelho</button>
+                    </div>
+                </div>
+
+                <button onclick="window.toggleMobileMenu()" class="p-2 sys-text-secondary hover:sys-text-accent focus:outline-none rounded-lg transition-colors">
+                    <i data-lucide="menu" class="w-6 h-6"></i>
+                </button>
+            </div>
         </div>
 
-        <div id="mobile-menu" class="bg-white border-t border-gray-100 px-4 shadow-sm overflow-y-auto">
-            <nav class="flex flex-col py-4 gap-4 text-sm font-medium text-gray-600 max-w-3xl mx-auto">
-                <a href="#" onclick="window.clearFilter(); window.closeArticle(); window.toggleMobileMenu(); return false;" class="hover:text-blue-900 flex items-center gap-2 font-bold"><i data-lucide="home" class="w-4 h-4"></i> Início</a>
+        <div id="mobile-menu" class="sys-bg-surface sys-border border-t px-4 shadow-sm overflow-y-auto">
+            <nav class="flex flex-col py-4 gap-4 text-sm font-medium sys-text-secondary max-w-3xl mx-auto">
+                <a href="#" onclick="window.clearFilter(); window.closeArticle(); window.toggleMobileMenu(); return false;" class="hover:sys-text-accent flex items-center gap-2 font-bold"><i data-lucide="home" class="w-4 h-4"></i> Início</a>
                 
                 <div class="flex flex-col">
-                    <button onclick="window.toggleCategories(event)" class="flex items-center justify-between w-full text-left hover:text-blue-900 transition-colors focus:outline-none py-1 font-bold">
+                    <button onclick="window.toggleCategories(event)" class="flex items-center justify-between w-full text-left hover:sys-text-accent transition-colors focus:outline-none py-1 font-bold">
                         <span class="flex items-center gap-2"><i data-lucide="folder" class="w-4 h-4"></i> Categorias</span>
                         <i data-lucide="chevron-down" id="cat-chevron" class="w-4 h-4 transition-transform"></i>
                     </button>
-                    <div id="categories-list" class="hidden flex-col pl-6 mt-3 gap-3 text-gray-500 border-l-2 border-gray-100 ml-2"></div>
+                    <div id="categories-list" class="hidden flex-col pl-6 mt-3 gap-3 sys-text-secondary sys-border border-l-2 ml-2"></div>
                 </div>
 
-                <a href="#" class="hover:text-blue-900 flex items-center gap-2 font-bold"><i data-lucide="user" class="w-4 h-4"></i> Sobre</a>
-                <a href="#" class="hover:text-blue-900 flex items-center gap-2 font-bold"><i data-lucide="mail" class="w-4 h-4"></i> Contato</a>
+                <a href="#" class="hover:sys-text-accent flex items-center gap-2 font-bold"><i data-lucide="user" class="w-4 h-4"></i> Sobre</a>
+                <a href="#" class="hover:sys-text-accent flex items-center gap-2 font-bold"><i data-lucide="mail" class="w-4 h-4"></i> Contato</a>
                 
-                <div class="border-t border-gray-100 pt-3 mt-1">
-                    <a href="#" onclick="window.openAdminLogin(); return false;" class="flex items-center gap-2 text-gray-400 hover:text-blue-900 transition-colors">
+                <div class="sys-border border-t pt-3 mt-1">
+                    <a href="#" onclick="window.openAdminLogin(); return false;" class="flex items-center gap-2 sys-text-secondary hover:sys-text-accent transition-colors opacity-60">
                         <i data-lucide="settings" class="w-4 h-4"></i> Painel
                     </a>
                 </div>
@@ -141,40 +156,27 @@
 
     <main id="home-view" class="flex-grow max-w-3xl w-full mx-auto px-4 py-8 z-10 fade-enter">
         <div class="mb-8 text-center sm:text-left" id="feed-header">
-            <h2 class="text-3xl font-black text-gray-900 mb-1">Reflexões</h2>
-            <p class="text-gray-500 font-medium">Estudos e aprendizados sobre a Fé.</p>
+            <h2 class="text-3xl font-black sys-text-primary mb-1">Reflexões</h2>
+            <p class="sys-text-secondary font-medium">Estudos e aprendizados sobre a Fé.</p>
         </div>
 
         <div id="feed-container" class="flex flex-col gap-6">
-            <div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden animate-pulse">
-                <div class="aspect-video bg-gray-200 w-full"></div>
+            <div class="sys-bg-surface rounded-2xl shadow-sm sys-border border overflow-hidden animate-pulse">
+                <div class="aspect-video bg-gray-200/50 w-full"></div>
                 <div class="p-6">
-                    <div class="h-8 bg-gray-200 rounded w-3/4 mb-3"></div>
-                    <div class="h-4 bg-gray-200 rounded w-full"></div>
+                    <div class="h-8 bg-gray-200/50 rounded w-3/4 mb-3"></div>
+                    <div class="h-4 bg-gray-200/50 rounded w-full"></div>
                 </div>
             </div>
         </div>
     </main>
 
-    <main id="article-view" class="hidden flex-grow w-full bg-white z-10 transition-all duration-300">
+    <main id="article-view" class="hidden flex-grow w-full z-10 transition-all duration-300">
         <div class="max-w-3xl mx-auto px-4 py-8 fade-enter">
-            <div class="flex flex-wrap items-center justify-between gap-4 mb-8 border-b border-gray-200/50 pb-6">
-                <button onclick="window.closeArticle()" class="flex items-center gap-2 text-blue-600 hover:text-blue-800 font-bold group">
+            <div class="mb-8 sys-border border-b pb-6">
+                <button onclick="window.closeArticle()" class="flex items-center gap-2 sys-text-accent font-bold group hover:opacity-80 transition-all">
                     <i data-lucide="arrow-left" class="w-5 h-5 transform group-hover:-translate-x-1 transition-transform"></i> Voltar
                 </button>
-
-                <div class="flex items-center gap-3">
-                    <button onclick="window.toggleFontSize()" class="p-2 bg-gray-100 hover:bg-gray-200 rounded-lg text-gray-700 border border-gray-200" title="Ajustar Fonte">
-                        <i data-lucide="type" class="w-5 h-5"></i>
-                    </button>
-                    <div class="flex gap-1.5 p-1.5 bg-gray-100 rounded-xl border border-gray-200">
-                        <button onclick="window.setArticleTheme('light')" class="w-5 h-5 rounded-full bg-white border border-gray-300 shadow-sm" title="Claro"></button>
-                        <button onclick="window.setArticleTheme('polen')" class="w-5 h-5 rounded-full bg-[#f4ecd8] border border-gray-300" title="Polen"></button>
-                        <button onclick="window.setArticleTheme('dark')" class="w-5 h-5 rounded-full bg-gray-900 border border-black" title="Escuro"></button>
-                        <button onclick="window.setArticleTheme('verde')" class="w-5 h-5 rounded-full bg-green-700 border border-white" title="Verde"></button>
-                        <button onclick="window.setArticleTheme('azul')" class="w-5 h-5 rounded-full bg-blue-700 border border-white" title="Azul"></button>
-                    </div>
-                </div>
             </div>
 
             <article id="article-content" class="pb-16"></article>
@@ -192,199 +194,12 @@
                 <div class="w-16 h-16 bg-blue-50 text-blue-600 rounded-full flex items-center justify-center mx-auto mb-4"><i data-lucide="lock" class="w-8 h-8"></i></div>
                 <h3 class="text-2xl font-bold text-gray-900">Acesso Restrito</h3>
             </div>
-            <input type="password" id="admin-password" placeholder="Senha" class="w-full border border-gray-300 rounded-xl px-4 py-3 mb-4 outline-none focus:ring-2 focus:ring-blue-900">
+            <input type="password" id="admin-password" placeholder="Senha" class="w-full border border-gray-300 rounded-xl px-4 py-3 mb-4 outline-none focus:ring-2 focus:ring-blue-900 text-gray-900 bg-white">
             <button onclick="window.verifyPassword()" class="w-full bg-blue-900 hover:bg-blue-950 text-white font-bold py-3 rounded-xl transition-all">Entrar no Painel</button>
             <p id="login-error" class="text-red-500 text-sm mt-3 text-center hidden">Senha incorreta.</p>
         </div>
     </div>
 
-    <div id="dashboard-modal" class="hidden fixed inset-0 z-50 flex items-center justify-center modal-overlay px-4">
-        <div class="bg-white rounded-2xl shadow-2xl w-full max-w-4xl max-h-[90vh] flex flex-col relative overflow-hidden">
-            <div class="p-6 border-b border-gray-100 flex justify-between items-center bg-gray-50/50">
-                <h3 class
-    <meta property="og:title" content="Professor Luiz Henrique - Reflexões de Fé">
-    <meta property="og:description" content="Estudos e aprendizados sobre a Fé. Palavras e reflexões diárias.">
-    <!-- Imagem de capa padrão para o site (importante para o WhatsApp) -->
-    <meta property="og:image" content="https://lh3.googleusercontent.com/d/1mMr4QBxQtAPXYNg1aGRZ1a2Jib-PbJIx">
-    <meta property="og:type" content="website">
-    <meta name="twitter:card" content="summary_large_image">
-
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://unpkg.com/lucide@latest"></script>
-    <style>
-        html { scroll-behavior: smooth; }
-        
-        .faq-content {
-            display: grid;
-            grid-template-rows: 0fr;
-            transition: grid-template-rows 0.4s ease-out;
-        }
-        .faq-content.open { grid-template-rows: 1fr; }
-        .faq-content-inner { overflow: hidden; }
-        
-        .chevron-icon { transition: transform 0.3s ease; }
-        .open .chevron-icon { transform: rotate(180deg); }
-
-        #mobile-menu {
-            transition: max-height 0.3s ease-in-out;
-            max-height: 0;
-            overflow: hidden;
-        }
-        #mobile-menu.menu-open { max-height: 500px; }
-
-        .modal-overlay {
-            background-color: rgba(0, 0, 0, 0.6);
-            backdrop-filter: blur(8px);
-        }
-        .hidden { display: none !important; }
-
-        .fade-enter {
-            animation: fadeIn 0.4s ease-in-out forwards;
-        }
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        /* Temas de Leitura Corrigidos para Contraste */
-        .theme-light { background-color: #ffffff; color: #1f2937; }
-        .theme-polen { background-color: #f4ecd8; color: #5f4b32; }
-        .theme-cafe { background-color: #3c2f2f; color: #e7d8c9; }
-        .theme-dark { background-color: #111827; color: #f3f4f6; }
-        
-        .theme-verde { background: linear-gradient(135deg, #064e3b 0%, #065f46 100%); color: #ffffff; }
-        .theme-azul { background: linear-gradient(135deg, #1e3a8a 0%, #1e40af 100%); color: #ffffff; }
-        .theme-vermelho { background: linear-gradient(135deg, #7f1d1d 0%, #991b1b 100%); color: #ffffff; }
-
-        .theme-verde .prose, .theme-azul .prose, .theme-vermelho .prose, .theme-dark .prose, .theme-cafe .prose {
-            color: inherit !important;
-        }
-        .theme-verde .prose h1, .theme-azul .prose h1, .theme-vermelho .prose h1,
-        .theme-verde .prose h2, .theme-azul .prose h2, .theme-vermelho .prose h2 {
-            color: #ffffff !important;
-        }
-
-        /* Tamanhos de Fonte */
-        .font-normal-view { font-size: 1.125rem; line-height: 1.75rem; }
-        .font-large-view { font-size: 1.35rem; line-height: 2.1rem; }
-        .font-xlarge-view { font-size: 1.6rem; line-height: 2.4rem; }
-
-        /* Botão Flutuante */
-        .floating-btn {
-            position: fixed;
-            bottom: 24px;
-            right: 24px;
-            z-index: 40;
-            transition: all 0.3s ease;
-        }
-        .floating-btn:hover { transform: translateY(-4px); box-shadow: 0 10px 20px rgba(0,0,0,0.2); }
-    </style>
-</head>
-<body class="bg-gray-100 text-gray-800 font-sans antialiased min-h-screen flex flex-col">
-
-    <!-- Cabeçalho -->
-    <header class="bg-white shadow-sm sticky top-0 z-20 flex-shrink-0">
-        <div class="max-w-3xl mx-auto px-4 py-4 flex items-center justify-between">
-            <a href="#" onclick="window.clearFilter(); window.closeArticle(); return false;" class="text-xl sm:text-2xl font-bold tracking-tight text-blue-900 flex items-center gap-2 truncate hover:opacity-80 transition-opacity">
-                <i data-lucide="cross" class="w-6 h-6 shrink-0 text-blue-700"></i>
-                Professor Luiz Henrique
-            </a>
-            
-            <button onclick="window.toggleMobileMenu()" class="p-2 text-gray-600 hover:text-blue-900 focus:outline-none rounded-lg hover:bg-gray-100 transition-colors">
-                <i data-lucide="menu" class="w-6 h-6"></i>
-            </button>
-        </div>
-
-        <!-- Menu Mobile -->
-        <div id="mobile-menu" class="bg-white border-t border-gray-100 px-4 shadow-sm overflow-y-auto">
-            <nav class="flex flex-col py-4 gap-4 text-sm font-medium text-gray-600 max-w-3xl mx-auto">
-                <a href="#" onclick="window.clearFilter(); window.closeArticle(); window.toggleMobileMenu(); return false;" class="hover:text-blue-900 flex items-center gap-2 font-bold"><i data-lucide="home" class="w-4 h-4"></i> Início</a>
-                
-                <div class="flex flex-col">
-                    <button onclick="window.toggleCategories(event)" class="flex items-center justify-between w-full text-left hover:text-blue-900 transition-colors focus:outline-none py-1 font-bold">
-                        <span class="flex items-center gap-2"><i data-lucide="folder" class="w-4 h-4"></i> Categorias</span>
-                        <i data-lucide="chevron-down" id="cat-chevron" class="w-4 h-4 transition-transform"></i>
-                    </button>
-                    <div id="categories-list" class="hidden flex-col pl-6 mt-3 gap-3 text-gray-500 border-l-2 border-gray-100 ml-2"></div>
-                </div>
-
-                <a href="#" class="hover:text-blue-900 flex items-center gap-2 font-bold"><i data-lucide="user" class="w-4 h-4"></i> Sobre</a>
-                <a href="#" class="hover:text-blue-900 flex items-center gap-2 font-bold"><i data-lucide="mail" class="w-4 h-4"></i> Contato</a>
-                
-                <div class="border-t border-gray-100 pt-3 mt-1">
-                    <a href="#" onclick="window.openAdminLogin(); return false;" class="flex items-center gap-2 text-gray-400 hover:text-blue-900 transition-colors">
-                        <i data-lucide="settings" class="w-4 h-4"></i> Painel
-                    </a>
-                </div>
-            </nav>
-        </div>
-    </header>
-
-    <!-- FEED PRINCIPAL -->
-    <main id="home-view" class="flex-grow max-w-3xl w-full mx-auto px-4 py-8 z-10 fade-enter">
-        <div class="mb-8 text-center sm:text-left" id="feed-header">
-            <h2 class="text-3xl font-black text-gray-900 mb-1">Reflexões</h2>
-            <p class="text-gray-500 font-medium">Estudos e aprendizados sobre a Fé.</p>
-        </div>
-
-        <div id="feed-container" class="flex flex-col gap-6">
-            <!-- Skeleton Inicial -->
-            <div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden animate-pulse">
-                <div class="aspect-video bg-gray-200 w-full"></div>
-                <div class="p-6">
-                    <div class="h-8 bg-gray-200 rounded w-3/4 mb-3"></div>
-                    <div class="h-4 bg-gray-200 rounded w-full"></div>
-                </div>
-            </div>
-        </div>
-    </main>
-
-    <!-- VISUALIZAÇÃO DO ARTIGO -->
-    <main id="article-view" class="hidden flex-grow w-full bg-white z-10 transition-all duration-300">
-        <div class="max-w-3xl mx-auto px-4 py-8 fade-enter">
-            <div class="flex flex-wrap items-center justify-between gap-4 mb-8 border-b border-gray-200/50 pb-6">
-                <button onclick="window.closeArticle()" class="flex items-center gap-2 text-blue-600 hover:text-blue-800 font-bold group">
-                    <i data-lucide="arrow-left" class="w-5 h-5 transform group-hover:-translate-x-1 transition-transform"></i> Voltar
-                </button>
-
-                <div class="flex items-center gap-3">
-                    <button onclick="window.toggleFontSize()" class="p-2 bg-gray-100 hover:bg-gray-200 rounded-lg text-gray-700 border border-gray-200" title="Ajustar Fonte">
-                        <i data-lucide="type" class="w-5 h-5"></i>
-                    </button>
-                    <div class="flex gap-1.5 p-1.5 bg-gray-100 rounded-xl border border-gray-200">
-                        <button onclick="window.setArticleTheme('light')" class="w-5 h-5 rounded-full bg-white border border-gray-300 shadow-sm" title="Claro"></button>
-                        <button onclick="window.setArticleTheme('polen')" class="w-5 h-5 rounded-full bg-[#f4ecd8] border border-gray-300" title="Polen"></button>
-                        <button onclick="window.setArticleTheme('dark')" class="w-5 h-5 rounded-full bg-gray-900 border border-black" title="Escuro"></button>
-                        <button onclick="window.setArticleTheme('verde')" class="w-5 h-5 rounded-full bg-green-700 border border-white" title="Verde"></button>
-                        <button onclick="window.setArticleTheme('azul')" class="w-5 h-5 rounded-full bg-blue-700 border border-white" title="Azul"></button>
-                    </div>
-                </div>
-            </div>
-
-            <article id="article-content" class="pb-16"></article>
-        </div>
-    </main>
-
-    <!-- Botão Flutuante -->
-    <a href="https://chat.whatsapp.com/DgwfvBpeVZIIzHZLgiIlCk" target="_blank" class="floating-btn bg-green-600 text-white px-5 py-3 rounded-full shadow-2xl flex items-center gap-2 font-bold text-sm sm:text-base border-b-4 border-green-800 active:translate-y-1 active:border-b-0 hover:bg-green-700 transition-all">
-        <i data-lucide="users" class="w-5 h-5"></i> Seja Notificado
-    </a>
-
-    <!-- MODAL LOGIN -->
-    <div id="login-modal" class="hidden fixed inset-0 z-50 flex items-center justify-center modal-overlay px-4">
-        <div class="bg-white rounded-2xl shadow-2xl w-full max-w-sm p-8 relative">
-            <button onclick="window.closeAdminLogin()" class="absolute top-4 right-4 text-gray-400 hover:text-gray-600"><i data-lucide="x" class="w-6 h-6"></i></button>
-            <div class="text-center mb-6">
-                <div class="w-16 h-16 bg-blue-50 text-blue-600 rounded-full flex items-center justify-center mx-auto mb-4"><i data-lucide="lock" class="w-8 h-8"></i></div>
-                <h3 class="text-2xl font-bold text-gray-900">Acesso Restrito</h3>
-            </div>
-            <input type="password" id="admin-password" placeholder="Senha" class="w-full border border-gray-300 rounded-xl px-4 py-3 mb-4 outline-none focus:ring-2 focus:ring-blue-900">
-            <button onclick="window.verifyPassword()" class="w-full bg-blue-900 hover:bg-blue-950 text-white font-bold py-3 rounded-xl transition-all">Entrar no Painel</button>
-            <p id="login-error" class="text-red-500 text-sm mt-3 text-center hidden">Senha incorreta.</p>
-        </div>
-    </div>
-
-    <!-- PAINEL DASHBOARD -->
     <div id="dashboard-modal" class="hidden fixed inset-0 z-50 flex items-center justify-center modal-overlay px-4">
         <div class="bg-white rounded-2xl shadow-2xl w-full max-w-4xl max-h-[90vh] flex flex-col relative overflow-hidden">
             <div class="p-6 border-b border-gray-100 flex justify-between items-center bg-gray-50/50">
@@ -405,9 +220,8 @@
         </div>
     </div>
 
-    <!-- EDITOR -->
     <div id="editor-modal" class="hidden fixed inset-0 z-50 flex items-center justify-center modal-overlay px-4 py-4">
-        <div class="bg-white rounded-2xl shadow-2xl w-full max-w-3xl max-h-full flex flex-col relative overflow-hidden">
+        <div class="bg-white rounded-2xl shadow-2xl w-full max-w-3xl max-h-full flex flex-col relative overflow-hidden text-gray-900">
             <div class="p-5 border-b border-gray-100 flex justify-between items-center bg-gray-50">
                 <h3 id="editor-title" class="text-xl font-bold text-gray-900">Nova Reflexão</h3>
                 <button onclick="window.closeEditor()" class="text-gray-400 hover:text-gray-600"><i data-lucide="x" class="w-6 h-6"></i></button>
@@ -440,20 +254,20 @@
                 </div>
                 <div>
                     <label class="block text-sm font-bold text-gray-700 mb-1">Título da Reflexão</label>
-                    <input type="text" id="post-title" class="w-full border border-gray-300 rounded-xl px-4 py-2.5 outline-none focus:ring-2 focus:ring-blue-900">
+                    <input type="text" id="post-title" class="w-full border border-gray-300 bg-white rounded-xl px-4 py-2.5 outline-none focus:ring-2 focus:ring-blue-900">
                 </div>
                 <div>
                     <label class="block text-sm font-bold text-gray-700 mb-1">Subtítulo / Breve Resumo</label>
-                    <input type="text" id="post-subtitle" class="w-full border border-gray-300 rounded-xl px-4 py-2.5 outline-none focus:ring-2 focus:ring-blue-900">
+                    <input type="text" id="post-subtitle" class="w-full border border-gray-300 bg-white rounded-xl px-4 py-2.5 outline-none focus:ring-2 focus:ring-blue-900">
                 </div>
                 <div>
                     <label class="block text-sm font-bold text-gray-700 mb-1">Categoria</label>
-                    <input type="text" id="post-category" class="w-full border border-gray-300 rounded-xl px-4 py-2.5 outline-none focus:ring-2 focus:ring-blue-900" placeholder="Ex: Vida Cristã, Sabedoria">
+                    <input type="text" id="post-category" class="w-full border border-gray-300 bg-white rounded-xl px-4 py-2.5 outline-none focus:ring-2 focus:ring-blue-900" placeholder="Ex: Vida Cristã, Sabedoria">
                 </div>
                 <div class="bg-blue-50/30 p-5 rounded-xl border border-blue-100 flex flex-col gap-4">
                     <p class="text-xs font-bold text-blue-900 uppercase">Mídia de Capa (YouTube ou Imagem)</p>
-                    <input type="text" id="post-image" class="w-full border border-gray-300 rounded-xl px-4 py-2 text-sm outline-none" placeholder="Link da Imagem (Google Drive)">
-                    <input type="text" id="post-youtube" class="w-full border border-gray-300 rounded-xl px-4 py-2 text-sm outline-none" placeholder="Link do Vídeo (YouTube)">
+                    <input type="text" id="post-image" class="w-full border border-gray-300 bg-white rounded-xl px-4 py-2 text-sm outline-none" placeholder="Link da Imagem (Google Drive)">
+                    <input type="text" id="post-youtube" class="w-full border border-gray-300 bg-white rounded-xl px-4 py-2 text-sm outline-none" placeholder="Link do Vídeo (YouTube)">
                 </div>
                 <div>
                     <label class="block text-sm font-bold text-gray-700 mb-1">Texto Principal</label>
@@ -470,14 +284,13 @@
             <div class="p-6 border-t border-gray-100 flex justify-between items-center bg-gray-50">
                 <button id="btn-delete-editor" onclick="window.deletePost(document.getElementById('edit-post-id').value, true)" class="hidden px-5 py-2.5 text-red-600 font-bold hover:bg-red-50 rounded-xl"><i data-lucide="trash-2" class="w-4 h-4 inline mr-2"></i> Excluir</button>
                 <div class="flex gap-3 ml-auto">
-                    <button onclick="window.closeEditor()" class="px-6 py-2.5 border border-gray-300 rounded-xl font-medium">Cancelar</button>
+                    <button onclick="window.closeEditor()" class="px-6 py-2.5 border border-gray-300 text-gray-800 rounded-xl font-medium">Cancelar</button>
                     <button onclick="window.savePost()" id="btn-save-post" class="px-8 py-2.5 bg-blue-900 text-white rounded-xl font-bold shadow-lg">Salvar Reflexão</button>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- Toast Notification -->
     <div id="toast" class="fixed bottom-6 right-6 bg-green-700 text-white px-8 py-4 rounded-2xl shadow-2xl transform transition-transform duration-300 translate-y-32 opacity-0 z-50 flex items-center gap-3 font-bold border-b-4 border-green-900">
         <i data-lucide="check-circle" class="w-6 h-6"></i> Link copiado para compartilhar!
     </div>
@@ -499,7 +312,6 @@
         const ADMIN_PASSWORD = "Biguidu2013@"; 
         let blogPosts = [];
         let currentCategoryFilter = null;
-        let currentFontSize = 'normal';
         const container = document.getElementById('feed-container');
 
         const app = initializeApp(firebaseConfig);
@@ -527,11 +339,9 @@
                         updateCategoriesMenu();
                         renderPostsFeed();
                         
-                        // Garante que a lista do admin atualize se o modal estiver aberto
                         if (!document.getElementById('dashboard-modal').classList.contains('hidden')) {
                             window.renderAdminList();
                         }
-                        
                         checkDeepLink();
                     }, (err) => console.error("Firebase Error:", err));
                 }
@@ -548,6 +358,44 @@
             }
         }
 
+        /* ----------------------------------
+           MOTOR DE SISTEMA DE TEMAS E FONTE
+        ----------------------------------- */
+        window.toggleThemeMenu = (e) => {
+            if(e) e.stopPropagation();
+            document.getElementById('theme-menu').classList.toggle('hidden');
+        };
+
+        window.setSiteTheme = (theme) => {
+            const html = document.documentElement;
+            html.classList.remove('theme-light', 'theme-dark', 'theme-polen', 'theme-cafe', 'theme-verde', 'theme-azul', 'theme-vermelho');
+            html.classList.add('theme-' + theme);
+            localStorage.setItem('site-theme', theme);
+            document.getElementById('theme-menu').classList.add('hidden');
+        };
+
+        window.cycleFontSize = () => {
+            const html = document.documentElement;
+            let newSize = 'normal';
+            if(html.classList.contains('font-size-normal')) newSize = 'large';
+            else if(html.classList.contains('font-size-large')) newSize = 'xlarge';
+            
+            html.classList.remove('font-size-normal', 'font-size-large', 'font-size-xlarge');
+            html.classList.add('font-size-' + newSize);
+            localStorage.setItem('site-font-size', newSize);
+        };
+
+        // Fecha o menu de tema ao clicar fora
+        document.addEventListener('click', (e) => {
+            const menu = document.getElementById('theme-menu');
+            if (menu && !menu.classList.contains('hidden') && !e.target.closest('.relative')) {
+                menu.classList.add('hidden');
+            }
+        });
+
+        /* ----------------------------------
+           OPERAÇÕES DE DADOS (FIREBASE)
+        ----------------------------------- */
         window.savePost = async () => {
             const btn = document.getElementById('btn-save-post');
             const id = document.getElementById('edit-post-id').value;
@@ -590,19 +438,11 @@
             const safeTitle = (title || "Reflexão de Fé").replace(/["]/g, "");
             const url = window.location.origin + window.location.pathname + '?post=' + id;
             
-            // Convite espiritualizado em um único bloco de texto para o WhatsApp
             const inviteText = `🙏 *Reflexão de Fé - Prof. Luiz Henrique*\n\n*${safeTitle}*\n${subtitle ? `_${subtitle}_` : ""}\n\nLeia o conteúdo completo aqui:\n${url}`;
             
             if (navigator.share) {
-                try {
-                    await navigator.share({ 
-                        title: safeTitle, 
-                        text: inviteText
-                    });
-                } catch(e) { window.copyToClipboard(url); }
-            } else {
-                window.copyToClipboard(url);
-            }
+                try { await navigator.share({ title: safeTitle, text: inviteText }); } catch(e) { window.copyToClipboard(url); }
+            } else { window.copyToClipboard(url); }
         };
 
         window.copyToClipboard = (text) => {
@@ -624,27 +464,15 @@
             return (match && match[2].length === 11) ? match[2] : null;
         };
 
-        window.setArticleTheme = (theme) => {
-            const v = document.getElementById('article-view');
-            const ths = ['theme-light', 'theme-polen', 'theme-cafe', 'theme-dark', 'theme-verde', 'theme-azul', 'theme-vermelho'];
-            v.classList.remove(...ths); v.classList.add('theme-' + theme);
-        };
-
-        window.toggleFontSize = () => {
-            const body = document.querySelector('#text-body');
-            const sizes = ['font-normal-view', 'font-large-view', 'font-xlarge-view'];
-            if(!body) return;
-            body.classList.remove(...sizes);
-            currentFontSize = currentFontSize === 'normal' ? 'large' : (currentFontSize === 'large' ? 'xlarge' : 'normal');
-            body.classList.add('font-' + currentFontSize + '-view');
-        };
-
+        /* ----------------------------------
+           RENDERIZAÇÃO DA INTERFACE
+        ----------------------------------- */
         window.renderPostsFeed = () => {
             const header = document.getElementById('feed-header');
             if (currentCategoryFilter) {
-                header.innerHTML = `<div class="flex items-center gap-3"><button onclick="window.clearFilter()" class="p-2 bg-gray-200 rounded-full"><i data-lucide="arrow-left" class="w-4 h-4 text-gray-700"></i></button><h2 class="text-3xl font-black">Pasta: ${currentCategoryFilter}</h2></div>`;
+                header.innerHTML = `<div class="flex items-center gap-3"><button onclick="window.clearFilter()" class="p-2 sys-bg-surface sys-border border rounded-full hover:opacity-80"><i data-lucide="arrow-left" class="w-4 h-4 sys-text-secondary"></i></button><h2 class="text-3xl font-black sys-text-primary">Pasta: ${currentCategoryFilter}</h2></div>`;
             } else {
-                header.innerHTML = `<h2 class="text-3xl font-black text-gray-900 mb-1">Reflexões</h2><p class="text-gray-500 font-medium">Estudos e aprendizados sobre a Fé.</p>`;
+                header.innerHTML = `<h2 class="text-3xl font-black sys-text-primary mb-1">Reflexões</h2><p class="sys-text-secondary font-medium">Estudos e aprendizados sobre a Fé.</p>`;
             }
             
             container.innerHTML = '';
@@ -652,14 +480,14 @@
             if (currentCategoryFilter) posts = posts.filter(p => p.category === currentCategoryFilter);
 
             if (posts.length === 0) {
-                container.innerHTML = `<p class="text-center py-20 text-gray-400">Em breve, uma nova reflexão de fé será compartilhada aqui.</p>`;
+                container.innerHTML = `<p class="text-center py-20 sys-text-secondary opacity-70">Em breve, uma nova reflexão de fé será compartilhada aqui.</p>`;
                 lucide.createIcons();
                 return;
             }
 
             posts.forEach(post => {
                 const article = document.createElement('article');
-                article.className = 'bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden hover:shadow-xl transition-all duration-500 group cursor-pointer';
+                article.className = 'sys-bg-surface rounded-2xl shadow-sm sys-border border overflow-hidden hover:shadow-xl transition-all duration-500 group cursor-pointer';
                 
                 const ytId = window.getYoutubeId(post.youtubeUrl);
                 const mediaHtml = ytId 
@@ -675,18 +503,18 @@
                         ${mediaHtml}
                         <div class="p-6">
                             <div class="flex gap-2 mb-3">
-                                <span class="bg-blue-900 text-white text-[9px] font-black px-2 py-0.5 rounded-full uppercase tracking-widest">${post.type === 'page' ? 'Artigo' : 'Mensagem'}</span>
-                                ${post.category ? `<span class="bg-gray-100 text-gray-500 text-[9px] font-bold px-2 py-0.5 rounded-full uppercase border border-gray-200">${post.category}</span>` : ''}
+                                <span class="sys-bg-accent text-white text-[9px] font-black px-2 py-0.5 rounded-full uppercase tracking-widest">${post.type === 'page' ? 'Artigo' : 'Mensagem'}</span>
+                                ${post.category ? `<span class="sys-bg-body sys-text-secondary text-[9px] font-bold px-2 py-0.5 rounded-full uppercase sys-border border">${post.category}</span>` : ''}
                             </div>
-                            <h3 class="text-2xl font-black mb-2 text-gray-900 leading-tight group-hover:text-blue-900 transition-colors">${post.title}</h3>
-                            <p class="text-gray-500 text-sm line-clamp-2">${post.subtitle || post.description}</p>
-                            <div class="flex items-center justify-between pt-4 mt-4 border-t border-gray-50">
-                                <div class="text-blue-900 font-black text-xs uppercase flex items-center gap-1 toggle-indicator-${post.id}">Ler mais <i data-lucide="chevron-right" class="w-3 h-3"></i></div>
-                                <button onclick="window.sharePost('${post.id}', '${safeTitle}', '${safeSubtitle}', event)" class="p-2 text-gray-400 hover:text-green-600 transition-all"><i data-lucide="share-2" class="w-5 h-5"></i></button>
+                            <h3 class="text-2xl font-black mb-2 sys-text-primary leading-tight group-hover:sys-text-accent transition-colors">${post.title}</h3>
+                            <p class="sys-text-secondary text-sm line-clamp-2">${post.subtitle || post.description}</p>
+                            <div class="flex items-center justify-between pt-4 mt-4 sys-border border-t">
+                                <div class="sys-text-accent font-black text-xs uppercase flex items-center gap-1 toggle-indicator-${post.id}">Ler mais <i data-lucide="chevron-right" class="w-3 h-3"></i></div>
+                                <button onclick="window.sharePost('${post.id}', '${safeTitle}', '${safeSubtitle}', event)" class="p-2 sys-text-secondary hover:text-green-600 transition-all"><i data-lucide="share-2" class="w-5 h-5"></i></button>
                             </div>
                         </div>
                     </div>
-                    ${!isPage ? `<div id="content-${post.id}" class="faq-content bg-gray-50 border-t"><div class="faq-content-inner p-8 prose max-w-none text-gray-700">${post.fullText}</div></div>` : ''}
+                    ${!isPage ? `<div id="content-${post.id}" class="faq-content sys-bg-body sys-border border-t"><div class="faq-content-inner p-8 prose max-w-none sys-text-primary">${post.fullText}</div></div>` : ''}
                 `;
                 container.appendChild(article);
             });
@@ -709,18 +537,16 @@
             document.getElementById('article-content').innerHTML = `
                 ${mediaHtml}
                 <div class="px-2">
-                    <h1 class="text-4xl sm:text-6xl font-black mb-6 leading-tight tracking-tight">${post.title}</h1>
-                    <p class="text-xl sm:text-2xl opacity-80 mb-10 pb-10 border-b border-gray-300/30 font-medium italic">${post.subtitle}</p>
-                    <div id="text-body" class="prose prose-lg max-w-none font-normal-view leading-relaxed">${post.fullText}</div>
-                    <div class="mt-16 pt-12 border-t border-gray-200/50 flex justify-center">
+                    <h1 class="text-4xl sm:text-6xl font-black mb-6 leading-tight tracking-tight sys-text-primary">${post.title}</h1>
+                    <p class="text-xl sm:text-2xl opacity-80 mb-10 pb-10 sys-border border-b font-medium italic sys-text-secondary">${post.subtitle}</p>
+                    <div class="prose max-w-none leading-relaxed">${post.fullText}</div>
+                    <div class="mt-16 pt-12 sys-border border-t flex justify-center">
                         <button onclick="window.sharePost('${post.id}', '${sTitle}', '${sSub}', event)" class="flex items-center gap-3 bg-green-600 hover:bg-green-700 text-white sm:px-10 px-6 sm:py-5 py-3 rounded-full font-black shadow-2xl transition-all hover:scale-105 active:scale-95 uppercase text-sm sm:text-base">
                             <i data-lucide="share-2" class="w-5 h-5 sm:w-6 sm:h-6"></i> Compartilhar Palavra
                         </button>
                     </div>
                 </div>
             `;
-            window.setArticleTheme('light');
-            currentFontSize = 'normal';
             lucide.createIcons();
         };
 
@@ -751,7 +577,7 @@
         window.filterByCategory = (cat) => { currentCategoryFilter = cat; window.closeArticle(); document.getElementById('mobile-menu').classList.remove('menu-open'); window.renderPostsFeed(); };
         window.clearFilter = () => { currentCategoryFilter = null; window.renderPostsFeed(); };
         window.toggleCategories = (e) => { e.stopPropagation(); document.getElementById('categories-list').classList.toggle('hidden'); };
-        function updateCategoriesMenu() { const cats = [...new Set(blogPosts.filter(p => p.status === 'published' && p.category).map(p => p.category))]; document.getElementById('categories-list').innerHTML = cats.map(c => `<a href="#" onclick="window.filterByCategory('${c}'); return false;" class="hover:text-blue-900 py-1 flex items-center gap-2 font-bold"><i data-lucide="folder-open" class="w-3 h-3"></i> ${c}</a>`).join('') || '<span class="text-xs italic text-gray-400">Nenhuma categoria ativa.</span>'; lucide.createIcons(); }
+        function updateCategoriesMenu() { const cats = [...new Set(blogPosts.filter(p => p.status === 'published' && p.category).map(p => p.category))]; document.getElementById('categories-list').innerHTML = cats.map(c => `<a href="#" onclick="window.filterByCategory('${c}'); return false;" class="hover:sys-text-accent py-1 flex items-center gap-2 font-bold"><i data-lucide="folder-open" class="w-3 h-3"></i> ${c}</a>`).join('') || '<span class="text-xs italic sys-text-secondary">Nenhuma categoria.</span>'; lucide.createIcons(); }
 
         window.execEditor = (cmd, val = null) => { document.execCommand(cmd, false, val); document.getElementById('post-fulltext').focus(); };
         window.insertEditorImage = () => { const url = prompt("Link da imagem:"); if (url) window.execEditor('insertHTML', `<img src="${window.getDriveImageUrl(url)}" class="w-full rounded-xl my-4" />`); };

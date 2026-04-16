@@ -238,9 +238,10 @@
                 </a>
             </div>
 
-            <div class="mt-auto pt-6 border-t sys-border pb-safe">
-                <a href="#" onclick="window.openAdminLogin(); return false;" class="flex items-center gap-4 font-bold text-lg sys-text-secondary hover:sys-text-accent transition-colors opacity-70">
-                    <i data-lucide="settings" class="w-5 h-5"></i> Painel Admin
+            <!-- Rodapé Invisível de Acesso Restrito (Apenas a Engrenagem Translúcida) -->
+            <div class="mt-auto pt-6 border-t sys-border pb-safe flex justify-end px-2">
+                <a href="#" onclick="window.openAdminLogin(); return false;" class="p-3 sys-text-secondary hover:sys-text-accent transition-all opacity-10 hover:opacity-100 rounded-full" title="Sistema">
+                    <i data-lucide="settings" class="w-5 h-5"></i>
                 </a>
             </div>
         </div>
@@ -276,7 +277,7 @@
         </div>
     </main>
 
-    <!-- MENU INFERIOR MOBILE (Design Moderno PWA) -->
+    <!-- MENU INFERIOR MOBILE (Limpo, Apenas 3 Botões Principais) -->
     <nav class="fixed bottom-0 w-full sys-bg-surface sys-border border-t shadow-[0_-10px_40px_rgba(0,0,0,0.06)] z-30 sm:hidden pb-safe">
         <div class="flex justify-around items-center h-[72px] px-2">
             <button onclick="window.clearFilter(); window.closeArticle(); window.scrollTo(0,0);" class="flex flex-col items-center justify-center w-full h-full sys-text-secondary hover:sys-text-accent transition-all group">
@@ -299,13 +300,6 @@
                 </div>
                 <span class="text-[10px] font-bold">Comunidade</span>
             </a>
-            
-            <button onclick="window.openAdminLogin()" class="flex flex-col items-center justify-center w-full h-full sys-text-secondary hover:sys-text-accent transition-all group">
-                <div class="p-1.5 rounded-2xl group-hover:bg-gray-100/50 transition-colors mb-0.5">
-                    <i data-lucide="user" class="w-6 h-6"></i>
-                </div>
-                <span class="text-[10px] font-bold">Painel</span>
-            </button>
         </div>
     </nav>
 
@@ -322,7 +316,7 @@
         </div>
     </div>
 
-    <!-- Botão Flutuante (Oculto no Mobile, pois o Menu Inferior já tem o botão Comunidade) -->
+    <!-- Botão Flutuante (Desktop) -->
     <a href="https://chat.whatsapp.com/DgwfvBpeVZIIzHZLgiIlCk" target="_blank" class="hidden sm:flex floating-btn bg-green-600 text-white px-5 py-3 rounded-full shadow-2xl items-center gap-2 font-bold text-sm sm:text-base border-b-4 border-green-800 active:translate-y-1 active:border-b-0 hover:bg-green-700 transition-all">
         <i data-lucide="users" class="w-5 h-5"></i> Seja Notificado
     </a>
@@ -336,27 +330,51 @@
                 <h3 class="text-2xl font-bold text-gray-900">Acesso Restrito</h3>
             </div>
             <input type="password" id="admin-password" placeholder="Senha" class="w-full border border-gray-300 rounded-xl px-4 py-3 mb-4 outline-none focus:ring-2 focus:ring-blue-900 text-gray-900 bg-white">
-            <button onclick="window.verifyPassword()" class="w-full bg-blue-900 hover:bg-blue-950 text-white font-bold py-3 rounded-xl transition-all">Entrar no Painel</button>
+            <button onclick="window.verifyPassword()" class="w-full bg-blue-900 hover:bg-blue-950 text-white font-bold py-3 rounded-xl transition-all">Entrar no Sistema</button>
             <p id="login-error" class="text-red-500 text-sm mt-3 text-center hidden">Senha incorreta.</p>
         </div>
     </div>
 
-    <!-- PAINEL DASHBOARD -->
+    <!-- PAINEL DASHBOARD COM ABAS (Reflexões / Categorias) -->
     <div id="dashboard-modal" class="hidden fixed inset-0 z-50 flex items-center justify-center modal-overlay px-4">
         <div class="bg-white rounded-2xl shadow-2xl w-full max-w-4xl max-h-[90vh] flex flex-col relative overflow-hidden">
             <div class="p-6 border-b border-gray-100 flex justify-between items-center bg-gray-50/50">
                 <h3 class="text-xl font-bold text-gray-900 flex items-center gap-2"><i data-lucide="layout-dashboard" class="w-6 h-6 text-blue-900"></i> Painel de Controle</h3>
                 <button onclick="window.closeDashboard()" class="text-gray-400 hover:text-gray-600"><i data-lucide="x" class="w-6 h-6"></i></button>
             </div>
+            
+            <!-- Navegação das Abas -->
+            <div class="px-6 pt-4 border-b border-gray-100 bg-white flex gap-6">
+                <button onclick="window.switchAdminTab('posts')" id="tab-btn-posts" class="pb-3 text-sm font-black text-blue-900 border-b-2 border-blue-900 transition-colors focus:outline-none">Reflexões</button>
+                <button onclick="window.switchAdminTab('categories')" id="tab-btn-categories" class="pb-3 text-sm font-bold text-gray-400 border-b-2 border-transparent hover:text-gray-600 transition-colors focus:outline-none">Categorias</button>
+            </div>
+
             <div class="p-6 flex-1 overflow-y-auto">
-                <div class="flex flex-col sm:flex-row justify-between items-center gap-4 mb-8">
-                    <h4 class="text-lg font-semibold text-gray-800">Gerenciar Reflexões</h4>
-                    <button onclick="window.openEditor()" class="w-full sm:w-auto bg-blue-900 hover:bg-blue-950 text-white px-6 py-2.5 rounded-xl font-bold flex items-center justify-center gap-2">
-                        <i data-lucide="plus" class="w-5 h-5"></i> Criar Reflexão
-                    </button>
+                <!-- VIEW 1: REFLEXÕES -->
+                <div id="admin-view-posts">
+                    <div class="flex flex-col sm:flex-row justify-between items-center gap-4 mb-6">
+                        <h4 class="text-lg font-semibold text-gray-800">Suas Reflexões</h4>
+                        <button onclick="window.openEditor()" class="w-full sm:w-auto bg-blue-900 hover:bg-blue-950 text-white px-6 py-2.5 rounded-xl font-bold flex items-center justify-center gap-2">
+                            <i data-lucide="plus" class="w-5 h-5"></i> Criar Nova
+                        </button>
+                    </div>
+                    <div id="admin-posts-list" class="flex flex-col gap-3">
+                        <p class="text-center text-gray-400 py-10">Carregando publicações...</p>
+                    </div>
                 </div>
-                <div id="admin-posts-list" class="flex flex-col gap-3">
-                    <p class="text-center text-gray-400 py-10">Carregando publicações...</p>
+
+                <!-- VIEW 2: GESTÃO DE CATEGORIAS -->
+                <div id="admin-view-categories" class="hidden">
+                    <div class="flex flex-col sm:flex-row gap-3 mb-6 bg-gray-50 p-4 rounded-2xl border border-gray-100">
+                        <input type="text" id="new-category-input" placeholder="Nome da nova categoria..." class="flex-1 border border-gray-300 rounded-xl px-4 py-2.5 outline-none focus:ring-2 focus:ring-blue-900 text-gray-900 bg-white">
+                        <button onclick="window.createCategory()" class="bg-green-700 hover:bg-green-800 text-white px-6 py-2.5 rounded-xl font-bold shadow-sm whitespace-nowrap transition-colors flex items-center justify-center gap-2">
+                            <i data-lucide="plus" class="w-4 h-4"></i> Adicionar
+                        </button>
+                    </div>
+                    <h4 class="text-sm font-bold text-gray-500 uppercase tracking-widest mb-4 pl-1">Categorias Ativas</h4>
+                    <div id="admin-categories-list" class="flex flex-col gap-2">
+                        <!-- Categorias Injetadas Via JS -->
+                    </div>
                 </div>
             </div>
         </div>
@@ -404,8 +422,11 @@
                     <input type="text" id="post-subtitle" class="w-full border border-gray-300 bg-white rounded-xl px-4 py-2.5 outline-none focus:ring-2 focus:ring-blue-900">
                 </div>
                 <div>
-                    <label class="block text-sm font-bold text-gray-700 mb-1">Categoria</label>
-                    <input type="text" id="post-category" class="w-full border border-gray-300 bg-white rounded-xl px-4 py-2.5 outline-none focus:ring-2 focus:ring-blue-900" placeholder="Ex: Vida Cristã, Sabedoria">
+                    <label class="block text-sm font-bold text-gray-700 mb-1">Categoria (Obrigatória)</label>
+                    <select id="post-category" class="w-full border border-gray-300 bg-white rounded-xl px-4 py-2.5 outline-none focus:ring-2 focus:ring-blue-900 text-gray-900 cursor-pointer">
+                        <option value="">Sem Categoria</option>
+                        <!-- Injetado via JS pelo painel canônico -->
+                    </select>
                 </div>
                 <div class="bg-blue-50/30 p-5 rounded-xl border border-blue-100 flex flex-col gap-4">
                     <p class="text-xs font-bold text-blue-900 uppercase">Mídia de Capa (YouTube ou Imagem)</p>
@@ -455,6 +476,7 @@
 
         const ADMIN_PASSWORD = "Biguidu2013@"; 
         let blogPosts = [];
+        let siteCategories = []; // Array centralizado de categorias do banco
         let currentCategoryFilter = null;
         const container = document.getElementById('feed-container');
 
@@ -481,22 +503,34 @@
             
             onAuthStateChanged(auth, (user) => {
                 if (user) {
+                    // Escuta Ativa das Reflexões
                     const postsRef = collection(db, 'artifacts', appId, 'public', 'data', 'posts');
                     onSnapshot(postsRef, (snapshot) => {
                         blogPosts = [];
-                        snapshot.forEach(doc => { 
-                            blogPosts.push({ id: doc.id, ...doc.data() }); 
-                        });
+                        snapshot.forEach(doc => { blogPosts.push({ id: doc.id, ...doc.data() }); });
                         blogPosts.sort((a, b) => (b.createdAt || 0) - (a.createdAt || 0));
                         
                         updateCategoriesMenu();
                         renderPostsFeed();
                         
-                        if (!document.getElementById('dashboard-modal').classList.contains('hidden')) {
+                        if (!document.getElementById('dashboard-modal').classList.contains('hidden') && !document.getElementById('admin-view-posts').classList.contains('hidden')) {
                             window.renderAdminList();
                         }
                         checkDeepLink();
                     }, (err) => console.error("Firebase Error:", err));
+
+                    // Escuta Ativa das Categorias Canônicas
+                    const catsRef = collection(db, 'artifacts', appId, 'public', 'data', 'categories');
+                    onSnapshot(catsRef, (snapshot) => {
+                        siteCategories = [];
+                        snapshot.forEach(doc => { siteCategories.push({ id: doc.id, ...doc.data() }); });
+                        siteCategories.sort((a, b) => (a.createdAt || 0) - (b.createdAt || 0));
+                        
+                        updateCategoriesMenu();
+                        if (!document.getElementById('dashboard-modal').classList.contains('hidden') && !document.getElementById('admin-view-categories').classList.contains('hidden')) {
+                            window.renderAdminCategories();
+                        }
+                    }, (err) => console.error("Firebase Error Categories:", err));
                 }
             });
         };
@@ -549,12 +583,10 @@
             const overlay = document.getElementById('sidebar-overlay');
             
             if (sidebar.classList.contains('translate-x-full')) {
-                // Abrir Sidebar
                 sidebar.classList.remove('translate-x-full');
                 overlay.classList.remove('hidden');
                 setTimeout(() => overlay.classList.remove('opacity-0'), 10);
             } else {
-                // Fechar Sidebar
                 sidebar.classList.add('translate-x-full');
                 overlay.classList.add('opacity-0');
                 setTimeout(() => overlay.classList.add('hidden'), 300);
@@ -573,7 +605,78 @@
             }
         };
 
-        /* OPERAÇÕES DE DADOS (FIREBASE) */
+        /* LÓGICA DE GESTÃO CANÔNICA DE CATEGORIAS (CRUD) */
+        window.createCategory = async () => {
+            const input = document.getElementById('new-category-input');
+            const name = input.value.trim();
+            if(!name) return;
+            try {
+                await addDoc(collection(db, 'artifacts', appId, 'public', 'data', 'categories'), { name, createdAt: Date.now() });
+                input.value = '';
+            } catch(e) { alert("Erro ao criar: " + e.message); }
+        };
+
+        window.deleteCategory = async (id) => {
+            if(confirm("Deseja excluir esta categoria definitivamente do sistema?")) {
+                await deleteDoc(doc(db, 'artifacts', appId, 'public', 'data', 'categories', id));
+            }
+        };
+
+        window.editCategory = async (id, oldName) => {
+            const newName = prompt("Renomear categoria para:", oldName);
+            if(newName && newName.trim() !== "" && newName !== oldName) {
+                const finalName = newName.trim();
+                await updateDoc(doc(db, 'artifacts', appId, 'public', 'data', 'categories', id), { name: finalName });
+                
+                // Engenharia ZIG: Atualização em Lote de Artigos Existentes
+                blogPosts.forEach(async p => {
+                    if(p.category === oldName) {
+                        await updateDoc(doc(db, 'artifacts', appId, 'public', 'data', 'posts', p.id), { category: finalName });
+                    }
+                });
+            }
+        };
+
+        window.renderAdminCategories = () => {
+            const list = document.getElementById('admin-categories-list');
+            if(!list) return;
+            if(siteCategories.length === 0) {
+                list.innerHTML = `<p class="text-center text-gray-400 py-6">Nenhuma categoria registrada. Crie a primeira acima.</p>`;
+                return;
+            }
+            list.innerHTML = siteCategories.map(c => `
+                <div class="flex justify-between items-center p-4 border border-gray-200 rounded-xl bg-white shadow-sm">
+                    <span class="font-bold text-gray-800">${c.name}</span>
+                    <div class="flex gap-2">
+                        <button onclick="window.editCategory('${c.id}', '${c.name}')" class="p-2 bg-blue-50 text-blue-900 rounded-lg hover:bg-blue-100 transition-colors"><i data-lucide="edit-3" class="w-4 h-4"></i></button>
+                        <button onclick="window.deleteCategory('${c.id}')" class="p-2 bg-red-50 text-red-600 rounded-lg hover:bg-red-100 transition-colors"><i data-lucide="trash-2" class="w-4 h-4"></i></button>
+                    </div>
+                </div>
+            `).join('');
+            lucide.createIcons();
+        };
+
+        /* MUDANÇA DE ABAS NO PAINEL ADMIN */
+        window.switchAdminTab = (tab) => {
+            const vPosts = document.getElementById('admin-view-posts');
+            const vCats = document.getElementById('admin-view-categories');
+            const btnPosts = document.getElementById('tab-btn-posts');
+            const btnCats = document.getElementById('tab-btn-categories');
+            
+            if(tab === 'posts') {
+                vPosts.classList.remove('hidden'); vCats.classList.add('hidden');
+                btnPosts.className = "pb-3 text-sm font-black text-blue-900 border-b-2 border-blue-900 transition-colors focus:outline-none";
+                btnCats.className = "pb-3 text-sm font-bold text-gray-400 border-b-2 border-transparent hover:text-gray-600 transition-colors focus:outline-none";
+                window.renderAdminList();
+            } else {
+                vPosts.classList.add('hidden'); vCats.classList.remove('hidden');
+                btnCats.className = "pb-3 text-sm font-black text-blue-900 border-b-2 border-blue-900 transition-colors focus:outline-none";
+                btnPosts.className = "pb-3 text-sm font-bold text-gray-400 border-b-2 border-transparent hover:text-gray-600 transition-colors focus:outline-none";
+                window.renderAdminCategories();
+            }
+        };
+
+        /* OPERAÇÕES DE DADOS DE POSTS (FIREBASE) */
         window.savePost = async () => {
             const btn = document.getElementById('btn-save-post');
             const id = document.getElementById('edit-post-id').value;
@@ -582,7 +685,7 @@
             const postData = {
                 type: document.querySelector('input[name="post_type"]:checked').value,
                 status: document.querySelector('input[name="post_status"]:checked').value,
-                category: document.getElementById('post-category').value.trim() || "Geral",
+                category: document.getElementById('post-category').value.trim(),
                 title: document.getElementById('post-title').value || "Reflexão de Fé",
                 subtitle: document.getElementById('post-subtitle').value || "",
                 imageUrl: document.getElementById('post-image').value || "",
@@ -667,13 +770,11 @@
                 
                 const ytId = window.getYoutubeId(post.youtubeUrl);
                 
-                // Engenharia de Thumbnails do YouTube (Sem Iframe, Foco em Performance e UX)
                 const mediaHtml = ytId 
                     ? `<div class="aspect-video bg-gray-900 overflow-hidden relative group">
                            <img src="https://img.youtube.com/vi/${ytId}/maxresdefault.jpg" onerror="this.src='https://img.youtube.com/vi/${ytId}/hqdefault.jpg'" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 opacity-90">
                            <div class="absolute inset-0 flex items-center justify-center pointer-events-none">
                                <div class="w-16 h-16 bg-black/50 backdrop-blur-sm rounded-full flex items-center justify-center border border-white/20 group-hover:bg-blue-900/80 transition-all shadow-xl group-hover:scale-110">
-                                   <!-- Ícone Sólido de Play (SVG Puro para consistência visual) -->
                                    <svg class="w-7 h-7 text-white ml-1" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
                                </div>
                            </div>
@@ -715,7 +816,6 @@
             view.classList.remove('hidden');
             window.scrollTo(0, 0);
             
-            // No modo de artigo inteiro (página), mantemos o Iframe nativo para que ele possa assistir.
             const ytId = window.getYoutubeId(post.youtubeUrl);
             const mediaHtml = ytId ? `<div class="aspect-video rounded-3xl overflow-hidden mb-8 shadow-2xl bg-black"><iframe class="w-full h-full" src="https://www.youtube.com/embed/${ytId}" frameborder="0" allowfullscreen></iframe></div>` : `<div class="aspect-video rounded-3xl overflow-hidden mb-8 shadow-xl"><img src="${window.getDriveImageUrl(post.imageUrl)}" class="w-full h-full object-cover"></div>`;
             const sTitle = (post.title || "").replace(/'/g, "\\'");
@@ -766,17 +866,15 @@
         window.toggleCategories = (e) => { e.stopPropagation(); document.getElementById('categories-list').classList.toggle('hidden'); };
         
         function updateCategoriesMenu() { 
-            const cats = [...new Set(blogPosts.filter(p => p.status === 'published' && p.category).map(p => p.category))]; 
+            // Agora a lista do site e menus obedece fielmente ao banco canônico de categorias
+            const cats = siteCategories.map(c => c.name); 
             
-            // Renderiza no Menu Lateral (Desktop/Mobile)
             document.getElementById('categories-list').innerHTML = cats.map(c => `<a href="#" onclick="window.filterByCategory('${c}'); return false;" class="hover:sys-text-accent py-2 flex items-center gap-3 font-bold text-base transition-colors"><i data-lucide="folder-open" class="w-4 h-4"></i> ${c}</a>`).join('') || '<span class="text-xs italic sys-text-secondary">Nenhuma categoria.</span>'; 
             
-            // Renderiza no Modal do Menu Inferior
             const bottomList = document.getElementById('bottom-categories-list');
             if(bottomList) {
                 bottomList.innerHTML = cats.map(c => `<button onclick="window.filterByCategory('${c}'); window.toggleCategoriesModal();" class="w-full text-left px-5 py-4 sys-bg-body sys-text-primary hover:sys-text-accent font-black rounded-2xl transition-colors flex items-center gap-3 border sys-border shadow-sm"><i data-lucide="folder-open" class="w-5 h-5"></i> ${c}</button>`).join('') || '<p class="text-sm sys-text-secondary text-center py-4">Nenhuma categoria encontrada.</p>';
             }
-
             lucide.createIcons(); 
         }
 
@@ -785,10 +883,38 @@
         window.insertEditorVideo = () => { const url = prompt("Link do YouTube:"); const id = window.getYoutubeId(url); if (id) window.execEditor('insertHTML', `<div class="aspect-video w-full rounded-xl overflow-hidden my-4"><iframe class="w-full h-full" src="https://www.youtube.com/embed/${id}" frameborder="0" allowfullscreen></iframe></div>`); };
         window.openAdminLogin = () => { if(!document.getElementById('sidebar-menu').classList.contains('translate-x-full')) window.toggleMobileMenu(); document.getElementById('login-modal').classList.remove('hidden'); document.getElementById('admin-password').value = ''; };
         window.closeAdminLogin = () => document.getElementById('login-modal').classList.add('hidden');
-        window.verifyPassword = () => { if (document.getElementById('admin-password').value === ADMIN_PASSWORD) { window.closeAdminLogin(); document.getElementById('dashboard-modal').classList.remove('hidden'); window.renderAdminList(); } else { document.getElementById('login-error').classList.remove('hidden'); } };
+        window.verifyPassword = () => { if (document.getElementById('admin-password').value === ADMIN_PASSWORD) { window.closeAdminLogin(); document.getElementById('dashboard-modal').classList.remove('hidden'); window.switchAdminTab('posts'); } else { document.getElementById('login-error').classList.remove('hidden'); } };
         window.closeDashboard = () => document.getElementById('dashboard-modal').classList.add('hidden');
-        window.openEditor = () => { document.getElementById('edit-post-id').value = ''; ['title', 'subtitle', 'image', 'youtube', 'category'].forEach(f => document.getElementById('post-'+f).value = ''); document.getElementById('post-fulltext').innerHTML = ''; document.getElementById('editor-modal').classList.remove('hidden'); document.getElementById('btn-delete-editor').classList.add('hidden'); };
-        window.editPost = (id) => { const p = blogPosts.find(x => x.id === id); document.getElementById('edit-post-id').value = p.id; document.getElementById('post-title').value = p.title; document.getElementById('post-subtitle').value = p.subtitle; document.getElementById('post-category').value = p.category || ''; document.getElementById('post-image').value = p.imageUrl || ''; document.getElementById('post-youtube').value = p.youtubeUrl || ''; document.getElementById('post-fulltext').innerHTML = p.fullText; document.getElementById('editor-modal').classList.remove('hidden'); document.getElementById('btn-delete-editor').classList.remove('hidden'); };
+        
+        // Popula o <select> do Editor usando as categorias canônicas
+        window.openEditor = () => { 
+            const catSelect = document.getElementById('post-category');
+            catSelect.innerHTML = '<option value="">Sem Categoria</option>' + siteCategories.map(c => `<option value="${c.name}">${c.name}</option>`).join('');
+            
+            document.getElementById('edit-post-id').value = ''; 
+            ['title', 'subtitle', 'image', 'youtube'].forEach(f => document.getElementById('post-'+f).value = ''); 
+            catSelect.value = '';
+            document.getElementById('post-fulltext').innerHTML = ''; 
+            document.getElementById('editor-modal').classList.remove('hidden'); 
+            document.getElementById('btn-delete-editor').classList.add('hidden'); 
+        };
+        
+        window.editPost = (id) => { 
+            const p = blogPosts.find(x => x.id === id); 
+            
+            const catSelect = document.getElementById('post-category');
+            catSelect.innerHTML = '<option value="">Sem Categoria</option>' + siteCategories.map(c => `<option value="${c.name}">${c.name}</option>`).join('');
+            
+            document.getElementById('edit-post-id').value = p.id; 
+            document.getElementById('post-title').value = p.title; 
+            document.getElementById('post-subtitle').value = p.subtitle; 
+            catSelect.value = p.category || ''; 
+            document.getElementById('post-image').value = p.imageUrl || ''; 
+            document.getElementById('post-youtube').value = p.youtubeUrl || ''; 
+            document.getElementById('post-fulltext').innerHTML = p.fullText; 
+            document.getElementById('editor-modal').classList.remove('hidden'); 
+            document.getElementById('btn-delete-editor').classList.remove('hidden'); 
+        };
         window.closeEditor = () => document.getElementById('editor-modal').classList.add('hidden');
 
         lucide.createIcons();

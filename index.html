@@ -139,15 +139,18 @@
         .faq-content { display: grid; grid-template-rows: 0fr; transition: grid-template-rows 0.4s ease-out; }
         .faq-content.open { grid-template-rows: 1fr; }
         .faq-content-inner { overflow: hidden; }
-        #mobile-menu { transition: max-height 0.3s ease-in-out; max-height: 0; overflow: hidden; }
-        #mobile-menu.menu-open { max-height: 500px; }
         .modal-overlay { background-color: rgba(0, 0, 0, 0.6); backdrop-filter: blur(8px); }
         .hidden { display: none !important; }
+        
         .fade-enter { animation: fadeIn 0.4s ease-in-out forwards; }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
         .floating-btn { position: fixed; bottom: 24px; right: 24px; z-index: 40; transition: all 0.3s ease; }
         .floating-btn:hover { transform: translateY(-4px); box-shadow: 0 10px 20px rgba(0,0,0,0.2); }
+
+        /* Ajustes específicos para a barra inferior no celular (Área Segura do iOS/Android) */
+        .pb-safe { padding-bottom: env(safe-area-inset-bottom); }
+        .slide-up-animation { transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
     </style>
 </head>
 <body class="sys-bg-body sys-text-primary font-sans antialiased min-h-screen flex flex-col">
@@ -155,15 +158,14 @@
     <!-- Cabeçalho -->
     <header class="sys-bg-surface shadow-sm sticky top-0 z-20 flex-shrink-0 sys-border border-b">
         <div class="max-w-3xl mx-auto px-4 py-4 flex items-center justify-between">
-            <a href="#" onclick="window.clearFilter(); window.closeArticle(); return false;" class="text-xl sm:text-2xl font-black tracking-tight sys-text-accent flex items-center gap-3 truncate hover:opacity-80 transition-opacity">
-                <!-- Foto do Professor atualizada para PNG e Título enxuto -->
+            <a href="#" onclick="window.clearFilter(); window.closeArticle(); window.scrollTo(0,0); return false;" class="text-xl sm:text-2xl font-black tracking-tight sys-text-accent flex items-center gap-3 truncate hover:opacity-80 transition-opacity">
                 <img src="./foto-compartilhamento.png" alt="Foto PLH" class="w-9 h-9 rounded-full object-cover border-2 sys-border shrink-0 shadow-sm">
                 PLH
             </a>
             
             <div class="flex items-center gap-2 sm:gap-3">
                 <!-- BOTÃO INSTALAR (Fica oculto até o navegador liberar) -->
-                <button id="install-btn" onclick="window.installApp()" class="hidden hidden sm:flex items-center gap-2 px-3 py-1.5 bg-blue-900 text-white text-sm font-bold rounded-lg hover:bg-blue-800 transition-colors shadow-sm">
+                <button id="install-btn" onclick="window.installApp()" class="hidden sm:flex items-center gap-2 px-3 py-1.5 bg-blue-900 text-white text-sm font-bold rounded-lg hover:bg-blue-800 transition-colors shadow-sm">
                     <i data-lucide="download" class="w-4 h-4"></i> Instalar
                 </button>
 
@@ -187,41 +189,65 @@
                     </div>
                 </div>
 
+                <!-- Botão Menu Hambúrguer -->
                 <button onclick="window.toggleMobileMenu()" class="p-2 sys-text-secondary hover:sys-text-accent focus:outline-none rounded-lg transition-colors">
                     <i data-lucide="menu" class="w-6 h-6"></i>
                 </button>
             </div>
         </div>
-
-        <div id="mobile-menu" class="sys-bg-surface sys-border border-t px-4 shadow-sm overflow-y-auto">
-            <nav class="flex flex-col py-4 gap-4 text-sm font-medium sys-text-secondary max-w-3xl mx-auto">
-                <a href="#" onclick="window.clearFilter(); window.closeArticle(); window.toggleMobileMenu(); return false;" class="hover:sys-text-accent flex items-center gap-2 font-bold"><i data-lucide="home" class="w-4 h-4"></i> Início</a>
-                
-                <!-- Botão Instalar Mobile -->
-                <a href="#" id="install-btn-mobile" onclick="window.installApp(); window.toggleMobileMenu(); return false;" class="hidden hover:sys-text-accent flex items-center gap-2 font-bold text-blue-600"><i data-lucide="download" class="w-4 h-4"></i> Instalar Aplicativo</a>
-
-                <div class="flex flex-col">
-                    <button onclick="window.toggleCategories(event)" class="flex items-center justify-between w-full text-left hover:sys-text-accent transition-colors focus:outline-none py-1 font-bold">
-                        <span class="flex items-center gap-2"><i data-lucide="folder" class="w-4 h-4"></i> Categorias</span>
-                        <i data-lucide="chevron-down" id="cat-chevron" class="w-4 h-4 transition-transform"></i>
-                    </button>
-                    <div id="categories-list" class="hidden flex-col pl-6 mt-3 gap-3 sys-text-secondary sys-border border-l-2 ml-2"></div>
-                </div>
-
-                <a href="#" class="hover:sys-text-accent flex items-center gap-2 font-bold"><i data-lucide="user" class="w-4 h-4"></i> Sobre</a>
-                <a href="#" class="hover:sys-text-accent flex items-center gap-2 font-bold"><i data-lucide="mail" class="w-4 h-4"></i> Contato</a>
-                
-                <div class="sys-border border-t pt-3 mt-1">
-                    <a href="#" onclick="window.openAdminLogin(); return false;" class="flex items-center gap-2 sys-text-secondary hover:sys-text-accent transition-colors opacity-60">
-                        <i data-lucide="settings" class="w-4 h-4"></i> Painel
-                    </a>
-                </div>
-            </nav>
-        </div>
     </header>
 
+    <!-- OVERLAY DO SIDEBAR -->
+    <div id="sidebar-overlay" onclick="window.toggleMobileMenu()" class="fixed inset-0 bg-black/50 backdrop-blur-sm z-40 hidden transition-opacity opacity-0 duration-300"></div>
+
+    <!-- MENU LATERAL (SIDEBAR) -->
+    <aside id="sidebar-menu" class="fixed top-0 right-0 h-full w-[280px] sys-bg-surface shadow-2xl z-50 transform translate-x-full transition-transform duration-300 ease-in-out flex flex-col border-l sys-border">
+        <div class="p-6 flex justify-between items-center sys-border border-b bg-gray-50/5 sys-bg-body">
+            <span class="font-black text-xl sys-text-primary flex items-center gap-2"><i data-lucide="compass" class="w-6 h-6 sys-text-accent"></i> Menu</span>
+            <button onclick="window.toggleMobileMenu()" class="p-2 rounded-full sys-bg-surface sys-text-secondary hover:sys-text-accent sys-border border transition-colors shadow-sm">
+                <i data-lucide="x" class="w-5 h-5"></i>
+            </button>
+        </div>
+        
+        <div class="flex-1 overflow-y-auto px-6 py-6 flex flex-col gap-6">
+            <a href="#" onclick="window.clearFilter(); window.closeArticle(); window.toggleMobileMenu(); return false;" class="flex items-center gap-4 font-bold text-lg sys-text-primary hover:sys-text-accent transition-colors">
+                <div class="p-2 sys-bg-body rounded-lg sys-border border"><i data-lucide="home" class="w-5 h-5"></i></div> Início
+            </a>
+            
+            <a href="#" id="install-btn-mobile" onclick="window.installApp(); window.toggleMobileMenu(); return false;" class="hidden flex items-center gap-4 font-bold text-lg text-blue-600 hover:opacity-80 transition-colors">
+                <div class="p-2 bg-blue-50 rounded-lg border border-blue-100"><i data-lucide="download" class="w-5 h-5"></i></div> Instalar App
+            </a>
+
+            <div class="flex flex-col gap-2 mt-2">
+                <p class="text-[10px] font-black uppercase tracking-widest sys-text-secondary mb-2 pl-1">Explorar</p>
+                <div class="flex flex-col gap-3">
+                    <button onclick="window.toggleCategories(event)" class="flex items-center justify-between w-full text-left sys-text-primary hover:sys-text-accent font-bold text-lg transition-colors">
+                        <span class="flex items-center gap-4"><div class="p-2 sys-bg-body rounded-lg sys-border border"><i data-lucide="folder" class="w-5 h-5"></i></div> Categorias</span>
+                        <i data-lucide="chevron-down" id="cat-chevron" class="w-4 h-4 transition-transform"></i>
+                    </button>
+                    <div id="categories-list" class="hidden flex-col pl-14 mt-1 gap-4 sys-text-secondary border-l-2 sys-border ml-[22px] pb-2">
+                        <!-- Categorias injetadas aqui -->
+                    </div>
+                </div>
+                
+                <a href="#" class="flex items-center gap-4 font-bold text-lg sys-text-primary hover:sys-text-accent transition-colors mt-2">
+                    <div class="p-2 sys-bg-body rounded-lg sys-border border"><i data-lucide="user" class="w-5 h-5"></i></div> Sobre
+                </a>
+                <a href="#" class="flex items-center gap-4 font-bold text-lg sys-text-primary hover:sys-text-accent transition-colors mt-2">
+                    <div class="p-2 sys-bg-body rounded-lg sys-border border"><i data-lucide="mail" class="w-5 h-5"></i></div> Contato
+                </a>
+            </div>
+
+            <div class="mt-auto pt-6 border-t sys-border pb-safe">
+                <a href="#" onclick="window.openAdminLogin(); return false;" class="flex items-center gap-4 font-bold text-lg sys-text-secondary hover:sys-text-accent transition-colors opacity-70">
+                    <i data-lucide="settings" class="w-5 h-5"></i> Painel Admin
+                </a>
+            </div>
+        </div>
+    </aside>
+
     <!-- FEED PRINCIPAL -->
-    <main id="home-view" class="flex-grow max-w-3xl w-full mx-auto px-4 py-8 z-10 fade-enter">
+    <main id="home-view" class="flex-grow max-w-3xl w-full mx-auto px-4 py-8 pb-28 sm:pb-8 z-10 fade-enter">
         <div class="mb-8 text-center sm:text-left" id="feed-header">
             <h2 class="text-3xl font-black sys-text-primary mb-1">Reflexões</h2>
             <p class="sys-text-secondary font-medium">Estudos e aprendizados sobre a Fé.</p>
@@ -239,7 +265,7 @@
     </main>
 
     <!-- VISUALIZAÇÃO DO ARTIGO -->
-    <main id="article-view" class="hidden flex-grow w-full z-10 transition-all duration-300">
+    <main id="article-view" class="hidden flex-grow w-full z-10 transition-all duration-300 pb-28 sm:pb-8">
         <div class="max-w-3xl mx-auto px-4 py-8 fade-enter">
             <div class="mb-8 sys-border border-b pb-6">
                 <button onclick="window.closeArticle()" class="flex items-center gap-2 sys-text-accent font-bold group hover:opacity-80 transition-all">
@@ -250,8 +276,54 @@
         </div>
     </main>
 
-    <!-- Botão Flutuante -->
-    <a href="https://chat.whatsapp.com/DgwfvBpeVZIIzHZLgiIlCk" target="_blank" class="floating-btn bg-green-600 text-white px-5 py-3 rounded-full shadow-2xl flex items-center gap-2 font-bold text-sm sm:text-base border-b-4 border-green-800 active:translate-y-1 active:border-b-0 hover:bg-green-700 transition-all">
+    <!-- MENU INFERIOR MOBILE (Design Moderno PWA) -->
+    <nav class="fixed bottom-0 w-full sys-bg-surface sys-border border-t shadow-[0_-10px_40px_rgba(0,0,0,0.06)] z-30 sm:hidden pb-safe">
+        <div class="flex justify-around items-center h-[72px] px-2">
+            <button onclick="window.clearFilter(); window.closeArticle(); window.scrollTo(0,0);" class="flex flex-col items-center justify-center w-full h-full sys-text-secondary hover:sys-text-accent transition-all group">
+                <div class="p-1.5 rounded-2xl group-hover:bg-gray-100/50 transition-colors mb-0.5">
+                    <i data-lucide="home" class="w-6 h-6"></i>
+                </div>
+                <span class="text-[10px] font-bold">Início</span>
+            </button>
+            
+            <button onclick="window.toggleCategoriesModal()" class="flex flex-col items-center justify-center w-full h-full sys-text-secondary hover:sys-text-accent transition-all group">
+                <div class="p-1.5 rounded-2xl group-hover:bg-gray-100/50 transition-colors mb-0.5">
+                    <i data-lucide="layout-grid" class="w-6 h-6"></i>
+                </div>
+                <span class="text-[10px] font-bold">Categorias</span>
+            </button>
+            
+            <a href="https://chat.whatsapp.com/DgwfvBpeVZIIzHZLgiIlCk" target="_blank" class="flex flex-col items-center justify-center w-full h-full sys-text-secondary hover:text-green-600 transition-all group">
+                <div class="p-1.5 rounded-2xl group-hover:bg-green-50 transition-colors mb-0.5">
+                    <i data-lucide="message-circle" class="w-6 h-6"></i>
+                </div>
+                <span class="text-[10px] font-bold">Comunidade</span>
+            </a>
+            
+            <button onclick="window.openAdminLogin()" class="flex flex-col items-center justify-center w-full h-full sys-text-secondary hover:sys-text-accent transition-all group">
+                <div class="p-1.5 rounded-2xl group-hover:bg-gray-100/50 transition-colors mb-0.5">
+                    <i data-lucide="user" class="w-6 h-6"></i>
+                </div>
+                <span class="text-[10px] font-bold">Painel</span>
+            </button>
+        </div>
+    </nav>
+
+    <!-- MODAL DE CATEGORIAS (Para o Menu Inferior) -->
+    <div id="categories-modal" onclick="if(event.target === this) window.toggleCategoriesModal()" class="hidden fixed inset-0 z-50 flex items-end justify-center modal-overlay sm:hidden">
+        <div class="sys-bg-surface rounded-t-3xl shadow-2xl w-full p-6 relative transform transition-transform translate-y-full slide-up-animation pb-safe border-t sys-border">
+            <div class="flex justify-between items-center mb-6 border-b sys-border pb-4">
+                <h3 class="text-xl font-black sys-text-primary flex items-center gap-2"><i data-lucide="layout-grid" class="w-6 h-6 sys-text-accent"></i> Categorias</h3>
+                <button onclick="window.toggleCategoriesModal()" class="sys-text-secondary hover:sys-text-primary bg-gray-100 p-2 rounded-full"><i data-lucide="x" class="w-5 h-5"></i></button>
+            </div>
+            <div id="bottom-categories-list" class="flex flex-col gap-3 max-h-[60vh] overflow-y-auto pb-4">
+                <!-- Injetado via JS -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Botão Flutuante (Oculto no Mobile, pois o Menu Inferior já tem o botão Comunidade) -->
+    <a href="https://chat.whatsapp.com/DgwfvBpeVZIIzHZLgiIlCk" target="_blank" class="hidden sm:flex floating-btn bg-green-600 text-white px-5 py-3 rounded-full shadow-2xl items-center gap-2 font-bold text-sm sm:text-base border-b-4 border-green-800 active:translate-y-1 active:border-b-0 hover:bg-green-700 transition-all">
         <i data-lucide="users" class="w-5 h-5"></i> Seja Notificado
     </a>
 
@@ -471,6 +543,36 @@
             }
         });
 
+        /* FUNÇÕES DE MENUS E MODAIS */
+        window.toggleMobileMenu = () => {
+            const sidebar = document.getElementById('sidebar-menu');
+            const overlay = document.getElementById('sidebar-overlay');
+            
+            if (sidebar.classList.contains('translate-x-full')) {
+                // Abrir Sidebar
+                sidebar.classList.remove('translate-x-full');
+                overlay.classList.remove('hidden');
+                setTimeout(() => overlay.classList.remove('opacity-0'), 10);
+            } else {
+                // Fechar Sidebar
+                sidebar.classList.add('translate-x-full');
+                overlay.classList.add('opacity-0');
+                setTimeout(() => overlay.classList.add('hidden'), 300);
+            }
+        };
+
+        window.toggleCategoriesModal = () => {
+            const modal = document.getElementById('categories-modal');
+            const inner = modal.querySelector('.slide-up-animation');
+            if(modal.classList.contains('hidden')) {
+                modal.classList.remove('hidden');
+                setTimeout(() => inner.classList.remove('translate-y-full'), 10);
+            } else {
+                inner.classList.add('translate-y-full');
+                setTimeout(() => modal.classList.add('hidden'), 300);
+            }
+        };
+
         /* OPERAÇÕES DE DADOS (FIREBASE) */
         window.savePost = async () => {
             const btn = document.getElementById('btn-save-post');
@@ -648,16 +750,29 @@
 
         window.closeArticle = () => { document.getElementById('article-view').classList.add('hidden'); document.getElementById('home-view').classList.remove('hidden'); };
         window.togglePost = (id) => { const el = document.getElementById('content-' + id); if(!el) return; el.classList.toggle('open'); document.querySelector('.toggle-indicator-' + id).innerHTML = el.classList.contains('open') ? `Recolher <i data-lucide="chevron-up" class="w-3 h-3"></i>` : `Ler mais <i data-lucide="chevron-right" class="w-3 h-3"></i>`; lucide.createIcons(); };
-        window.filterByCategory = (cat) => { currentCategoryFilter = cat; window.closeArticle(); document.getElementById('mobile-menu').classList.remove('menu-open'); window.renderPostsFeed(); };
+        window.filterByCategory = (cat) => { currentCategoryFilter = cat; window.closeArticle(); document.getElementById('sidebar-menu').classList.add('translate-x-full'); document.getElementById('sidebar-overlay').classList.add('hidden'); window.renderPostsFeed(); };
         window.clearFilter = () => { currentCategoryFilter = null; window.renderPostsFeed(); };
         window.toggleCategories = (e) => { e.stopPropagation(); document.getElementById('categories-list').classList.toggle('hidden'); };
-        function updateCategoriesMenu() { const cats = [...new Set(blogPosts.filter(p => p.status === 'published' && p.category).map(p => p.category))]; document.getElementById('categories-list').innerHTML = cats.map(c => `<a href="#" onclick="window.filterByCategory('${c}'); return false;" class="hover:sys-text-accent py-1 flex items-center gap-2 font-bold"><i data-lucide="folder-open" class="w-3 h-3"></i> ${c}</a>`).join('') || '<span class="text-xs italic sys-text-secondary">Nenhuma categoria.</span>'; lucide.createIcons(); }
+        
+        function updateCategoriesMenu() { 
+            const cats = [...new Set(blogPosts.filter(p => p.status === 'published' && p.category).map(p => p.category))]; 
+            
+            // Renderiza no Menu Lateral (Desktop/Mobile)
+            document.getElementById('categories-list').innerHTML = cats.map(c => `<a href="#" onclick="window.filterByCategory('${c}'); return false;" class="hover:sys-text-accent py-2 flex items-center gap-3 font-bold text-base transition-colors"><i data-lucide="folder-open" class="w-4 h-4"></i> ${c}</a>`).join('') || '<span class="text-xs italic sys-text-secondary">Nenhuma categoria.</span>'; 
+            
+            // Renderiza no Modal do Menu Inferior
+            const bottomList = document.getElementById('bottom-categories-list');
+            if(bottomList) {
+                bottomList.innerHTML = cats.map(c => `<button onclick="window.filterByCategory('${c}'); window.toggleCategoriesModal();" class="w-full text-left px-5 py-4 sys-bg-body sys-text-primary hover:sys-text-accent font-black rounded-2xl transition-colors flex items-center gap-3 border sys-border shadow-sm"><i data-lucide="folder-open" class="w-5 h-5"></i> ${c}</button>`).join('') || '<p class="text-sm sys-text-secondary text-center py-4">Nenhuma categoria encontrada.</p>';
+            }
+
+            lucide.createIcons(); 
+        }
 
         window.execEditor = (cmd, val = null) => { document.execCommand(cmd, false, val); document.getElementById('post-fulltext').focus(); };
         window.insertEditorImage = () => { const url = prompt("Link da imagem:"); if (url) window.execEditor('insertHTML', `<img src="${window.getDriveImageUrl(url)}" class="w-full rounded-xl my-4" />`); };
         window.insertEditorVideo = () => { const url = prompt("Link do YouTube:"); const id = window.getYoutubeId(url); if (id) window.execEditor('insertHTML', `<div class="aspect-video w-full rounded-xl overflow-hidden my-4"><iframe class="w-full h-full" src="https://www.youtube.com/embed/${id}" frameborder="0" allowfullscreen></iframe></div>`); };
-        window.toggleMobileMenu = () => document.getElementById('mobile-menu').classList.toggle('menu-open');
-        window.openAdminLogin = () => { document.getElementById('mobile-menu').classList.remove('menu-open'); document.getElementById('login-modal').classList.remove('hidden'); document.getElementById('admin-password').value = ''; };
+        window.openAdminLogin = () => { if(!document.getElementById('sidebar-menu').classList.contains('translate-x-full')) window.toggleMobileMenu(); document.getElementById('login-modal').classList.remove('hidden'); document.getElementById('admin-password').value = ''; };
         window.closeAdminLogin = () => document.getElementById('login-modal').classList.add('hidden');
         window.verifyPassword = () => { if (document.getElementById('admin-password').value === ADMIN_PASSWORD) { window.closeAdminLogin(); document.getElementById('dashboard-modal').classList.remove('hidden'); window.renderAdminList(); } else { document.getElementById('login-error').classList.remove('hidden'); } };
         window.closeDashboard = () => document.getElementById('dashboard-modal').classList.add('hidden');

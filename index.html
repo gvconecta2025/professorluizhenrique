@@ -144,7 +144,7 @@
                     <i data-lucide="menu" class="w-6 h-6"></i>
                 </button>
 
-                <a href="#" onclick="window.clearFilter(); window.closeArticle(); window.scrollTo(0,0); return false;" class="text-xl sm:text-2xl font-black tracking-tight sys-text-accent flex items-center gap-3 truncate hover:opacity-80 transition-opacity">
+                <a href="#" onclick="window.clearFilter(); window.showHome(); window.scrollTo(0,0); return false;" class="text-xl sm:text-2xl font-black tracking-tight sys-text-accent flex items-center gap-3 truncate hover:opacity-80 transition-opacity">
                     <img src="./foto-compartilhamento.png" alt="Foto PLH" class="w-9 h-9 rounded-full object-cover border-2 sys-border shrink-0 shadow-sm">
                     PLH
                 </a>
@@ -191,11 +191,10 @@
         </div>
         
         <div class="flex-1 overflow-y-auto px-6 py-6 flex flex-col gap-6">
-            <a href="#" onclick="window.clearFilter(); window.closeArticle(); window.toggleMobileMenu(); return false;" class="flex items-center gap-4 font-bold text-lg sys-text-primary hover:sys-text-accent transition-colors">
+            <a href="#" onclick="window.clearFilter(); window.showHome(); window.toggleMobileMenu(); return false;" class="flex items-center gap-4 font-bold text-lg sys-text-primary hover:sys-text-accent transition-colors">
                 <div class="p-2 sys-bg-body rounded-lg sys-border border"><i data-lucide="home" class="w-5 h-5"></i></div> Início
             </a>
 
-            <!-- ABA: BIBLIOTECA -->
             <a href="#" onclick="window.showLibrary(); window.toggleMobileMenu(); return false;" class="flex items-center gap-4 font-bold text-lg sys-text-primary hover:sys-text-accent transition-colors">
                 <div class="p-2 sys-bg-body rounded-lg sys-border border"><i data-lucide="book-open" class="w-5 h-5"></i></div> Biblioteca
             </a>
@@ -207,12 +206,10 @@
             <div class="flex flex-col gap-2 mt-2">
                 <p class="text-[10px] font-black uppercase tracking-widest sys-text-secondary mb-2 pl-1">Explorar</p>
                 <div class="flex flex-col gap-3">
-                    <!-- BOTÃO PASTAS QUE EXPANDE O SIDEBAR -->
                     <button onclick="window.toggleCategories(event)" class="flex items-center justify-between w-full text-left sys-text-primary hover:sys-text-accent font-bold text-lg transition-colors">
                         <span class="flex items-center gap-4"><div class="p-2 sys-bg-body rounded-lg sys-border border"><i data-lucide="folder" class="w-5 h-5"></i></div> Pastas</span>
                         <i data-lucide="chevron-down" id="cat-chevron" class="w-4 h-4 transition-transform duration-300"></i>
                     </button>
-                    <!-- LISTA DE PASTAS (SANFONA) -->
                     <div id="categories-list" class="hidden flex-col pl-14 mt-1 gap-4 sys-text-secondary border-l-2 sys-border ml-[22px] pb-2">
                         <!-- Categorias injetadas -->
                     </div>
@@ -244,7 +241,7 @@
         <div id="feed-container" class="flex flex-col gap-6"></div>
     </main>
 
-    <!-- VIEW: BIBLIOTECA -->
+    <!-- VIEW: BIBLIOTECA (GALERIA) -->
     <main id="library-view" class="hidden flex-grow max-w-4xl w-full mx-auto px-4 py-8 pb-28 sm:pb-8 z-10 fade-enter">
         <div class="mb-8 text-center sm:text-left border-b sys-border pb-6">
             <h2 class="text-3xl font-black sys-text-primary mb-2 flex items-center justify-center sm:justify-start gap-3"><i data-lucide="book-open" class="w-8 h-8 sys-text-accent"></i> Biblioteca</h2>
@@ -255,11 +252,22 @@
         </div>
     </main>
 
+    <!-- VIEW: DETALHES DO LIVRO (NOVO FUNIL DE VENDAS) -->
+    <main id="book-detail-view" class="hidden flex-grow max-w-4xl w-full mx-auto px-4 py-8 pb-28 sm:pb-8 z-10 fade-enter">
+        <div class="mb-6 border-b sys-border pb-4">
+            <button onclick="window.showLibrary()" class="flex items-center gap-2 sys-text-accent font-bold group hover:opacity-80 transition-all">
+                <i data-lucide="arrow-left" class="w-5 h-5 transform group-hover:-translate-x-1 transition-transform"></i> Voltar para Biblioteca
+            </button>
+        </div>
+        <div id="book-detail-content">
+            <!-- Detalhes injetados via JS -->
+        </div>
+    </main>
+
     <!-- VISUALIZAÇÃO DO ARTIGO -->
     <main id="article-view" class="hidden flex-grow w-full z-10 transition-all duration-300 pb-28 sm:pb-8">
         <div class="max-w-3xl mx-auto px-4 py-8 fade-enter">
             <div class="mb-8 sys-border border-b pb-6">
-                <!-- Alterado para apenas chamar showHome() mantendo o filtro salvo na memória -->
                 <button onclick="window.showHome()" class="flex items-center gap-2 sys-text-accent font-bold group hover:opacity-80 transition-all">
                     <i data-lucide="arrow-left" class="w-5 h-5 transform group-hover:-translate-x-1 transition-transform"></i> Voltar
                 </button>
@@ -271,7 +279,7 @@
     <!-- MENU INFERIOR MOBILE -->
     <nav class="fixed bottom-0 w-full sys-bg-surface sys-border border-t shadow-[0_-10px_40px_rgba(0,0,0,0.06)] z-30 sm:hidden pb-safe">
         <div class="flex justify-around items-center h-[72px] px-1">
-            <button onclick="window.clearFilter(); window.closeArticle(); window.scrollTo(0,0);" class="flex flex-col items-center justify-center w-full h-full sys-text-secondary hover:sys-text-accent transition-all group">
+            <button onclick="window.clearFilter(); window.showHome(); window.scrollTo(0,0);" class="flex flex-col items-center justify-center w-full h-full sys-text-secondary hover:sys-text-accent transition-all group">
                 <div class="p-1.5 rounded-2xl group-hover:bg-gray-100/50 transition-colors mb-0.5">
                     <i data-lucide="home" class="w-[22px] h-[22px]"></i>
                 </div>
@@ -333,7 +341,7 @@
         </div>
     </div>
 
-    <!-- PAINEL DASHBOARD (TABS: REFLEXÕES | BIBLIOTECA | CATEGORIAS) -->
+    <!-- PAINEL DASHBOARD -->
     <div id="dashboard-modal" class="hidden fixed inset-0 z-50 flex items-center justify-center modal-overlay px-4">
         <div class="bg-white rounded-2xl shadow-2xl w-full max-w-4xl max-h-[90vh] flex flex-col relative overflow-hidden">
             <div class="p-6 border-b border-gray-100 flex justify-between items-center bg-gray-50/50">
@@ -344,7 +352,7 @@
             <div class="px-6 pt-4 border-b border-gray-100 bg-white flex gap-6 overflow-x-auto">
                 <button onclick="window.switchAdminTab('posts')" id="tab-btn-posts" class="pb-3 text-sm font-black text-blue-900 border-b-2 border-blue-900 transition-colors focus:outline-none whitespace-nowrap">Reflexões</button>
                 <button onclick="window.switchAdminTab('books')" id="tab-btn-books" class="pb-3 text-sm font-bold text-gray-400 border-b-2 border-transparent hover:text-gray-600 transition-colors focus:outline-none whitespace-nowrap">Biblioteca</button>
-                <button onclick="window.switchAdminTab('categories')" id="tab-btn-categories" class="pb-3 text-sm font-bold text-gray-400 border-b-2 border-transparent hover:text-gray-600 transition-colors focus:outline-none whitespace-nowrap">Categorias</button>
+                <button onclick="window.switchAdminTab('categories')" id="tab-btn-categories" class="pb-3 text-sm font-bold text-gray-400 border-b-2 border-transparent hover:text-gray-600 transition-colors focus:outline-none whitespace-nowrap">Pastas</button>
             </div>
 
             <div class="p-6 flex-1 overflow-y-auto bg-gray-50/30">
@@ -374,12 +382,12 @@
                 <!-- ABA: CATEGORIAS -->
                 <div id="admin-view-categories" class="hidden">
                     <div class="flex flex-col sm:flex-row gap-3 mb-6 bg-gray-50 p-4 rounded-2xl border border-gray-100">
-                        <input type="text" id="new-category-input" placeholder="Nome da nova categoria..." class="flex-1 border border-gray-300 rounded-xl px-4 py-2.5 outline-none focus:ring-2 focus:ring-blue-900 text-gray-900 bg-white">
+                        <input type="text" id="new-category-input" placeholder="Nome da nova pasta..." class="flex-1 border border-gray-300 rounded-xl px-4 py-2.5 outline-none focus:ring-2 focus:ring-blue-900 text-gray-900 bg-white">
                         <button onclick="window.createCategory()" class="bg-gray-800 hover:bg-gray-900 text-white px-6 py-2.5 rounded-xl font-bold shadow-sm whitespace-nowrap transition-colors flex items-center justify-center gap-2">
                             <i data-lucide="plus" class="w-4 h-4"></i> Adicionar
                         </button>
                     </div>
-                    <h4 class="text-sm font-bold text-gray-500 uppercase tracking-widest mb-4 pl-1">Categorias Ativas</h4>
+                    <h4 class="text-sm font-bold text-gray-500 uppercase tracking-widest mb-4 pl-1">Pastas Ativas</h4>
                     <div id="admin-categories-list" class="flex flex-col gap-2"></div>
                 </div>
             </div>
@@ -388,6 +396,7 @@
 
     <!-- EDITOR DE POSTS (REFLEXÕES) -->
     <div id="editor-modal" class="hidden fixed inset-0 z-50 flex items-center justify-center modal-overlay px-4 py-4">
+        <!-- Mantido inalterado conforme a última versão robusta -->
         <div class="bg-white rounded-2xl shadow-2xl w-full max-w-4xl max-h-full flex flex-col relative overflow-hidden text-gray-900">
             <div class="p-5 border-b border-gray-100 flex justify-between items-center bg-gray-50">
                 <h3 id="editor-title" class="text-xl font-bold text-gray-900">Nova Reflexão</h3>
@@ -423,7 +432,7 @@
                         <input type="text" id="post-subtitle" class="w-full border border-gray-300 bg-white rounded-xl px-4 py-2.5 outline-none focus:ring-2 focus:ring-blue-900">
                     </div>
                     <div>
-                        <label class="block text-sm font-bold text-gray-700 mb-1">Categoria</label>
+                        <label class="block text-sm font-bold text-gray-700 mb-1">Pasta</label>
                         <select id="post-category" class="w-full border border-gray-300 bg-white rounded-xl px-4 py-2.5 outline-none focus:ring-2 focus:ring-blue-900 text-gray-900 cursor-pointer"></select>
                     </div>
                 </div>
@@ -477,9 +486,9 @@
         </div>
     </div>
 
-    <!-- NOVO: EDITOR DE LIVROS (BIBLIOTECA) -->
+    <!-- EDITOR DE LIVROS (ATUALIZADO COM NOVOS CAMPOS) -->
     <div id="book-editor-modal" class="hidden fixed inset-0 z-50 flex items-center justify-center modal-overlay px-4 py-4">
-        <div class="bg-white rounded-2xl shadow-2xl w-full max-w-xl max-h-full flex flex-col relative overflow-hidden text-gray-900">
+        <div class="bg-white rounded-2xl shadow-2xl w-full max-w-2xl max-h-full flex flex-col relative overflow-hidden text-gray-900">
             <div class="p-5 border-b border-gray-100 flex justify-between items-center bg-green-50/50">
                 <h3 class="text-xl font-bold text-gray-900 flex items-center gap-2"><i data-lucide="book-plus" class="w-6 h-6 text-green-700"></i> <span id="book-editor-title">Adicionar Livro</span></h3>
                 <button onclick="window.closeBookEditor()" class="text-gray-400 hover:text-gray-600"><i data-lucide="x" class="w-6 h-6"></i></button>
@@ -493,29 +502,41 @@
                 </div>
                 
                 <div>
-                    <label class="block text-sm font-bold text-gray-700 mb-1">Breve Resumo</label>
-                    <textarea id="book-desc" rows="3" placeholder="Pequena descrição que aparecerá no cartão..." class="w-full border border-gray-300 bg-white rounded-xl px-4 py-2.5 outline-none focus:ring-2 focus:ring-green-700 resize-none"></textarea>
+                    <label class="block text-sm font-bold text-gray-700 mb-1">Sinopse (Descrição Completa)</label>
+                    <textarea id="book-desc" rows="4" placeholder="Esta sinopse aparecerá na página exclusiva do livro..." class="w-full border border-gray-300 bg-white rounded-xl px-4 py-2.5 outline-none focus:ring-2 focus:ring-green-700 resize-none"></textarea>
                 </div>
 
-                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
                     <div>
-                        <label class="block text-sm font-bold text-gray-700 mb-1">Preço ou Tag</label>
-                        <input type="text" id="book-price" placeholder="Ex: R$ 49,90 ou Gratuito" class="w-full border border-gray-300 bg-white rounded-xl px-4 py-2.5 outline-none focus:ring-2 focus:ring-green-700">
+                        <label class="block text-sm font-bold text-gray-700 mb-1">Preço/Tag</label>
+                        <input type="text" id="book-price" placeholder="Ex: R$ 49,90" class="w-full border border-gray-300 bg-white rounded-xl px-4 py-2.5 outline-none focus:ring-2 focus:ring-green-700">
                     </div>
                     <div>
-                        <label class="block text-sm font-bold text-gray-700 mb-1">Texto do Botão</label>
-                        <input type="text" id="book-btn-text" placeholder="Ex: Comprar, Baixar, Ler" class="w-full border border-gray-300 bg-white rounded-xl px-4 py-2.5 outline-none focus:ring-2 focus:ring-green-700" value="Acessar">
+                        <label class="block text-sm font-bold text-gray-700 mb-1">Páginas</label>
+                        <input type="number" id="book-pages" placeholder="Ex: 120" class="w-full border border-gray-300 bg-white rounded-xl px-4 py-2.5 outline-none focus:ring-2 focus:ring-green-700">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-bold text-gray-700 mb-1">Formato</label>
+                        <select id="book-format" class="w-full border border-gray-300 bg-white rounded-xl px-4 py-2.5 outline-none focus:ring-2 focus:ring-green-700 cursor-pointer">
+                            <option value="Físico">Físico</option>
+                            <option value="E-book">E-book</option>
+                            <option value="Físico e E-book">Físico e E-book</option>
+                        </select>
                     </div>
                 </div>
 
-                <div class="bg-gray-50 p-4 rounded-xl border border-gray-200 flex flex-col gap-4">
-                    <div>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 bg-gray-50 p-4 rounded-xl border border-gray-200">
+                    <div class="sm:col-span-2">
                         <label class="block text-xs font-bold text-gray-500 uppercase tracking-wider mb-1">Link da Capa (Proporção Livro 2:3)</label>
-                        <input type="text" id="book-cover" class="w-full border border-gray-300 bg-white rounded-xl px-4 py-2 text-sm outline-none" placeholder="URL da Imagem (Google Drive ou Site)">
+                        <input type="text" id="book-cover" class="w-full border border-gray-300 bg-white rounded-xl px-4 py-2.5 text-sm outline-none focus:ring-2 focus:ring-green-700" placeholder="URL da Imagem (Google Drive)">
                     </div>
                     <div>
-                        <label class="block text-xs font-bold text-gray-500 uppercase tracking-wider mb-1">Link de Destino (Venda/Download)</label>
-                        <input type="text" id="book-link" class="w-full border border-gray-300 bg-white rounded-xl px-4 py-2 text-sm outline-none" placeholder="https://...">
+                        <label class="block text-xs font-bold text-gray-500 uppercase tracking-wider mb-1">Link de Compra / Acesso</label>
+                        <input type="text" id="book-link" class="w-full border border-gray-300 bg-white rounded-xl px-4 py-2.5 text-sm outline-none focus:ring-2 focus:ring-green-700" placeholder="Ex: https://amazon.com.br/...">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-gray-500 uppercase tracking-wider mb-1">PDF Amostra Grátis (Opcional)</label>
+                        <input type="text" id="book-sample" class="w-full border border-gray-300 bg-white rounded-xl px-4 py-2.5 text-sm outline-none focus:ring-2 focus:ring-green-700" placeholder="Link do Drive para o PDF">
                     </div>
                 </div>
             </div>
@@ -530,13 +551,14 @@
     </div>
 
     <div id="toast" class="fixed bottom-6 right-6 bg-green-700 text-white px-8 py-4 rounded-2xl shadow-2xl transform transition-transform duration-300 translate-y-32 opacity-0 z-50 flex items-center gap-3 font-bold border-b-4 border-green-900">
-        <i data-lucide="check-circle" class="w-6 h-6"></i> Link copiado para compartilhar!
+        <i data-lucide="check-circle" class="w-6 h-6"></i> <span id="toast-msg">Ação concluída!</span>
     </div>
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
         import { getAuth, onAuthStateChanged, signInAnonymously, signInWithCustomToken } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
-        import { getFirestore, collection, onSnapshot, addDoc, updateDoc, deleteDoc, doc } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+        // IMPORTADAS FUNÇÕES DE ENGAJAMENTO (arrayUnion, increment)
+        import { getFirestore, collection, onSnapshot, addDoc, updateDoc, deleteDoc, doc, arrayUnion, increment } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
 
         const firebaseConfig = {
             apiKey: "AIzaSyCg5aIHRDyOPHDwrP_OFYMn2AE9euWVOyw",
@@ -552,6 +574,7 @@
         let siteCategories = [];
         let siteBooks = []; 
         let currentCategoryFilter = null;
+        let currentOpenBookId = null;
 
         const app = initializeApp(firebaseConfig);
         const auth = getAuth(app);
@@ -587,6 +610,12 @@
                         siteBooks = []; snapshot.forEach(doc => { siteBooks.push({ id: doc.id, ...doc.data() }); });
                         siteBooks.sort((a, b) => (b.createdAt || 0) - (a.createdAt || 0)); 
                         renderLibrary();
+                        
+                        // ZIG: Se o usuário estiver com o detalhe do livro aberto, atualizamos ao vivo para mostrar novos likes/comentários.
+                        if(currentOpenBookId && !document.getElementById('book-detail-view').classList.contains('hidden')) {
+                            window.renderBookDetailContent(currentOpenBookId);
+                        }
+
                         if (!document.getElementById('dashboard-modal').classList.contains('hidden') && !document.getElementById('admin-view-books').classList.contains('hidden')) { window.renderAdminBooks(); }
                     });
                 }
@@ -619,15 +648,18 @@
         window.showHome = () => {
             document.getElementById('article-view').classList.add('hidden');
             document.getElementById('library-view').classList.add('hidden');
+            document.getElementById('book-detail-view').classList.add('hidden');
             document.getElementById('home-view').classList.remove('hidden');
-            // NÃO zeramos o currentCategoryFilter aqui para preservar a memória.
+            currentOpenBookId = null;
             window.renderPostsFeed();
         };
 
         window.showLibrary = () => {
             document.getElementById('home-view').classList.add('hidden');
             document.getElementById('article-view').classList.add('hidden');
+            document.getElementById('book-detail-view').classList.add('hidden');
             document.getElementById('library-view').classList.remove('hidden');
+            currentOpenBookId = null;
         };
 
         window.toggleMobileMenu = () => {
@@ -639,7 +671,6 @@
             }
         };
 
-        // NOVA FUNÇÃO: Alterna a lista de pastas (sanfona) no Menu Lateral
         window.toggleCategories = (e) => {
             if(e) e.stopPropagation();
             const list = document.getElementById('categories-list');
@@ -682,7 +713,10 @@
 
         window.openBookEditor = () => {
             document.getElementById('edit-book-id').value = '';
-            ['title', 'desc', 'price', 'btn-text', 'cover', 'link'].forEach(f => document.getElementById('book-'+f).value = f==='btn-text'?'Acessar':'');
+            ['title', 'desc', 'price', 'btn-text', 'pages', 'format', 'sample', 'cover', 'link'].forEach(f => {
+                const el = document.getElementById('book-'+f);
+                if(el) el.value = (f==='btn-text') ? 'Acessar' : (f==='format' ? 'Físico' : '');
+            });
             document.getElementById('book-editor-title').innerText = "Novo Livro";
             document.getElementById('btn-delete-book').classList.add('hidden');
             document.getElementById('book-editor-modal').classList.remove('hidden');
@@ -697,12 +731,19 @@
                 desc: document.getElementById('book-desc').value || "",
                 price: document.getElementById('book-price').value || "",
                 btnText: document.getElementById('book-btn-text').value || "Acessar",
+                pages: document.getElementById('book-pages').value || "",
+                format: document.getElementById('book-format').value || "Físico",
+                sampleLink: document.getElementById('book-sample').value || "",
                 cover: document.getElementById('book-cover').value || "",
                 link: document.getElementById('book-link').value || "#"
             };
             try {
-                if (id) await updateDoc(doc(db, 'artifacts', appId, 'public', 'data', 'books', id), data);
-                else await addDoc(collection(db, 'artifacts', appId, 'public', 'data', 'books'), { ...data, createdAt: Date.now() });
+                if (id) {
+                    await updateDoc(doc(db, 'artifacts', appId, 'public', 'data', 'books', id), data);
+                } else {
+                    // Inicializamos contadores vazios para livros novos
+                    await addDoc(collection(db, 'artifacts', appId, 'public', 'data', 'books'), { ...data, likes: 0, comments: [], createdAt: Date.now() });
+                }
                 window.closeBookEditor();
             } catch (e) { alert("Erro: " + e.message); } finally { btn.disabled = false; }
         };
@@ -714,6 +755,9 @@
             document.getElementById('book-desc').value = b.desc;
             document.getElementById('book-price').value = b.price || '';
             document.getElementById('book-btn-text').value = b.btnText || 'Acessar';
+            document.getElementById('book-pages').value = b.pages || '';
+            document.getElementById('book-format').value = b.format || 'Físico';
+            document.getElementById('book-sample').value = b.sampleLink || '';
             document.getElementById('book-cover').value = b.cover || '';
             document.getElementById('book-link').value = b.link || '';
             document.getElementById('book-editor-title').innerText = "Editar Livro";
@@ -749,23 +793,162 @@
                 container.innerHTML = `<div class="col-span-full py-20 text-center flex flex-col items-center justify-center opacity-60"><i data-lucide="library" class="w-12 h-12 sys-text-secondary mb-4"></i><p class="sys-text-secondary font-bold">A biblioteca está sendo organizada.</p></div>`;
                 lucide.createIcons(); return;
             }
+            // ZIG: A capa do livro na galeria agora abre a página de Detalhes em vez de mandar para fora.
             container.innerHTML = siteBooks.map(b => `
-                <a href="${b.link.startsWith('http') ? b.link : 'https://'+b.link}" target="_blank" class="flex flex-col group sys-bg-surface rounded-2xl shadow-sm sys-border border overflow-hidden hover:shadow-xl transition-all duration-300">
+                <div onclick="window.openBookDetail('${b.id}')" class="flex flex-col group sys-bg-surface rounded-2xl shadow-sm sys-border border overflow-hidden hover:shadow-xl transition-all duration-300 cursor-pointer">
                     <div class="aspect-[2/3] bg-gray-100 relative overflow-hidden border-b sys-border">
                         <img src="${window.getDriveImageUrl(b.cover)}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" onerror="this.src='https://via.placeholder.com/400x600?text=Capa'">
                         ${b.price ? `<div class="absolute top-2 right-2 sys-bg-accent text-white text-[10px] sm:text-xs font-black px-2 py-1 rounded-lg shadow-md tracking-wide uppercase">${b.price}</div>` : ''}
                     </div>
-                    <div class="p-4 flex flex-col flex-grow">
+                    <div class="p-4 flex flex-col flex-grow items-center text-center">
                         <h3 class="font-black sys-text-primary text-sm sm:text-base leading-snug mb-1 group-hover:sys-text-accent transition-colors line-clamp-2">${b.title}</h3>
-                        <p class="text-[11px] sm:text-xs sys-text-secondary line-clamp-2 mb-4 flex-grow opacity-80">${b.desc}</p>
-                        <div class="mt-auto w-full sys-bg-body sys-text-primary group-hover:sys-bg-accent group-hover:text-white rounded-xl py-2.5 text-center font-black text-xs uppercase flex items-center justify-center gap-1.5 transition-all shadow-sm">
-                            ${b.btnText || 'Acessar'} <i data-lucide="external-link" class="w-3 h-3"></i>
-                        </div>
+                        <p class="text-[10px] sys-text-secondary font-bold uppercase tracking-wider mt-auto pt-2">${b.format || 'Livro'}</p>
                     </div>
-                </a>
+                </div>
             `).join('');
             lucide.createIcons();
         };
+
+        /* FUNÇÕES DA PÁGINA EXCLUSIVA DO LIVRO (ENGAJAMENTO E CONVERSÃO) */
+        window.openBookDetail = (id) => {
+            currentOpenBookId = id;
+            document.getElementById('home-view').classList.add('hidden');
+            document.getElementById('library-view').classList.add('hidden');
+            document.getElementById('article-view').classList.add('hidden');
+            document.getElementById('book-detail-view').classList.remove('hidden');
+            window.scrollTo(0, 0);
+            window.renderBookDetailContent(id);
+        };
+
+        window.renderBookDetailContent = (id) => {
+            const b = siteBooks.find(x => x.id === id);
+            if (!b) return;
+
+            const safeLink = (b.link || '#').startsWith('http') ? b.link : 'https://' + b.link;
+            const safeSample = b.sampleLink ? (b.sampleLink.startsWith('http') ? b.sampleLink : 'https://' + b.sampleLink) : '';
+            const likesCount = b.likes || 0;
+            const commentsList = b.comments || [];
+
+            const html = `
+                <div class="flex flex-col md:flex-row gap-8 lg:gap-12 mb-12">
+                    <!-- Esquerda: Capa e Engajamento -->
+                    <div class="w-full md:w-1/3 flex flex-col gap-6">
+                        <div class="aspect-[2/3] w-full max-w-[280px] mx-auto md:max-w-none rounded-2xl overflow-hidden shadow-2xl sys-border border">
+                            <img src="${window.getDriveImageUrl(b.cover)}" class="w-full h-full object-cover" onerror="this.src='https://via.placeholder.com/400x600?text=Capa'">
+                        </div>
+                        
+                        <!-- Barra de Prova Social -->
+                        <div class="flex items-center justify-center gap-6 sys-bg-surface p-4 rounded-2xl sys-border border shadow-sm">
+                            <button onclick="window.likeBook('${b.id}')" class="flex flex-col items-center gap-1 text-red-500 hover:scale-110 active:scale-95 transition-transform">
+                                <i data-lucide="heart" class="w-6 h-6 fill-current"></i>
+                                <span class="text-xs font-black">${likesCount}</span>
+                            </button>
+                            <div class="w-px h-8 bg-gray-200"></div>
+                            <div class="flex flex-col items-center gap-1 sys-text-secondary">
+                                <i data-lucide="message-square" class="w-6 h-6"></i>
+                                <span class="text-xs font-black">${commentsList.length}</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Direita: Informações e Conversão -->
+                    <div class="w-full md:w-2/3 flex flex-col">
+                        <div class="flex flex-wrap gap-2 mb-4">
+                            ${b.format ? `<span class="px-3 py-1 sys-bg-body sys-text-secondary border sys-border text-xs font-black rounded-lg uppercase tracking-wider">${b.format}</span>` : ''}
+                            ${b.pages ? `<span class="px-3 py-1 sys-bg-body sys-text-secondary border sys-border text-xs font-black rounded-lg uppercase tracking-wider">${b.pages} Páginas</span>` : ''}
+                        </div>
+                        <h1 class="text-3xl sm:text-4xl font-black sys-text-primary leading-tight mb-4">${b.title}</h1>
+                        <p class="text-xl sm:text-2xl font-black text-green-600 mb-6">${b.price || 'Acesso Gratuito'}</p>
+                        
+                        <div class="prose max-w-none sys-text-primary text-base sm:text-lg opacity-90 leading-relaxed mb-8 whitespace-pre-wrap">${b.desc || 'Sem sinopse disponível.'}</div>
+                        
+                        <div class="flex flex-col sm:flex-row gap-4 mt-auto border-t sys-border pt-8">
+                            <a href="${safeLink}" target="_blank" class="flex-1 flex justify-center items-center gap-2 sys-bg-accent text-white py-4 px-6 rounded-xl font-black text-sm uppercase tracking-wide hover:opacity-90 shadow-xl transition-all hover:-translate-y-1">
+                                ${b.btnText || 'Acessar Agora'} <i data-lucide="external-link" class="w-4 h-4"></i>
+                            </a>
+                            ${safeSample ? `
+                                <a href="${safeSample}" target="_blank" class="flex-1 flex justify-center items-center gap-2 sys-bg-surface sys-text-primary border-2 sys-border py-4 px-6 rounded-xl font-bold text-sm uppercase tracking-wide hover:bg-gray-50 transition-all">
+                                    <i data-lucide="file-text" class="w-4 h-4"></i> Amostra em PDF
+                                </a>
+                            ` : ''}
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Seção de Comentários -->
+                <div class="border-t sys-border pt-10">
+                    <h3 class="text-2xl font-black sys-text-primary mb-6 flex items-center gap-2"><i data-lucide="message-square" class="w-6 h-6 sys-text-accent"></i> Comentários dos Leitores</h3>
+                    
+                    <div class="sys-bg-surface p-5 sm:p-6 rounded-2xl sys-border border shadow-sm mb-8">
+                        <p class="text-sm font-bold sys-text-primary mb-4">Deixe o seu comentário</p>
+                        <div class="flex flex-col gap-3">
+                            <input type="text" id="comment-name-${b.id}" placeholder="Seu nome" class="w-full border border-gray-300 rounded-xl px-4 py-3 outline-none focus:ring-2 focus:ring-blue-900 bg-white text-gray-900 text-sm">
+                            <textarea id="comment-text-${b.id}" rows="3" placeholder="O que você achou desta obra?" class="w-full border border-gray-300 rounded-xl px-4 py-3 outline-none focus:ring-2 focus:ring-blue-900 bg-white text-gray-900 resize-none text-sm"></textarea>
+                            <button onclick="window.submitBookComment('${b.id}')" class="self-end bg-blue-900 hover:bg-blue-950 text-white px-6 py-2.5 rounded-xl font-bold text-sm transition-colors flex items-center gap-2">
+                                Enviar <i data-lucide="send" class="w-4 h-4"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="flex flex-col gap-4">
+                        ${commentsList.length > 0 ? commentsList.map(c => `
+                            <div class="flex gap-4 p-4 sys-bg-body rounded-2xl border sys-border">
+                                <div class="w-10 h-10 rounded-full sys-bg-surface flex items-center justify-center border sys-border shrink-0">
+                                    <i data-lucide="user" class="w-5 h-5 sys-text-secondary"></i>
+                                </div>
+                                <div class="flex-1">
+                                    <div class="flex items-center gap-2 mb-1">
+                                        <p class="font-bold sys-text-primary text-sm">${c.name}</p>
+                                        <span class="text-[10px] sys-text-secondary">${new Date(c.date).toLocaleDateString('pt-BR')}</span>
+                                    </div>
+                                    <p class="sys-text-secondary text-sm leading-relaxed">${c.text}</p>
+                                </div>
+                            </div>
+                        `).reverse().join('') : '<p class="text-center sys-text-secondary py-8 italic opacity-70">Seja o primeiro a comentar.</p>'}
+                    </div>
+                </div>
+            `;
+            document.getElementById('book-detail-content').innerHTML = html;
+            lucide.createIcons();
+        };
+
+        window.likeBook = async (id) => {
+            try {
+                // Notificação visual temporária
+                window.showToast("Curtida registrada!");
+                await updateDoc(doc(db, 'artifacts', appId, 'public', 'data', 'books', id), {
+                    likes: increment(1)
+                });
+            } catch (e) { console.error("Erro ao curtir:", e); }
+        };
+
+        window.submitBookComment = async (id) => {
+            const nameInput = document.getElementById(`comment-name-${id}`);
+            const textInput = document.getElementById(`comment-text-${id}`);
+            const name = nameInput.value.trim() || 'Leitor Anônimo';
+            const text = textInput.value.trim();
+
+            if (!text) { alert("Por favor, escreva um comentário."); return; }
+
+            try {
+                window.showToast("Comentário enviado!");
+                const newComment = { name, text, date: Date.now() };
+                await updateDoc(doc(db, 'artifacts', appId, 'public', 'data', 'books', id), {
+                    comments: arrayUnion(newComment)
+                });
+                textInput.value = '';
+                nameInput.value = '';
+            } catch (e) { console.error("Erro ao comentar:", e); }
+        };
+
+        window.showToast = (msg) => {
+            document.getElementById('toast-msg').innerText = msg;
+            const toast = document.getElementById('toast'); 
+            toast.classList.remove('translate-y-32', 'opacity-0'); 
+            setTimeout(() => toast.classList.add('translate-y-32', 'opacity-0'), 3000);
+        };
+
+        /* FIM DAS FUNÇÕES DO LIVRO */
 
         window.switchAdminTab = (tab) => {
             ['posts', 'books', 'categories'].forEach(t => {
@@ -802,7 +985,7 @@
         };
         window.copyToClipboard = (text) => {
             const el = document.createElement('textarea'); el.value = text; document.body.appendChild(el); el.select(); document.execCommand('copy'); document.body.removeChild(el);
-            const toast = document.getElementById('toast'); toast.classList.remove('translate-y-32', 'opacity-0'); setTimeout(() => toast.classList.add('translate-y-32', 'opacity-0'), 3000);
+            window.showToast("Link copiado para compartilhar!");
         };
         window.getDriveImageUrl = (url) => { if (!url) return ""; const match = url.match(/\/d\/([a-zA-Z0-9_-]+)/) || url.match(/id=([a-zA-Z0-9_-]+)/); return match ? `https://lh3.googleusercontent.com/d/${match[1]}` : url; };
         window.getYoutubeId = (url) => { const match = url.match(/^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|&v=)([^#&?]*).*/); return (match && match[2].length === 11) ? match[2] : null; };
@@ -856,67 +1039,6 @@
                 container.appendChild(article);
             });
             lucide.createIcons();
-        };
-
-        window.openArticle = (id) => {
-            const post = blogPosts.find(p => p.id === id); if (!post) return;
-            document.getElementById('home-view').classList.add('hidden'); document.getElementById('library-view').classList.add('hidden'); document.getElementById('article-view').classList.remove('hidden'); window.scrollTo(0, 0);
-            
-            const ytId = window.getYoutubeId(post.youtubeUrl);
-            const mediaHtml = ytId ? `<div class="aspect-video rounded-3xl overflow-hidden mb-8 shadow-2xl bg-black"><iframe class="w-full h-full" src="https://www.youtube.com/embed/${ytId}" frameborder="0" allowfullscreen></iframe></div>` : `<div class="aspect-video rounded-3xl overflow-hidden mb-8 shadow-xl"><img src="${window.getDriveImageUrl(post.imageUrl)}" class="w-full h-full object-cover"></div>`;
-            document.getElementById('article-content').innerHTML = `
-                ${mediaHtml}
-                <div class="px-2">
-                    <h1 class="text-4xl sm:text-6xl font-black mb-6 leading-tight tracking-tight sys-text-primary">${post.title}</h1>
-                    <p class="text-xl sm:text-2xl opacity-80 mb-10 pb-10 sys-border border-b font-medium italic sys-text-secondary">${post.subtitle}</p>
-                    <div class="prose max-w-none leading-relaxed">${post.fullText}</div>
-                    <div class="mt-16 pt-12 sys-border border-t flex justify-center">
-                        <button onclick="window.sharePost('${post.id}', '${(post.title || "").replace(/'/g, "\\'")}', '${(post.subtitle || "").replace(/'/g, "\\'")}', event)" class="flex items-center gap-3 bg-green-600 hover:bg-green-700 text-white sm:px-10 px-6 sm:py-5 py-3 rounded-full font-black shadow-2xl transition-all hover:scale-105 active:scale-95 uppercase text-sm sm:text-base"><i data-lucide="share-2" class="w-5 h-5 sm:w-6 sm:h-6"></i> Compartilhar Palavra</button>
-                    </div>
-                </div>
-            `;
-            lucide.createIcons();
-        };
-
-        window.renderAdminList = () => {
-            const list = document.getElementById('admin-posts-list');
-            list.innerHTML = blogPosts.map(p => `
-                <div class="flex justify-between items-center p-4 border border-gray-200 rounded-xl bg-white shadow-sm">
-                    <div class="truncate mr-4 flex items-center gap-3 min-w-0"><span class="text-[10px] font-black px-2 py-0.5 rounded-full ${p.status === 'draft' ? 'bg-yellow-100 text-yellow-800' : 'bg-green-100 text-green-800'} shrink-0">${(p.status || 'published').toUpperCase()}</span><span class="font-bold text-gray-800 truncate">${p.title}</span></div>
-                    <div class="flex gap-2 shrink-0"><button onclick="window.editPost('${p.id}')" class="p-2 bg-blue-50 text-blue-900 rounded-lg"><i data-lucide="edit-3" class="w-4 h-4"></i></button><button onclick="window.deletePost('${p.id}')" class="p-2 bg-red-50 text-red-600 rounded-lg"><i data-lucide="trash-2" class="w-4 h-4"></i></button></div>
-                </div>
-            `).join('') || '<p class="text-center text-gray-400 py-6">Nenhuma publicação.</p>';
-            lucide.createIcons();
-        };
-
-        window.closeArticle = () => { window.showHome(); };
-        window.togglePost = (id) => { const el = document.getElementById('content-' + id); if(!el) return; el.classList.toggle('open'); document.querySelector('.toggle-indicator-' + id).innerHTML = el.classList.contains('open') ? `Recolher <i data-lucide="chevron-up" class="w-3 h-3"></i>` : `Ler mais <i data-lucide="chevron-right" class="w-3 h-3"></i>`; lucide.createIcons(); };
-        
-        // FUNÇÃO DE FILTRO: O sistema agora aponta o filtro e redireciona sem apagar a memória.
-        window.filterByCategory = (cat) => { currentCategoryFilter = cat; window.showHome(); };
-        
-        // FUNÇÃO LIMPAR: O único botão com autorização para limpar o filtro (ex: clicar no Logo ou no botão Início).
-        window.clearFilter = () => { currentCategoryFilter = null; window.showHome(); };
-        
-        function updateCategoriesMenu() { 
-            const cats = siteCategories.map(c => c.name); 
-            // Render no Menu Lateral
-            document.getElementById('categories-list').innerHTML = cats.map(c => `<a href="#" onclick="window.filterByCategory('${c}'); window.toggleMobileMenu(); return false;" class="hover:sys-text-accent py-2 flex items-center gap-3 font-bold text-base transition-colors"><i data-lucide="folder-open" class="w-4 h-4"></i> ${c}</a>`).join('') || '<span class="text-xs italic sys-text-secondary">Nenhuma pasta encontrada.</span>'; 
-            
-            // Render no Modal de Baixo
-            const bottomList = document.getElementById('bottom-categories-list');
-            if(bottomList) bottomList.innerHTML = cats.map(c => `<button onclick="window.filterByCategory('${c}'); window.toggleCategoriesModal();" class="w-full text-left px-5 py-4 sys-bg-body sys-text-primary hover:sys-text-accent font-black rounded-2xl transition-colors flex items-center gap-3 border sys-border shadow-sm"><i data-lucide="folder-open" class="w-5 h-5"></i> ${c}</button>`).join('') || '<p class="text-sm sys-text-secondary text-center py-4">Nenhuma pasta encontrada.</p>';
-            lucide.createIcons(); 
-        }
-
-        window.execEditor = (cmd, val = null) => { document.execCommand(cmd, false, val); document.getElementById('post-fulltext').focus(); };
-        window.insertEditorLink = () => { const url = prompt("URL:"); if(url) window.execEditor('createLink', url); };
-        window.insertEditorImage = () => { const url = prompt("Link da imagem:"); if (url) window.execEditor('insertHTML', `<img src="${window.getDriveImageUrl(url)}" class="w-full rounded-xl my-4" />`); };
-        window.insertEditorVideo = () => { const url = prompt("Link do YouTube:"); const id = window.getYoutubeId(url); if (id) window.execEditor('insertHTML', `<div class="aspect-video w-full rounded-xl overflow-hidden my-4"><iframe class="w-full h-full" src="https://www.youtube.com/embed/${id}" frameborder="0" allowfullscreen></iframe></div>`); };
-        window.insertEditorButton = () => {
-            const text = prompt("Texto do botão:"); if (!text) return; const url = prompt("Link de destino:"); if (!url) return;
-            const safeUrl = url.startsWith('http') ? url : 'https://' + url;
-            window.execEditor('insertHTML', `<div class="my-8 flex justify-center"><a href="${safeUrl}" target="_blank" class="sys-bg-accent font-black text-sm sm:text-base py-4 px-10 rounded-full shadow-2xl transition-all hover:scale-105 uppercase tracking-wide" style="color: #ffffff !important; text-decoration: none !important;">${text}</a></div><p><br></p>`);
         };
 
         window.openAdminLogin = () => { if(!document.getElementById('sidebar-menu').classList.contains('-translate-x-full')) window.toggleMobileMenu(); document.getElementById('login-modal').classList.remove('hidden'); document.getElementById('admin-password').value = ''; };

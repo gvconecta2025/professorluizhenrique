@@ -29,7 +29,8 @@
 
     <!-- Memória do Sistema e Motor PWA -->
     <script>
-        const savedTheme = localStorage.getItem('site-theme') || 'light';
+        // ZIG: Alteração para o Tema Pólen como padrão absoluto inicial.
+        const savedTheme = localStorage.getItem('site-theme') || 'polen';
         const savedFontSize = localStorage.getItem('site-font-size') || 'normal';
         document.documentElement.classList.add('theme-' + savedTheme);
         document.documentElement.classList.add('font-size-' + savedFontSize);
@@ -40,7 +41,7 @@
                 short_name: "PLH",
                 start_url: window.location.pathname,
                 display: "standalone",
-                background_color: "#f3f4f6",
+                background_color: "#f4ecd8",
                 theme_color: "#1e3a8a",
                 icons: [
                     { src: "./foto-compartilhamento.png", sizes: "192x192", type: "image/png" },
@@ -347,17 +348,12 @@
         </div>
     </div>
 
-    <!-- Editor de Livros (Versões Separadas) COM MÓDULO DE MODERAÇÃO -->
+    <!-- Editor de Livros (Formatos Independentes) -->
     <div id="book-editor-modal" class="hidden fixed inset-0 z-50 flex items-center justify-center modal-overlay px-4 py-4">
         <div class="bg-white rounded-2xl shadow-2xl w-full max-w-4xl max-h-full flex flex-col relative overflow-hidden text-gray-900">
             <div class="p-5 border-b flex justify-between items-center bg-green-50/50"><h3 id="book-editor-title" class="text-xl font-bold text-green-900">Livro</h3><button onclick="window.closeBookEditor()" class="text-gray-400"><i data-lucide="x" class="w-6 h-6"></i></button></div>
             <div class="p-6 flex-1 overflow-y-auto flex flex-col gap-6">
                 <input type="hidden" id="edit-book-id">
-                
-                <div class="bg-green-50/30 p-4 rounded-xl border border-green-200 flex gap-6">
-                    <label class="font-bold text-gray-900"><input type="radio" name="book_price_mode" value="paid" onchange="window.toggleBookPriceMode()" class="mr-2" checked> Pago</label>
-                    <label class="font-bold text-gray-900"><input type="radio" name="book_price_mode" value="free" onchange="window.toggleBookPriceMode()" class="mr-2"> Gratuito (Isca)</label>
-                </div>
                 
                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <input type="text" id="book-title" placeholder="Título da Obra" class="border border-gray-300 rounded-xl px-4 py-2.5 outline-none focus:ring-2 focus:ring-green-700">
@@ -365,23 +361,26 @@
                 </div>
                 
                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                    <input type="text" id="book-cover" placeholder="Link da Capa (Imagem)" class="border border-gray-300 rounded-xl px-4 py-2.5 outline-none focus:ring-2 focus:ring-green-700">
+                    <input type="text" id="book-cover" placeholder="Link da Capa (Imagem 2:3)" class="border border-gray-300 rounded-xl px-4 py-2.5 outline-none focus:ring-2 focus:ring-green-700">
                     <input type="number" id="book-pages" placeholder="Quantidade de Páginas" class="border border-gray-300 rounded-xl px-4 py-2.5 outline-none focus:ring-2 focus:ring-green-700">
                 </div>
 
+                <!-- Engenharia ZIG: Formatos Independentes -->
                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-6 border-t border-gray-200 pt-6">
                     <div class="bg-gray-50 p-4 rounded-xl border border-gray-200">
                         <label class="flex items-center gap-2 font-bold mb-3"><input type="checkbox" id="book-has-physical" class="w-4 h-4" onchange="window.toggleBookFormats()"> Livro Físico</label>
                         <div id="book-physical-fields" class="flex flex-col gap-2 opacity-50 pointer-events-none">
-                            <input type="text" id="book-price-physical" class="border border-gray-300 rounded-lg px-3 py-2 text-sm" placeholder="Preço (Ex: R$ 49,90)" disabled>
-                            <input type="text" id="book-link-physical" class="border border-gray-300 rounded-lg px-3 py-2 text-sm" placeholder="Link de Venda" disabled>
+                            <input type="text" id="book-price-physical" class="border border-gray-300 rounded-lg px-3 py-2 text-sm" placeholder="Preço (Ex: R$ 49,90 ou Gratuito)" disabled>
+                            <input type="text" id="book-btn-physical" class="border border-gray-300 rounded-lg px-3 py-2 text-sm" placeholder="Texto Botão Físico (Ex: Comprar)" disabled>
+                            <input type="text" id="book-link-physical" class="border border-gray-300 rounded-lg px-3 py-2 text-sm" placeholder="Link de Venda/Acesso Físico" disabled>
                         </div>
                     </div>
                     <div class="bg-blue-50/50 p-4 rounded-xl border border-blue-100">
                         <label class="flex items-center gap-2 font-bold mb-3"><input type="checkbox" id="book-has-ebook" class="w-4 h-4" onchange="window.toggleBookFormats()"> E-book (Digital)</label>
                         <div id="book-ebook-fields" class="flex flex-col gap-2 opacity-50 pointer-events-none">
-                            <input type="text" id="book-price-ebook" class="border border-gray-300 rounded-lg px-3 py-2 text-sm" placeholder="Preço ou 'Gratuito'" disabled>
-                            <input type="text" id="book-link-ebook" class="border border-gray-300 rounded-lg px-3 py-2 text-sm" placeholder="Link de Download/Venda" disabled>
+                            <input type="text" id="book-price-ebook" class="border border-gray-300 rounded-lg px-3 py-2 text-sm" placeholder="Preço (Ex: R$ 19,90 ou Gratuito)" disabled>
+                            <input type="text" id="book-btn-ebook" class="border border-gray-300 rounded-lg px-3 py-2 text-sm" placeholder="Texto Botão E-book (Ex: Baixar E-book)" disabled>
+                            <input type="text" id="book-link-ebook" class="border border-gray-300 rounded-lg px-3 py-2 text-sm" placeholder="Link de Venda/Download E-book" disabled>
                         </div>
                     </div>
                 </div>
@@ -397,7 +396,7 @@
                     <div id="book-fulltext" contenteditable="true" class="w-full border border-gray-300 rounded-b-xl px-6 py-6 min-h-[250px] bg-white overflow-y-auto prose prose-green max-w-none shadow-inner outline-none"></div>
                 </div>
 
-                <!-- NOVA SEÇÃO: Moderação e Métricas (ZIG) -->
+                <!-- Moderação e Métricas -->
                 <div class="border-t border-gray-200 pt-6 mt-2">
                     <h4 class="text-sm font-bold text-gray-900 mb-4"><i data-lucide="shield-alert" class="w-4 h-4 inline mr-1 text-red-600"></i> Moderação e Métricas</h4>
                     <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-4">
@@ -407,16 +406,19 @@
                         </div>
                     </div>
                     <div id="book-moderation-section" class="hidden">
-                        <label class="block text-xs font-bold text-gray-500 uppercase tracking-wider mb-2">Comentários Ativos (Clique na lixeira para apagar)</label>
+                        <label class="block text-xs font-bold text-gray-500 uppercase tracking-wider mb-2">Comentários Ativos</label>
                         <div id="book-comments-moderation" class="flex flex-col gap-2 max-h-[250px] overflow-y-auto bg-gray-50 p-3 rounded-xl border border-gray-200 shadow-inner">
-                            <!-- Comentários injetados via JS -->
                         </div>
                     </div>
                 </div>
 
             </div>
-            <div class="p-6 border-t bg-gray-50 flex justify-between"><button id="btn-delete-book" onclick="window.deleteBook(document.getElementById('edit-book-id').value)" class="text-red-600 font-bold px-4">Remover Obra</button><div class="flex gap-3 ml-auto"><button onclick="window.closeBookEditor()" class="px-6 py-2.5 border rounded-xl font-medium hover:bg-gray-100">Cancelar</button><button onclick="window.saveBook()" id="btn-save-book" class="px-8 py-2.5 bg-green-700 text-white rounded-xl font-bold shadow-lg hover:bg-green-800">Salvar Livro</button></div></div>
+            <div class="p-6 border-t bg-gray-50 flex justify-between"><button id="btn-delete-book" onclick="window.deleteBook(document.getElementById('edit-book-id').value)" class="hidden px-5 py-2.5 text-red-600 font-bold hover:bg-red-50 rounded-xl transition-colors"><i data-lucide="trash-2" class="w-4 h-4 inline mr-2"></i> Excluir</button><div class="flex gap-3 ml-auto"><button onclick="window.closeBookEditor()" class="px-6 py-2.5 border rounded-xl font-medium hover:bg-gray-100">Cancelar</button><button onclick="window.saveBook()" id="btn-save-book" class="px-8 py-2.5 bg-green-700 text-white rounded-xl font-bold shadow-lg hover:bg-green-800">Salvar Livro</button></div></div>
         </div>
+    </div>
+
+    <div id="toast" class="fixed bottom-6 right-6 bg-green-700 text-white px-8 py-4 rounded-2xl shadow-2xl transform transition-transform duration-300 translate-y-32 opacity-0 z-50 flex items-center gap-3 font-bold border-b-4 border-green-900">
+        <i data-lucide="check-circle" class="w-6 h-6"></i> <span id="toast-msg">Ação concluída!</span>
     </div>
 
     <script type="module">
@@ -454,10 +456,10 @@
             const allCats = [...new Set([...dbCats, ...postCats])].sort();
             
             const sidebarList = document.getElementById('categories-list');
-            if(sidebarList) sidebarList.innerHTML = allCats.map(c => `<a href="#" onclick="window.filterByCategory('${c.replace(/'/g, "\\'")}'); window.toggleMobileMenu(); return false;" class="hover:sys-text-accent py-2 flex items-center gap-3 font-bold text-base transition-colors"><i data-lucide="folder-open" class="w-4 h-4"></i> ${c}</a>`).join('') || '<span class="text-xs italic sys-text-secondary">Nenhuma pasta.</span>'; 
+            if(sidebarList) sidebarList.innerHTML = allCats.map(c => `<a href="#" onclick="window.filterByCategory('${c.replace(/'/g, "\\'")}'); window.toggleMobileMenu(); return false;" class="hover:sys-text-accent py-2 flex items-center gap-3 font-bold text-base transition-colors"><i data-lucide="folder-open" class="w-4 h-4"></i> ${c}</a>`).join('') || '<span class="text-xs italic sys-text-secondary">Nenhuma pasta encontrada.</span>'; 
             
             const bottomList = document.getElementById('bottom-categories-list');
-            if(bottomList) bottomList.innerHTML = allCats.map(c => `<button onclick="window.filterByCategory('${c.replace(/'/g, "\\'")}'); window.toggleCategoriesModal(true);" class="w-full text-left px-5 py-4 sys-bg-body sys-text-primary hover:sys-text-accent font-black rounded-2xl transition-colors flex items-center gap-3 border sys-border shadow-sm"><i data-lucide="folder-open" class="w-5 h-5"></i> ${c}</button>`).join('') || '<p class="text-sm sys-text-secondary text-center py-4">Nenhuma pasta.</p>';
+            if(bottomList) bottomList.innerHTML = allCats.map(c => `<button onclick="window.filterByCategory('${c.replace(/'/g, "\\'")}'); window.toggleCategoriesModal(true);" class="w-full text-left px-5 py-4 sys-bg-body sys-text-primary hover:sys-text-accent font-black rounded-2xl transition-colors flex items-center gap-3 border sys-border shadow-sm"><i data-lucide="folder-open" class="w-5 h-5"></i> ${c}</button>`).join('') || '<p class="text-sm sys-text-secondary text-center py-4">Nenhuma pasta encontrada.</p>';
             
             lucide.createIcons(); 
         };
@@ -528,43 +530,42 @@
             lucide.createIcons();
         };
 
-        window.toggleBookPriceMode = () => {
-            const mode = document.querySelector('input[name="book_price_mode"]:checked').value;
-            document.getElementById('book-has-physical').checked = (mode==='paid');
-            document.getElementById('book-has-ebook').checked = true;
-            window.toggleBookFormats();
-        };
-
         window.toggleBookFormats = () => {
             const hasPhys = document.getElementById('book-has-physical').checked;
             const hasEb = document.getElementById('book-has-ebook').checked;
-            const mode = document.querySelector('input[name="book_price_mode"]:checked').value;
-            
             const physBlock = document.getElementById('book-physical-fields');
             const ebBlock = document.getElementById('book-ebook-fields');
             
-            if(hasPhys) { physBlock.classList.remove('opacity-50', 'pointer-events-none'); document.getElementById('book-price-physical').disabled = false; document.getElementById('book-link-physical').disabled = false; }
-            else { physBlock.classList.add('opacity-50', 'pointer-events-none'); document.getElementById('book-price-physical').disabled = true; document.getElementById('book-link-physical').disabled = true; }
+            if(hasPhys) { physBlock.classList.remove('opacity-50', 'pointer-events-none'); document.getElementById('book-price-physical').disabled = false; document.getElementById('book-btn-physical').disabled = false; document.getElementById('book-link-physical').disabled = false; }
+            else { physBlock.classList.add('opacity-50', 'pointer-events-none'); document.getElementById('book-price-physical').disabled = true; document.getElementById('book-btn-physical').disabled = true; document.getElementById('book-link-physical').disabled = true; }
             
-            if(hasEb) { ebBlock.classList.remove('opacity-50', 'pointer-events-none'); document.getElementById('book-price-ebook').disabled = (mode==='free'); document.getElementById('book-link-ebook').disabled = false; document.getElementById('book-price-ebook').value = (mode==='free'?'Gratuito':document.getElementById('book-price-ebook').value); }
-            else { ebBlock.classList.add('opacity-50', 'pointer-events-none'); document.getElementById('book-price-ebook').disabled = true; document.getElementById('book-link-ebook').disabled = true; }
+            if(hasEb) { ebBlock.classList.remove('opacity-50', 'pointer-events-none'); document.getElementById('book-price-ebook').disabled = false; document.getElementById('book-btn-ebook').disabled = false; document.getElementById('book-link-ebook').disabled = false; }
+            else { ebBlock.classList.add('opacity-50', 'pointer-events-none'); document.getElementById('book-price-ebook').disabled = true; document.getElementById('book-btn-ebook').disabled = true; document.getElementById('book-link-ebook').disabled = true; }
         };
 
         window.openBookEditor = () => {
             window.currentEditorId = 'book-fulltext'; 
             document.getElementById('edit-book-id').value = '';
-            document.querySelector('input[name="book_price_mode"][value="paid"]').checked = true;
             
-            ['title', 'subtitle', 'pages', 'cover', 'price-physical', 'link-physical', 'price-ebook', 'link-ebook', 'sample', 'likes'].forEach(f => {
-                const el = document.getElementById('book-'+f); if(el) el.value = f==='likes' ? '0' : '';
+            document.getElementById('book-has-physical').checked = false;
+            document.getElementById('book-has-ebook').checked = true;
+            window.toggleBookFormats();
+
+            ['title', 'subtitle', 'pages', 'cover', 'price-physical', 'btn-physical', 'link-physical', 'price-ebook', 'btn-ebook', 'link-ebook', 'sample', 'likes'].forEach(f => {
+                const el = document.getElementById('book-'+f);
+                if(el) {
+                    if (f==='likes') el.value = '0';
+                    else if (f==='btn-physical') el.value = 'Comprar Livro Físico';
+                    else if (f==='btn-ebook') el.value = 'Comprar E-book';
+                    else el.value = '';
+                }
             });
-            document.getElementById('book-fulltext').innerHTML = '';
             
+            document.getElementById('book-fulltext').innerHTML = '';
             document.getElementById('book-moderation-section').classList.add('hidden');
             document.getElementById('book-comments-moderation').innerHTML = '';
             
-            window.toggleBookPriceMode();
-            document.getElementById('book-editor-title').innerText = "Adicionar Livro";
+            document.getElementById('book-editor-title').innerText = "Adicionar Livro / Isca";
             document.getElementById('btn-delete-book').classList.add('hidden');
             document.getElementById('book-editor-modal').classList.remove('hidden');
         };
@@ -574,12 +575,11 @@
         window.saveBook = async () => {
             const btn = document.getElementById('btn-save-book'); btn.disabled = true;
             const id = document.getElementById('edit-book-id').value;
-            const mode = document.querySelector('input[name="book_price_mode"]:checked').value;
             
             const hasPhysical = document.getElementById('book-has-physical').checked;
             const hasEbook = document.getElementById('book-has-ebook').checked;
 
-            if(!hasPhysical && !hasEbook) { alert("Você deve selecionar pelo menos um formato (Físico ou E-book)."); btn.disabled = false; return; }
+            if(!hasPhysical && !hasEbook) { alert("Selecione pelo menos um formato (Físico ou E-book)."); btn.disabled = false; return; }
 
             const likesCount = parseInt(document.getElementById('book-likes').value) || 0;
 
@@ -590,15 +590,16 @@
                 cover: document.getElementById('book-cover').value || "",
                 sampleLink: document.getElementById('book-sample').value || "",
                 fullText: document.getElementById('book-fulltext').innerHTML || "",
-                priceMode: mode,
                 likes: likesCount,
                 
                 hasPhysical: hasPhysical,
                 pricePhysical: hasPhysical ? document.getElementById('book-price-physical').value : "",
+                btnPhysical: hasPhysical ? (document.getElementById('book-btn-physical').value || "Comprar Físico") : "",
                 linkPhysical: hasPhysical ? document.getElementById('book-link-physical').value : "",
                 
                 hasEbook: hasEbook,
-                priceEbook: hasEbook ? (mode==='free'?'Gratuito':document.getElementById('book-price-ebook').value) : "",
+                priceEbook: hasEbook ? document.getElementById('book-price-ebook').value : "",
+                btnEbook: hasEbook ? (document.getElementById('book-btn-ebook').value || "Comprar E-book") : "",
                 linkEbook: hasEbook ? document.getElementById('book-link-ebook').value : ""
             };
 
@@ -613,12 +614,14 @@
             window.currentEditorId = 'book-fulltext'; 
             const b = window.siteBooks.find(x => x.id === id);
             document.getElementById('edit-book-id').value = b.id;
-            
-            const mode = b.priceMode || 'paid';
-            document.querySelector(`input[name="book_price_mode"][value="${mode}"]`).checked = true;
 
-            document.getElementById('book-has-physical').checked = !!b.hasPhysical;
-            document.getElementById('book-has-ebook').checked = !!b.hasEbook;
+            // ZIG: Retrocompatibilidade transparente para livros antigos que usavam priceMode
+            const legacyIsFree = b.priceMode === 'free';
+            const legacyHasPhys = b.format === 'Físico' || b.format === 'Físico e E-book' || (!legacyIsFree && b.hasPhysical === undefined);
+            const legacyHasEb = b.format === 'E-book' || b.format === 'Físico e E-book' || legacyIsFree;
+
+            document.getElementById('book-has-physical').checked = b.hasPhysical !== undefined ? b.hasPhysical : legacyHasPhys;
+            document.getElementById('book-has-ebook').checked = b.hasEbook !== undefined ? b.hasEbook : legacyHasEb;
             window.toggleBookFormats();
 
             document.getElementById('book-title').value = b.title || '';
@@ -628,15 +631,16 @@
             document.getElementById('book-sample').value = b.sampleLink || '';
             document.getElementById('book-likes').value = b.likes || 0;
             
-            document.getElementById('book-price-physical').value = b.pricePhysical || '';
-            document.getElementById('book-link-physical').value = b.linkPhysical || '';
+            document.getElementById('book-price-physical').value = b.pricePhysical || (!legacyIsFree && legacyHasPhys ? b.price : '');
+            document.getElementById('book-btn-physical').value = b.btnPhysical || (!legacyIsFree && legacyHasPhys ? b.btnText : 'Comprar Livro Físico');
+            document.getElementById('book-link-physical').value = b.linkPhysical || (!legacyIsFree && legacyHasPhys ? b.link : '');
             
-            document.getElementById('book-price-ebook').value = b.priceEbook || (mode==='free'?'Gratuito':'');
-            document.getElementById('book-link-ebook').value = b.linkEbook || '';
+            document.getElementById('book-price-ebook').value = b.priceEbook || (legacyIsFree ? 'Gratuito' : '');
+            document.getElementById('book-btn-ebook').value = b.btnEbook || (legacyIsFree ? (b.btnText||'Baixar E-book') : 'Comprar E-book');
+            document.getElementById('book-link-ebook').value = b.linkEbook || (legacyIsFree ? b.link : '');
 
-            document.getElementById('book-fulltext').innerHTML = b.fullText || ''; 
+            document.getElementById('book-fulltext').innerHTML = b.fullText || b.desc || ''; 
             
-            // Renderiza Seção de Moderação
             const modSec = document.getElementById('book-moderation-section');
             const modCont = document.getElementById('book-comments-moderation');
             if(b.comments && b.comments.length > 0) {
@@ -672,11 +676,8 @@
             const commentToRemove = b.comments.find(c => c.date === commentDate);
             if(commentToRemove) {
                 try {
-                    await updateDoc(doc(db, 'artifacts', appId, 'public', 'data', 'books', bookId), {
-                        comments: arrayRemove(commentToRemove)
-                    });
-                    window.showToast("Comentário apagado com sucesso.");
-                    // Fecha o modal e abre de novo para atualizar a lista visualmente
+                    await updateDoc(doc(db, 'artifacts', appId, 'public', 'data', 'books', bookId), { comments: arrayRemove(commentToRemove) });
+                    window.showToast("Comentário apagado.");
                     window.closeBookEditor();
                     setTimeout(() => window.editBook(bookId), 100);
                 } catch(e) { console.error(e); }
@@ -687,7 +688,9 @@
             const list = document.getElementById('admin-books-list');
             list.innerHTML = window.siteBooks.map(b => {
                 let badge = '';
-                if(b.hasPhysical && b.hasEbook) badge = 'Físico e E-book'; else if(b.hasPhysical) badge = 'Físico'; else badge = 'E-book';
+                const hasPhys = b.hasPhysical !== undefined ? b.hasPhysical : (b.format === 'Físico' || b.format === 'Físico e E-book' || b.priceMode === 'paid');
+                const hasEb = b.hasEbook !== undefined ? b.hasEbook : (b.format === 'E-book' || b.format === 'Físico e E-book' || b.priceMode === 'free');
+                if(hasPhys && hasEb) badge = 'Físico e E-book'; else if(hasPhys) badge = 'Físico'; else badge = 'E-book';
                 return `
                 <div class="flex items-center gap-4 p-3 border border-gray-200 rounded-xl bg-white shadow-sm cursor-pointer hover:border-green-600 transition-colors" onclick="window.editBook('${b.id}')">
                     <img src="${window.getDriveImageUrl(b.cover)}" class="w-12 h-16 object-cover rounded bg-gray-100" onerror="this.src='https://via.placeholder.com/48x64?text=Livro'">
@@ -710,8 +713,12 @@
                 lucide.createIcons(); return;
             }
             container.innerHTML = window.siteBooks.map(b => {
-                let badgeFormat = ''; if(b.hasPhysical && b.hasEbook) badgeFormat = 'FÍSICO E E-BOOK'; else if(b.hasPhysical) badgeFormat = 'LIVRO FÍSICO'; else badgeFormat = 'E-BOOK';
-                let isFree = b.priceMode === 'free';
+                const hasPhys = b.hasPhysical !== undefined ? b.hasPhysical : (b.format === 'Físico' || b.format === 'Físico e E-book' || b.priceMode === 'paid');
+                const hasEb = b.hasEbook !== undefined ? b.hasEbook : (b.format === 'E-book' || b.format === 'Físico e E-book' || b.priceMode === 'free');
+                const pEb = b.priceEbook || (b.priceMode === 'free' ? 'Gratuito' : '');
+                
+                let badgeFormat = ''; if(hasPhys && hasEb) badgeFormat = 'FÍSICO E E-BOOK'; else if(hasPhys) badgeFormat = 'LIVRO FÍSICO'; else badgeFormat = 'E-BOOK';
+                let isFree = hasEb && (pEb.toLowerCase().includes('grat') || pEb.toLowerCase().includes('grátis'));
                 let topBadge = isFree ? `<div class="absolute top-2 right-2 bg-blue-600 text-white text-[10px] sm:text-xs font-black px-2 py-1 rounded-lg shadow-md tracking-wide uppercase">GRATUITO</div>` : '';
                 
                 return `
@@ -740,7 +747,14 @@
         window.renderBookDetailContent = (id) => {
             const b = window.siteBooks.find(x => x.id === id); if (!b) return;
 
-            const isFree = b.priceMode === 'free';
+            const hasPhys = b.hasPhysical !== undefined ? b.hasPhysical : (b.format === 'Físico' || b.format === 'Físico e E-book' || b.priceMode === 'paid');
+            const hasEb = b.hasEbook !== undefined ? b.hasEbook : (b.format === 'E-book' || b.format === 'Físico e E-book' || b.priceMode === 'free');
+            const pPhys = b.pricePhysical || (!hasEb && b.priceMode !== 'free' ? b.price : '');
+            const pEb = b.priceEbook || (b.priceMode === 'free' ? 'Gratuito' : '');
+            const lPhys = (b.linkPhysical || (b.priceMode !== 'free' ? b.link : '#')).trim();
+            const lEb = (b.linkEbook || (b.priceMode === 'free' ? b.link : '#')).trim();
+            const safeLPhys = lPhys.startsWith('http') ? lPhys : 'https://'+lPhys;
+            const safeLEb = lEb.startsWith('http') ? lEb : 'https://'+lEb;
             const safeSample = b.sampleLink ? (b.sampleLink.startsWith('http') ? b.sampleLink : 'https://' + b.sampleLink) : '';
             const likesCount = b.likes || 0;
             const commentsList = b.comments || [];
@@ -748,21 +762,22 @@
             let tableRows = '';
             let buttonsHtml = '';
 
-            if(b.hasPhysical) {
-                tableRows += `<tr class="border-b sys-border"><td class="p-3 font-medium flex items-center gap-2"><i data-lucide="book" class="w-4 h-4"></i> Livro Físico</td><td class="p-3 font-black sys-text-accent">${b.pricePhysical || '-'}</td></tr>`;
-                const lPhys = (b.linkPhysical||'#').startsWith('http') ? b.linkPhysical : 'https://'+b.linkPhysical;
-                buttonsHtml += `<a href="${lPhys}" target="_blank" class="w-full flex justify-center items-center gap-2 sys-bg-accent text-white py-4 px-6 rounded-xl font-black text-sm uppercase tracking-wide hover:opacity-90 shadow-xl transition-all hover:-translate-y-1 mb-3">Comprar Livro Físico <i data-lucide="shopping-cart" class="w-4 h-4"></i></a>`;
+            if(hasPhys) {
+                tableRows += `<tr class="border-b sys-border"><td class="p-3 font-medium flex items-center gap-2"><i data-lucide="book" class="w-4 h-4"></i> Livro Físico</td><td class="p-3 font-black sys-text-accent">${pPhys || '-'}</td></tr>`;
+                let txt = b.btnPhysical || 'Comprar Físico';
+                buttonsHtml += `<a href="${safeLPhys}" target="_blank" class="w-full flex justify-center items-center gap-2 sys-bg-accent text-white py-4 px-6 rounded-xl font-black text-sm uppercase tracking-wide hover:opacity-90 shadow-xl transition-all hover:-translate-y-1 mb-3">${txt} <i data-lucide="shopping-cart" class="w-4 h-4"></i></a>`;
             }
-            if(b.hasEbook) {
-                let colorClass = isFree ? 'text-blue-600' : 'sys-text-accent';
-                tableRows += `<tr><td class="p-3 font-medium flex items-center gap-2"><i data-lucide="smartphone" class="w-4 h-4"></i> E-book</td><td class="p-3 font-black ${colorClass}">${isFree ? 'GRATUITO' : (b.priceEbook || '-')}</td></tr>`;
-                const lEb = (b.linkEbook||'#').startsWith('http') ? b.linkEbook : 'https://'+b.linkEbook;
+            if(hasEb) {
+                let isFree = pEb.toLowerCase().includes('grat') || pEb.toLowerCase().includes('grátis');
+                let colorClass = isFree ? 'text-green-600' : 'sys-text-accent';
+                tableRows += `<tr><td class="p-3 font-medium flex items-center gap-2"><i data-lucide="smartphone" class="w-4 h-4"></i> E-book</td><td class="p-3 font-black ${colorClass}">${pEb || '-'}</td></tr>`;
+                
                 let bgClass = isFree ? 'bg-blue-700 hover:bg-blue-800' : 'sys-bg-accent hover:opacity-90';
-                let txt = isFree ? 'Baixar E-book Grátis' : 'Comprar E-book';
                 let icn = isFree ? 'download' : 'shopping-cart';
-                buttonsHtml += `<a href="${lEb}" target="_blank" class="w-full flex justify-center items-center gap-2 ${bgClass} text-white py-4 px-6 rounded-xl font-black text-sm uppercase tracking-wide shadow-xl transition-all hover:-translate-y-1 mb-3">${txt} <i data-lucide="${icn}" class="w-4 h-4"></i></a>`;
+                let txt = b.btnEbook || (isFree ? 'Baixar E-book Grátis' : 'Comprar E-book');
+                buttonsHtml += `<a href="${safeLEb}" target="_blank" class="w-full flex justify-center items-center gap-2 ${bgClass} text-white py-4 px-6 rounded-xl font-black text-sm uppercase tracking-wide shadow-xl transition-all hover:-translate-y-1 mb-3"><i data-lucide="${icn}" class="w-4 h-4"></i> ${txt}</a>`;
             }
-            if (safeSample && !isFree) {
+            if (safeSample) {
                 buttonsHtml += `<a href="${safeSample}" target="_blank" class="w-full flex justify-center items-center gap-2 sys-bg-surface sys-text-primary border-2 sys-border py-4 px-6 rounded-xl font-bold text-sm uppercase tracking-wide hover:bg-gray-50 transition-all mb-3"><i data-lucide="file-text" class="w-4 h-4"></i> Ler Amostra Grátis</a>`;
             }
 
@@ -791,7 +806,7 @@
                         <h1 class="text-3xl sm:text-4xl font-black sys-text-primary leading-tight mb-2">${b.title}</h1>
                         ${b.pages ? `<p class="sys-text-secondary font-bold text-sm mb-6">${b.pages} Páginas</p>` : '<div class="mb-4"></div>'}
                         ${tableHtml}
-                        <div class="prose max-w-none sys-text-primary text-base sm:text-lg opacity-90 leading-relaxed mb-8">${b.fullText || 'Sem detalhes disponíveis.'}</div>
+                        <div class="prose max-w-none sys-text-primary text-base sm:text-lg opacity-90 leading-relaxed mb-8">${b.fullText || b.desc || 'Sem detalhes disponíveis.'}</div>
                         <div class="flex flex-col mt-auto border-t sys-border pt-8">${buttonsHtml}</div>
                     </div>
                 </div>
@@ -823,39 +838,19 @@
         };
 
         window.likeBook = async (id) => {
-            // ZIG: Sistema de bloqueio de curtida dupla (Memória do Navegador)
             let likedBooks = JSON.parse(localStorage.getItem('plh_liked_books') || '[]');
-            if (likedBooks.includes(id)) {
-                window.showToast("Você já curtiu esta obra!");
-                return;
-            }
-            try {
-                await updateDoc(doc(db, 'artifacts', appId, 'public', 'data', 'books', id), { likes: increment(1) });
-                likedBooks.push(id);
-                localStorage.setItem('plh_liked_books', JSON.stringify(likedBooks));
-                window.showToast("Curtida registrada com sucesso!");
-            } catch (e) { console.error(e); }
+            if (likedBooks.includes(id)) { window.showToast("Você já curtiu esta obra!"); return; }
+            try { await updateDoc(doc(db, 'artifacts', appId, 'public', 'data', 'books', id), { likes: increment(1) }); likedBooks.push(id); localStorage.setItem('plh_liked_books', JSON.stringify(likedBooks)); window.showToast("Curtida registrada com sucesso!"); } catch (e) { console.error(e); }
         };
 
         window.submitBookComment = async (id) => {
-            const nameInput = document.getElementById(`comment-name-${id}`);
-            const textInput = document.getElementById(`comment-text-${id}`);
-            const name = nameInput.value.trim() || 'Leitor Anônimo';
-            const text = textInput.value.trim();
+            const nameInput = document.getElementById(`comment-name-${id}`); const textInput = document.getElementById(`comment-text-${id}`);
+            const name = nameInput.value.trim() || 'Leitor Anônimo'; const text = textInput.value.trim();
             if (!text) { alert("Escreva um comentário."); return; }
-            try {
-                window.showToast("Comentário enviado!");
-                await updateDoc(doc(db, 'artifacts', appId, 'public', 'data', 'books', id), { comments: arrayUnion({ name, text, date: Date.now() }) });
-                textInput.value = ''; nameInput.value = '';
-            } catch (e) {}
+            try { window.showToast("Comentário enviado!"); await updateDoc(doc(db, 'artifacts', appId, 'public', 'data', 'books', id), { comments: arrayUnion({ name, text, date: Date.now() }) }); textInput.value = ''; nameInput.value = ''; } catch (e) {}
         };
 
-        window.showToast = (msg) => {
-            document.getElementById('toast-msg').innerText = msg;
-            const toast = document.getElementById('toast'); 
-            toast.classList.remove('translate-y-32', 'opacity-0'); 
-            setTimeout(() => toast.classList.add('translate-y-32', 'opacity-0'), 3000);
-        };
+        window.showToast = (msg) => { document.getElementById('toast-msg').innerText = msg; const toast = document.getElementById('toast'); toast.classList.remove('translate-y-32', 'opacity-0'); setTimeout(() => toast.classList.add('translate-y-32', 'opacity-0'), 3000); };
 
         window.switchAdminTab = (tab) => {
             ['posts', 'books', 'categories'].forEach(t => {
@@ -877,11 +872,7 @@
                 subtitle: document.getElementById('post-subtitle').value || "", imageUrl: document.getElementById('post-image').value || "",
                 youtubeUrl: document.getElementById('post-youtube').value || "", fullText: document.getElementById('post-fulltext').innerHTML,
             };
-            try {
-                if (id) await updateDoc(doc(db, 'artifacts', appId, 'public', 'data', 'posts', id), data);
-                else await addDoc(collection(db, 'artifacts', appId, 'public', 'data', 'posts'), { ...data, createdAt: Date.now() });
-                window.closeEditor();
-            } catch (e) { alert("Erro: " + e.message); } finally { btn.disabled = false; }
+            try { if (id) await updateDoc(doc(db, 'artifacts', appId, 'public', 'data', 'posts', id), data); else await addDoc(collection(db, 'artifacts', appId, 'public', 'data', 'posts'), { ...data, createdAt: Date.now() }); window.closeEditor(); } catch (e) { alert("Erro: " + e.message); } finally { btn.disabled = false; }
         };
 
         window.deletePost = async (id, fromEditor = false) => { if (confirm("Excluir reflexão?")) { await deleteDoc(doc(db, 'artifacts', appId, 'public', 'data', 'posts', id)); if (fromEditor) window.closeEditor(); } };
@@ -890,61 +881,25 @@
             const text = `🙏 *Reflexão - PLH*\n\n*${safeTitle}*\n${subtitle ? `_${subtitle}_` : ""}\n\nLeia aqui:\n${url}`;
             if (navigator.share) { try { await navigator.share({ title: safeTitle, text }); } catch(e) { window.copyToClipboard(url); } } else { window.copyToClipboard(url); }
         };
-        window.copyToClipboard = (text) => {
-            const el = document.createElement('textarea'); el.value = text; document.body.appendChild(el); el.select(); document.execCommand('copy'); document.body.removeChild(el);
-            window.showToast("Link copiado para compartilhar!");
-        };
+        window.copyToClipboard = (text) => { const el = document.createElement('textarea'); el.value = text; document.body.appendChild(el); el.select(); document.execCommand('copy'); document.body.removeChild(el); window.showToast("Link copiado para compartilhar!"); };
         window.getDriveImageUrl = (url) => { if (!url) return ""; const match = url.match(/\/d\/([a-zA-Z0-9_-]+)/) || url.match(/id=([a-zA-Z0-9_-]+)/); return match ? `https://lh3.googleusercontent.com/d/${match[1]}` : url; };
         window.getYoutubeId = (url) => { const match = url.match(/^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|&v=)([^#&?]*).*/); return (match && match[2].length === 11) ? match[2] : null; };
 
         window.renderPostsFeed = () => {
-            const header = document.getElementById('feed-header');
-            const container = document.getElementById('feed-container'); 
-            
+            const header = document.getElementById('feed-header'); const container = document.getElementById('feed-container'); 
             if (window.currentCategoryFilter) header.innerHTML = `<div class="flex items-center gap-3"><button onclick="window.clearFilter()" class="p-2 sys-bg-surface sys-border border rounded-full hover:opacity-80"><i data-lucide="arrow-left" class="w-4 h-4 sys-text-secondary"></i></button><h2 class="text-3xl font-black sys-text-primary">Pasta: ${window.currentCategoryFilter}</h2></div>`;
             else header.innerHTML = `<h2 class="text-3xl font-black sys-text-primary mb-1">Reflexões</h2><p class="sys-text-secondary font-medium">Estudos e aprendizados sobre a Fé.</p>`;
-            
             container.innerHTML = '';
             let posts = window.blogPosts.filter(p => p.status !== 'draft');
-            if (window.currentCategoryFilter) {
-                posts = posts.filter(p => (p.category || '').trim().toLowerCase() === window.currentCategoryFilter.trim().toLowerCase());
-            }
+            if (window.currentCategoryFilter) posts = posts.filter(p => (p.category || '').trim().toLowerCase() === window.currentCategoryFilter.trim().toLowerCase());
             if (posts.length === 0) { container.innerHTML = `<p class="text-center py-20 sys-text-secondary opacity-70">Nenhuma reflexão aqui.</p>`; lucide.createIcons(); return; }
 
             posts.forEach(post => {
                 const article = document.createElement('article'); article.className = 'sys-bg-surface rounded-2xl shadow-sm sys-border border overflow-hidden hover:shadow-xl transition-all duration-500 group cursor-pointer';
                 const ytId = window.getYoutubeId(post.youtubeUrl);
-                
-                const mediaHtml = ytId 
-                    ? `<div class="aspect-video bg-black relative overflow-hidden group">
-                           <iframe class="absolute inset-0 w-full h-full pointer-events-none transform scale-[1.35]" src="https://www.youtube.com/embed/${ytId}?autoplay=1&mute=1&controls=0&modestbranding=1&rel=0&loop=1&playlist=${ytId}&playsinline=1" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-                           <div class="absolute inset-0 z-10 flex items-center justify-center bg-black/20 group-hover:bg-black/10 transition-colors cursor-pointer">
-                               <div class="w-16 h-16 bg-white/20 backdrop-blur-md rounded-full flex items-center justify-center border border-white/30 group-hover:bg-white/30 transition-all shadow-2xl group-hover:scale-110">
-                                   <svg class="w-7 h-7 text-white ml-1 shadow-sm" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
-                               </div>
-                           </div>
-                       </div>` 
-                    : `<div class="aspect-video bg-gray-100 overflow-hidden"><img src="${window.getDriveImageUrl(post.imageUrl)}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"></div>`;
-                
-                const isPage = post.type === 'page';
-                const safeTitle = (post.title || "").replace(/'/g, "\\'");
-                const safeSubtitle = (post.subtitle || "").replace(/'/g, "\\'");
-
-                article.innerHTML = `
-                    <div onclick="window.${post.type === 'page' ? 'openArticle' : 'togglePost'}('${post.id}')">
-                        ${mediaHtml}
-                        <div class="p-6">
-                            <div class="flex gap-2 mb-3"><span class="sys-bg-accent text-white text-[9px] font-black px-2 py-0.5 rounded-full uppercase tracking-widest">${post.type === 'page' ? 'Artigo' : 'Mensagem'}</span>${post.category ? `<span class="sys-bg-body sys-text-secondary text-[9px] font-bold px-2 py-0.5 rounded-full uppercase sys-border border">${post.category}</span>` : ''}</div>
-                            <h3 class="text-2xl font-black mb-2 sys-text-primary leading-tight group-hover:sys-text-accent transition-colors">${post.title}</h3>
-                            <p class="sys-text-secondary text-sm line-clamp-2">${post.subtitle}</p>
-                            <div class="flex items-center justify-between pt-4 mt-4 sys-border border-t">
-                                <div class="sys-text-accent font-black text-xs uppercase flex items-center gap-1 toggle-indicator-${post.id}">Ler mais <i data-lucide="chevron-right" class="w-3 h-3"></i></div>
-                                <button onclick="window.sharePost('${post.id}', '${safeTitle}', '${safeSubtitle}', event)" class="p-2 sys-text-secondary hover:text-green-600 transition-all"><i data-lucide="share-2" class="w-5 h-5"></i></button>
-                            </div>
-                        </div>
-                    </div>
-                    ${post.type !== 'page' ? `<div id="content-${post.id}" class="faq-content sys-bg-body sys-border border-t"><div class="faq-content-inner p-8 prose max-w-none sys-text-primary">${post.fullText}</div></div>` : ''}
-                `;
+                const mediaHtml = ytId ? `<div class="aspect-video bg-black relative overflow-hidden group"><iframe class="absolute inset-0 w-full h-full pointer-events-none transform scale-[1.35]" src="https://www.youtube.com/embed/${ytId}?autoplay=1&mute=1&controls=0&modestbranding=1&rel=0&loop=1&playlist=${ytId}&playsinline=1" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe><div class="absolute inset-0 z-10 flex items-center justify-center bg-black/20 group-hover:bg-black/10 transition-colors cursor-pointer"><div class="w-16 h-16 bg-white/20 backdrop-blur-md rounded-full flex items-center justify-center border border-white/30 group-hover:bg-white/30 transition-all shadow-2xl group-hover:scale-110"><svg class="w-7 h-7 text-white ml-1 shadow-sm" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></div></div></div>` : `<div class="aspect-video bg-gray-100 overflow-hidden"><img src="${window.getDriveImageUrl(post.imageUrl)}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"></div>`;
+                const isPage = post.type === 'page'; const safeTitle = (post.title || "").replace(/'/g, "\\'"); const safeSubtitle = (post.subtitle || "").replace(/'/g, "\\'");
+                article.innerHTML = `<div onclick="window.${isPage ? 'openArticle' : 'togglePost'}('${post.id}')">${mediaHtml}<div class="p-6"><div class="flex gap-2 mb-3"><span class="sys-bg-accent text-white text-[9px] font-black px-2 py-0.5 rounded-full uppercase tracking-widest">${isPage ? 'Artigo' : 'Mensagem'}</span>${post.category ? `<span class="sys-bg-body sys-text-secondary text-[9px] font-bold px-2 py-0.5 rounded-full uppercase sys-border border">${post.category}</span>` : ''}</div><h3 class="text-2xl font-black mb-2 sys-text-primary leading-tight group-hover:sys-text-accent transition-colors">${post.title}</h3><p class="sys-text-secondary text-sm line-clamp-2">${post.subtitle}</p><div class="flex items-center justify-between pt-4 mt-4 sys-border border-t"><div class="sys-text-accent font-black text-xs uppercase flex items-center gap-1 toggle-indicator-${post.id}">Ler mais <i data-lucide="chevron-right" class="w-3 h-3"></i></div><button onclick="window.sharePost('${post.id}', '${safeTitle}', '${safeSubtitle}', event)" class="p-2 sys-text-secondary hover:text-green-600 transition-all"><i data-lucide="share-2" class="w-5 h-5"></i></button></div></div></div>${!isPage ? `<div id="content-${post.id}" class="faq-content sys-bg-body sys-border border-t"><div class="faq-content-inner p-8 prose max-w-none sys-text-primary">${post.fullText}</div></div>` : ''}`;
                 container.appendChild(article);
             });
             lucide.createIcons();
@@ -957,63 +912,33 @@
         
         window.renderAdminList = () => {
             const list = document.getElementById('admin-posts-list');
-            list.innerHTML = window.blogPosts.map(p => `
-                <div class="flex justify-between items-center p-4 border border-gray-200 rounded-xl bg-white shadow-sm">
-                    <div class="truncate mr-4 flex items-center gap-3 min-w-0"><span class="text-[10px] font-black px-2 py-0.5 rounded-full ${p.status === 'draft' ? 'bg-yellow-100 text-yellow-800' : 'bg-green-100 text-green-800'} shrink-0">${(p.status || 'published').toUpperCase()}</span><span class="font-bold text-gray-800 truncate">${p.title}</span></div>
-                    <div class="flex gap-2 shrink-0">
-                        <button onclick="window.editPost('${p.id}')" class="p-2 bg-blue-50 text-blue-900 rounded-lg hover:bg-blue-100 transition-colors"><i data-lucide="edit-3" class="w-4 h-4"></i></button>
-                        <button onclick="window.deletePost('${p.id}')" class="p-2 bg-red-50 text-red-600 rounded-lg hover:bg-red-100 transition-colors"><i data-lucide="trash-2" class="w-4 h-4"></i></button>
-                    </div>
-                </div>
-            `).join('') || '<p class="text-center text-gray-400 py-6">Nenhuma publicação.</p>';
+            list.innerHTML = window.blogPosts.map(p => `<div class="flex justify-between items-center p-4 border border-gray-200 rounded-xl bg-white shadow-sm"><div class="truncate mr-4 flex items-center gap-3 min-w-0"><span class="text-[10px] font-black px-2 py-0.5 rounded-full ${p.status === 'draft' ? 'bg-yellow-100 text-yellow-800' : 'bg-green-100 text-green-800'} shrink-0">${(p.status || 'published').toUpperCase()}</span><span class="font-bold text-gray-800 truncate">${p.title}</span></div><div class="flex gap-2 shrink-0"><button onclick="window.editPost('${p.id}')" class="p-2 bg-blue-50 text-blue-900 rounded-lg hover:bg-blue-100 transition-colors"><i data-lucide="edit-3" class="w-4 h-4"></i></button><button onclick="window.deletePost('${p.id}')" class="p-2 bg-red-50 text-red-600 rounded-lg hover:bg-red-100 transition-colors"><i data-lucide="trash-2" class="w-4 h-4"></i></button></div></div>`).join('') || '<p class="text-center text-gray-400 py-6">Nenhuma publicação.</p>';
             lucide.createIcons();
         };
 
         window.openEditor = () => { 
             window.currentEditorId = 'post-fulltext';
-            
-            const dbCats = window.siteCategories.map(c => c.name);
-            const postCats = window.blogPosts.map(p => p.category).filter(c => c && c.trim() !== '');
-            const allCats = [...new Set([...dbCats, ...postCats])].sort();
-
-            const catSelect = document.getElementById('post-category');
-            catSelect.innerHTML = '<option value="">Sem Categoria</option>' + allCats.map(c => `<option value="${c}">${c}</option>`).join('');
-            
+            const dbCats = window.siteCategories.map(c => c.name); const postCats = window.blogPosts.map(p => p.category).filter(c => c && c.trim() !== ''); const allCats = [...new Set([...dbCats, ...postCats])].sort();
+            const catSelect = document.getElementById('post-category'); catSelect.innerHTML = '<option value="">Sem Categoria</option>' + allCats.map(c => `<option value="${c}">${c}</option>`).join('');
             document.getElementById('edit-post-id').value = ''; ['title', 'subtitle', 'image', 'youtube'].forEach(f => document.getElementById('post-'+f).value = ''); 
             catSelect.value = ''; document.getElementById('post-fulltext').innerHTML = ''; document.getElementById('editor-modal').classList.remove('hidden'); document.getElementById('btn-delete-editor').classList.add('hidden'); 
         };
         
         window.editPost = (id) => { 
-            window.currentEditorId = 'post-fulltext';
-            const p = window.blogPosts.find(x => x.id === id); 
-            
-            const dbCats = window.siteCategories.map(c => c.name);
-            const postCats = window.blogPosts.map(post => post.category).filter(c => c && c.trim() !== '');
-            const allCats = [...new Set([...dbCats, ...postCats])].sort();
-
-            const catSelect = document.getElementById('post-category');
-            catSelect.innerHTML = '<option value="">Sem Categoria</option>' + allCats.map(c => `<option value="${c}">${c}</option>`).join('');
-            
+            window.currentEditorId = 'post-fulltext'; const p = window.blogPosts.find(x => x.id === id); 
+            const dbCats = window.siteCategories.map(c => c.name); const postCats = window.blogPosts.map(post => post.category).filter(c => c && c.trim() !== ''); const allCats = [...new Set([...dbCats, ...postCats])].sort();
+            const catSelect = document.getElementById('post-category'); catSelect.innerHTML = '<option value="">Sem Categoria</option>' + allCats.map(c => `<option value="${c}">${c}</option>`).join('');
             document.getElementById('edit-post-id').value = p.id; document.getElementById('post-title').value = p.title; document.getElementById('post-subtitle').value = p.subtitle; 
             catSelect.value = p.category || ''; document.getElementById('post-image').value = p.imageUrl || ''; document.getElementById('post-youtube').value = p.youtubeUrl || ''; document.getElementById('post-fulltext').innerHTML = p.fullText; 
             document.getElementById('editor-modal').classList.remove('hidden'); document.getElementById('btn-delete-editor').classList.remove('hidden'); 
         };
         window.closeEditor = () => document.getElementById('editor-modal').classList.add('hidden');
 
-        /* Funções Utilitárias Compartilhadas */
-        window.execEditor = (cmd, val = null) => { 
-            document.execCommand(cmd, false, val); 
-            const el = document.getElementById(window.currentEditorId || 'post-fulltext');
-            if(el) el.focus();
-        };
+        window.execEditor = (cmd, val = null) => { document.execCommand(cmd, false, val); const el = document.getElementById(window.currentEditorId || 'post-fulltext'); if(el) el.focus(); };
         window.insertEditorLink = () => { const url = prompt("URL:"); if(url) window.execEditor('createLink', url); };
         window.insertEditorImage = () => { const url = prompt("Link da imagem:"); if (url) window.execEditor('insertHTML', `<img src="${window.getDriveImageUrl(url)}" class="w-full rounded-xl my-4 shadow-sm" />`); };
         window.insertEditorVideo = () => { const url = prompt("Link do YouTube:"); const id = window.getYoutubeId(url); if (id) window.execEditor('insertHTML', `<div class="aspect-video w-full rounded-xl overflow-hidden my-4 shadow-sm"><iframe class="w-full h-full" src="https://www.youtube.com/embed/${id}" frameborder="0" allowfullscreen></iframe></div>`); };
-        window.insertEditorButton = () => {
-            const text = prompt("Texto do botão:"); if (!text) return; const url = prompt("Link de destino:"); if (!url) return;
-            const safeUrl = url.startsWith('http') ? url : 'https://' + url;
-            window.execEditor('insertHTML', `<div class="my-8 flex justify-center"><a href="${safeUrl}" target="_blank" class="sys-bg-accent font-black text-sm sm:text-base py-4 px-10 rounded-full shadow-2xl transition-all hover:scale-105 uppercase tracking-wide" style="color: #ffffff !important; text-decoration: none !important;">${text}</a></div><p><br></p>`);
-        };
+        window.insertEditorButton = () => { const text = prompt("Texto do botão:"); if (!text) return; const url = prompt("Link de destino:"); if (!url) return; const safeUrl = url.startsWith('http') ? url : 'https://' + url; window.execEditor('insertHTML', `<div class="my-8 flex justify-center"><a href="${safeUrl}" target="_blank" class="sys-bg-accent font-black text-sm sm:text-base py-4 px-10 rounded-full shadow-2xl transition-all hover:scale-105 uppercase tracking-wide" style="color: #ffffff !important; text-decoration: none !important;">${text}</a></div><p><br></p>`); };
 
         lucide.createIcons();
     </script>

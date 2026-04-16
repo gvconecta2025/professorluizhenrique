@@ -2,28 +2,95 @@
 <html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     
     <link rel="preconnect" href="https://www.gstatic.com">
     <link rel="preconnect" href="https://firestore.googleapis.com">
     
-    <title>Professor Luiz Henrique - Reflexões</title>
+    <title>PLH - Reflexões</title>
     
-    <meta property="og:title" content="Professor Luiz Henrique - Reflexões de Fé">
+    <!-- Metadados para Redes Sociais (Open Graph / WhatsApp) -->
+    <meta property="og:title" content="PLH - Reflexões de Fé">
     <meta property="og:description" content="Estudos e aprendizados sobre a Fé. Palavras e reflexões diárias.">
-    <meta property="og:url" content="https://SEU-DOMINIO-AQUI.vercel.app/">
-    <meta property="og:image" content="https://SEU-DOMINIO-AQUI.vercel.app/foto-compartilhamento.jpg">
-    <meta property="og:image:type" content="image/jpeg">
+    <meta property="og:url" content="https://professorluizhenrique.vercel.app/">
+    <meta property="og:image" content="https://professorluizhenrique.vercel.app/foto-compartilhamento.png">
+    <meta property="og:image:type" content="image/png">
     <meta property="og:type" content="website">
     <meta name="twitter:card" content="summary_large_image">
     
-    <link rel="icon" type="image/jpeg" href="./foto-compartilhamento.jpg">
+    <!-- Ícone da Aba do Navegador -->
+    <link rel="icon" type="image/png" href="./foto-compartilhamento.png">
+    
+    <!-- Cor da barra de status no mobile -->
+    <meta name="theme-color" content="#1e3a8a">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <link rel="apple-touch-icon" href="./foto-compartilhamento.png">
 
+    <!-- Memória do Sistema e Motor PWA -->
     <script>
+        // 1. Carrega as preferências visuais antes da tela renderizar
         const savedTheme = localStorage.getItem('site-theme') || 'light';
         const savedFontSize = localStorage.getItem('site-font-size') || 'normal';
         document.documentElement.classList.add('theme-' + savedTheme);
         document.documentElement.classList.add('font-size-' + savedFontSize);
+
+        // 2. Motor PWA: Cria Manifest na memória para habilitar "Instalar App"
+        window.addEventListener('load', () => {
+            const manifest = {
+                name: "PLH - Reflexões de Fé",
+                short_name: "PLH",
+                start_url: window.location.pathname,
+                display: "standalone",
+                background_color: "#f3f4f6",
+                theme_color: "#1e3a8a",
+                icons: [
+                    { src: "./foto-compartilhamento.png", sizes: "192x192", type: "image/png" },
+                    { src: "./foto-compartilhamento.png", sizes: "512x512", type: "image/png" }
+                ]
+            };
+            const manifestBlob = new Blob([JSON.stringify(manifest)], {type: 'application/manifest+json'});
+            const link = document.createElement('link');
+            link.rel = 'manifest';
+            link.href = URL.createObjectURL(manifestBlob);
+            document.head.appendChild(link);
+
+            if ('serviceWorker' in navigator) {
+                const swCode = `
+                    self.addEventListener('install', (e) => self.skipWaiting());
+                    self.addEventListener('activate', (e) => e.waitUntil(clients.claim()));
+                    self.addEventListener('fetch', (e) => {}); 
+                `;
+                const swBlob = new Blob([swCode], {type: 'application/javascript'});
+                navigator.serviceWorker.register(URL.createObjectURL(swBlob)).catch(()=>console.log('SW limit.'));
+            }
+        });
+
+        // 3. Captura o evento de instalação para mostrar o botão
+        let deferredPrompt;
+        window.addEventListener('beforeinstallprompt', (e) => {
+            e.preventDefault();
+            deferredPrompt = e;
+            // Exibe os botões de instalação que estão ocultos por padrão
+            const btn = document.getElementById('install-btn');
+            const btnMob = document.getElementById('install-btn-mobile');
+            if(btn) btn.classList.remove('hidden');
+            if(btnMob) btnMob.classList.remove('hidden');
+        });
+
+        window.installApp = async () => {
+            if (deferredPrompt) {
+                deferredPrompt.prompt();
+                const { outcome } = await deferredPrompt.userChoice;
+                if (outcome === 'accepted') {
+                    const btn = document.getElementById('install-btn');
+                    const btnMob = document.getElementById('install-btn-mobile');
+                    if(btn) btn.classList.add('hidden');
+                    if(btnMob) btnMob.classList.add('hidden');
+                }
+                deferredPrompt = null;
+            }
+        };
     </script>
 
     <script src="https://cdn.tailwindcss.com"></script>
@@ -31,16 +98,9 @@
     <style>
         html { scroll-behavior: smooth; }
         
-        /* * ENGENHARIA DE TEMAS: Variáveis Globais de Cores
-         * Isso permite que o Tailwind mude de cor dinamicamente sem reescrever HTML.
-         */
+        /* Variáveis Globais de Cores para Temas */
         :root, html.theme-light {
-            --sys-bg-body: #f3f4f6;
-            --sys-bg-surface: #ffffff;
-            --sys-text-primary: #111827;
-            --sys-text-secondary: #6b7280;
-            --sys-border: #e5e7eb;
-            --sys-accent: #1e3a8a;
+            --sys-bg-body: #f3f4f6; --sys-bg-surface: #ffffff; --sys-text-primary: #111827; --sys-text-secondary: #6b7280; --sys-border: #e5e7eb; --sys-accent: #1e3a8a;
         }
         html.theme-dark {
             --sys-bg-body: #111827; --sys-bg-surface: #1f2937; --sys-text-primary: #f9fafb; --sys-text-secondary: #9ca3af; --sys-border: #374151; --sys-accent: #60a5fa;
@@ -61,7 +121,6 @@
             --sys-bg-body: #450a0a; --sys-bg-surface: #7f1d1d; --sys-text-primary: #ffffff; --sys-text-secondary: #fecaca; --sys-border: #991b1b; --sys-accent: #fca5a5;
         }
 
-        /* Classes de Utilitários de Tema */
         .sys-bg-body { background-color: var(--sys-bg-body); transition: background-color 0.4s ease; }
         .sys-bg-surface { background-color: var(--sys-bg-surface); transition: background-color 0.4s ease; }
         .sys-text-primary { color: var(--sys-text-primary); transition: color 0.4s ease; }
@@ -70,16 +129,13 @@
         .sys-text-accent { color: var(--sys-accent); transition: color 0.4s ease; }
         .sys-bg-accent { background-color: var(--sys-accent); color: #fff; transition: background-color 0.4s ease; }
 
-        /* Integração com Prose (Texto do Artigo) */
         .prose, .prose h1, .prose h2, .prose h3, .prose h4, .prose blockquote, .prose strong, .prose b { color: var(--sys-text-primary) !important; }
         .prose a { color: var(--sys-accent) !important; }
 
-        /* ENGENHARIA DE ESCALA: Tamanho de Fonte Global */
         html.font-size-normal { font-size: 16px; transition: font-size 0.3s ease; }
         html.font-size-large { font-size: 18px; transition: font-size 0.3s ease; }
         html.font-size-xlarge { font-size: 20px; transition: font-size 0.3s ease; }
 
-        /* Componentes Funcionais */
         .faq-content { display: grid; grid-template-rows: 0fr; transition: grid-template-rows 0.4s ease-out; }
         .faq-content.open { grid-template-rows: 1fr; }
         .faq-content-inner { overflow: hidden; }
@@ -96,14 +152,21 @@
 </head>
 <body class="sys-bg-body sys-text-primary font-sans antialiased min-h-screen flex flex-col">
 
+    <!-- Cabeçalho -->
     <header class="sys-bg-surface shadow-sm sticky top-0 z-20 flex-shrink-0 sys-border border-b">
         <div class="max-w-3xl mx-auto px-4 py-4 flex items-center justify-between">
-            <a href="#" onclick="window.clearFilter(); window.closeArticle(); return false;" class="text-xl sm:text-2xl font-bold tracking-tight sys-text-accent flex items-center gap-2 truncate hover:opacity-80 transition-opacity">
-                <img src="./foto-compartilhamento.jpg" alt="Foto do Professor Luiz Henrique" class="w-8 h-8 rounded-full object-cover border-2 sys-border shrink-0">
-                Professor Luiz Henrique
+            <a href="#" onclick="window.clearFilter(); window.closeArticle(); return false;" class="text-xl sm:text-2xl font-black tracking-tight sys-text-accent flex items-center gap-3 truncate hover:opacity-80 transition-opacity">
+                <!-- Foto do Professor atualizada para PNG e Título enxuto -->
+                <img src="./foto-compartilhamento.png" alt="Foto PLH" class="w-9 h-9 rounded-full object-cover border-2 sys-border shrink-0 shadow-sm">
+                PLH
             </a>
             
-            <div class="flex items-center gap-1 sm:gap-2">
+            <div class="flex items-center gap-2 sm:gap-3">
+                <!-- BOTÃO INSTALAR (Fica oculto até o navegador liberar) -->
+                <button id="install-btn" onclick="window.installApp()" class="hidden hidden sm:flex items-center gap-2 px-3 py-1.5 bg-blue-900 text-white text-sm font-bold rounded-lg hover:bg-blue-800 transition-colors shadow-sm">
+                    <i data-lucide="download" class="w-4 h-4"></i> Instalar
+                </button>
+
                 <button onclick="window.cycleFontSize()" class="p-2 sys-text-secondary hover:sys-text-accent focus:outline-none rounded-lg transition-colors" title="Ajustar Tamanho da Fonte">
                     <i data-lucide="type" class="w-5 h-5"></i>
                 </button>
@@ -134,6 +197,9 @@
             <nav class="flex flex-col py-4 gap-4 text-sm font-medium sys-text-secondary max-w-3xl mx-auto">
                 <a href="#" onclick="window.clearFilter(); window.closeArticle(); window.toggleMobileMenu(); return false;" class="hover:sys-text-accent flex items-center gap-2 font-bold"><i data-lucide="home" class="w-4 h-4"></i> Início</a>
                 
+                <!-- Botão Instalar Mobile -->
+                <a href="#" id="install-btn-mobile" onclick="window.installApp(); window.toggleMobileMenu(); return false;" class="hidden hover:sys-text-accent flex items-center gap-2 font-bold text-blue-600"><i data-lucide="download" class="w-4 h-4"></i> Instalar Aplicativo</a>
+
                 <div class="flex flex-col">
                     <button onclick="window.toggleCategories(event)" class="flex items-center justify-between w-full text-left hover:sys-text-accent transition-colors focus:outline-none py-1 font-bold">
                         <span class="flex items-center gap-2"><i data-lucide="folder" class="w-4 h-4"></i> Categorias</span>
@@ -154,6 +220,7 @@
         </div>
     </header>
 
+    <!-- FEED PRINCIPAL -->
     <main id="home-view" class="flex-grow max-w-3xl w-full mx-auto px-4 py-8 z-10 fade-enter">
         <div class="mb-8 text-center sm:text-left" id="feed-header">
             <h2 class="text-3xl font-black sys-text-primary mb-1">Reflexões</h2>
@@ -171,6 +238,7 @@
         </div>
     </main>
 
+    <!-- VISUALIZAÇÃO DO ARTIGO -->
     <main id="article-view" class="hidden flex-grow w-full z-10 transition-all duration-300">
         <div class="max-w-3xl mx-auto px-4 py-8 fade-enter">
             <div class="mb-8 sys-border border-b pb-6">
@@ -178,15 +246,16 @@
                     <i data-lucide="arrow-left" class="w-5 h-5 transform group-hover:-translate-x-1 transition-transform"></i> Voltar
                 </button>
             </div>
-
             <article id="article-content" class="pb-16"></article>
         </div>
     </main>
 
+    <!-- Botão Flutuante -->
     <a href="https://chat.whatsapp.com/DgwfvBpeVZIIzHZLgiIlCk" target="_blank" class="floating-btn bg-green-600 text-white px-5 py-3 rounded-full shadow-2xl flex items-center gap-2 font-bold text-sm sm:text-base border-b-4 border-green-800 active:translate-y-1 active:border-b-0 hover:bg-green-700 transition-all">
         <i data-lucide="users" class="w-5 h-5"></i> Seja Notificado
     </a>
 
+    <!-- MODAL LOGIN -->
     <div id="login-modal" class="hidden fixed inset-0 z-50 flex items-center justify-center modal-overlay px-4">
         <div class="bg-white rounded-2xl shadow-2xl w-full max-w-sm p-8 relative">
             <button onclick="window.closeAdminLogin()" class="absolute top-4 right-4 text-gray-400 hover:text-gray-600"><i data-lucide="x" class="w-6 h-6"></i></button>
@@ -200,6 +269,7 @@
         </div>
     </div>
 
+    <!-- PAINEL DASHBOARD -->
     <div id="dashboard-modal" class="hidden fixed inset-0 z-50 flex items-center justify-center modal-overlay px-4">
         <div class="bg-white rounded-2xl shadow-2xl w-full max-w-4xl max-h-[90vh] flex flex-col relative overflow-hidden">
             <div class="p-6 border-b border-gray-100 flex justify-between items-center bg-gray-50/50">
@@ -220,6 +290,7 @@
         </div>
     </div>
 
+    <!-- EDITOR -->
     <div id="editor-modal" class="hidden fixed inset-0 z-50 flex items-center justify-center modal-overlay px-4 py-4">
         <div class="bg-white rounded-2xl shadow-2xl w-full max-w-3xl max-h-full flex flex-col relative overflow-hidden text-gray-900">
             <div class="p-5 border-b border-gray-100 flex justify-between items-center bg-gray-50">
@@ -291,6 +362,7 @@
         </div>
     </div>
 
+    <!-- Toast Notification -->
     <div id="toast" class="fixed bottom-6 right-6 bg-green-700 text-white px-8 py-4 rounded-2xl shadow-2xl transform transition-transform duration-300 translate-y-32 opacity-0 z-50 flex items-center gap-3 font-bold border-b-4 border-green-900">
         <i data-lucide="check-circle" class="w-6 h-6"></i> Link copiado para compartilhar!
     </div>
@@ -320,10 +392,19 @@
         const appId = typeof __app_id !== 'undefined' ? __app_id : 'plh-blog-default';
 
         window.onload = async () => {
-            if (typeof __initial_auth_token !== 'undefined' && __initial_auth_token) {
-                await signInWithCustomToken(auth, __initial_auth_token);
-            } else {
-                await signInAnonymously(auth);
+            try {
+                if (typeof __initial_auth_token !== 'undefined' && __initial_auth_token) {
+                    try {
+                        await signInWithCustomToken(auth, __initial_auth_token);
+                    } catch (tokenError) {
+                        console.warn("Conflito de token detectado. Recuando para login anônimo...");
+                        await signInAnonymously(auth);
+                    }
+                } else {
+                    await signInAnonymously(auth);
+                }
+            } catch (err) {
+                console.error("Erro na inicialização de autenticação:", err);
             }
             
             onAuthStateChanged(auth, (user) => {
@@ -358,9 +439,7 @@
             }
         }
 
-        /* ----------------------------------
-           MOTOR DE SISTEMA DE TEMAS E FONTE
-        ----------------------------------- */
+        /* MOTOR DE SISTEMA DE TEMAS E FONTE */
         window.toggleThemeMenu = (e) => {
             if(e) e.stopPropagation();
             document.getElementById('theme-menu').classList.toggle('hidden');
@@ -385,7 +464,6 @@
             localStorage.setItem('site-font-size', newSize);
         };
 
-        // Fecha o menu de tema ao clicar fora
         document.addEventListener('click', (e) => {
             const menu = document.getElementById('theme-menu');
             if (menu && !menu.classList.contains('hidden') && !e.target.closest('.relative')) {
@@ -393,9 +471,7 @@
             }
         });
 
-        /* ----------------------------------
-           OPERAÇÕES DE DADOS (FIREBASE)
-        ----------------------------------- */
+        /* OPERAÇÕES DE DADOS (FIREBASE) */
         window.savePost = async () => {
             const btn = document.getElementById('btn-save-post');
             const id = document.getElementById('edit-post-id').value;
@@ -438,7 +514,7 @@
             const safeTitle = (title || "Reflexão de Fé").replace(/["]/g, "");
             const url = window.location.origin + window.location.pathname + '?post=' + id;
             
-            const inviteText = `🙏 *Reflexão de Fé - Prof. Luiz Henrique*\n\n*${safeTitle}*\n${subtitle ? `_${subtitle}_` : ""}\n\nLeia o conteúdo completo aqui:\n${url}`;
+            const inviteText = `🙏 *Reflexão de Fé - PLH*\n\n*${safeTitle}*\n${subtitle ? `_${subtitle}_` : ""}\n\nLeia o conteúdo completo aqui:\n${url}`;
             
             if (navigator.share) {
                 try { await navigator.share({ title: safeTitle, text: inviteText }); } catch(e) { window.copyToClipboard(url); }
@@ -464,9 +540,7 @@
             return (match && match[2].length === 11) ? match[2] : null;
         };
 
-        /* ----------------------------------
-           RENDERIZAÇÃO DA INTERFACE
-        ----------------------------------- */
+        /* RENDERIZAÇÃO DA INTERFACE */
         window.renderPostsFeed = () => {
             const header = document.getElementById('feed-header');
             if (currentCategoryFilter) {

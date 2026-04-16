@@ -666,8 +666,18 @@
                 article.className = 'sys-bg-surface rounded-2xl shadow-sm sys-border border overflow-hidden hover:shadow-xl transition-all duration-500 group cursor-pointer';
                 
                 const ytId = window.getYoutubeId(post.youtubeUrl);
+                
+                // Engenharia de Thumbnails do YouTube (Sem Iframe, Foco em Performance e UX)
                 const mediaHtml = ytId 
-                    ? `<div class="aspect-video bg-black relative"><iframe class="w-full h-full pointer-events-none" src="https://www.youtube.com/embed/${ytId}?mute=1"></iframe><div class="absolute inset-0 z-10"></div></div>` 
+                    ? `<div class="aspect-video bg-gray-900 overflow-hidden relative group">
+                           <img src="https://img.youtube.com/vi/${ytId}/maxresdefault.jpg" onerror="this.src='https://img.youtube.com/vi/${ytId}/hqdefault.jpg'" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 opacity-90">
+                           <div class="absolute inset-0 flex items-center justify-center pointer-events-none">
+                               <div class="w-16 h-16 bg-black/50 backdrop-blur-sm rounded-full flex items-center justify-center border border-white/20 group-hover:bg-blue-900/80 transition-all shadow-xl group-hover:scale-110">
+                                   <!-- Ícone Sólido de Play (SVG Puro para consistência visual) -->
+                                   <svg class="w-7 h-7 text-white ml-1" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+                               </div>
+                           </div>
+                       </div>` 
                     : `<div class="aspect-video bg-gray-100 overflow-hidden"><img src="${window.getDriveImageUrl(post.imageUrl)}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"></div>`;
                 
                 const isPage = post.type === 'page';
@@ -705,6 +715,7 @@
             view.classList.remove('hidden');
             window.scrollTo(0, 0);
             
+            // No modo de artigo inteiro (página), mantemos o Iframe nativo para que ele possa assistir.
             const ytId = window.getYoutubeId(post.youtubeUrl);
             const mediaHtml = ytId ? `<div class="aspect-video rounded-3xl overflow-hidden mb-8 shadow-2xl bg-black"><iframe class="w-full h-full" src="https://www.youtube.com/embed/${ytId}" frameborder="0" allowfullscreen></iframe></div>` : `<div class="aspect-video rounded-3xl overflow-hidden mb-8 shadow-xl"><img src="${window.getDriveImageUrl(post.imageUrl)}" class="w-full h-full object-cover"></div>`;
             const sTitle = (post.title || "").replace(/'/g, "\\'");

@@ -320,7 +320,7 @@
     <!-- Editor de Reflexões -->
     <div id="editor-modal" class="hidden fixed inset-0 z-50 flex items-center justify-center modal-overlay px-4 py-4">
         <div class="bg-white rounded-2xl shadow-2xl w-full max-w-4xl max-h-full flex flex-col relative overflow-hidden text-gray-900">
-            <div class="p-5 border-b border-gray-100 flex justify-between items-center bg-gray-50"><h3 class="text-xl font-bold text-gray-900">Nova Reflexão</h3><button onclick="window.closeEditor()" class="text-gray-400 hover:text-gray-600"><i data-lucide="x" class="w-6 h-6"></i></button></div>
+            <div class="p-5 border-b border-gray-100 flex justify-between items-center bg-gray-50"><h3 id="editor-title" class="text-xl font-bold text-gray-900">Nova Reflexão</h3><button onclick="window.closeEditor()" class="text-gray-400 hover:text-gray-600"><i data-lucide="x" class="w-6 h-6"></i></button></div>
             <div class="p-6 flex-1 overflow-y-auto flex flex-col gap-6">
                 <input type="hidden" id="edit-post-id">
                 <div class="grid grid-cols-2 gap-4">
@@ -347,78 +347,82 @@
         </div>
     </div>
 
-    <!-- Novo Editor de Livros (Versões Separadas) -->
+    <!-- Editor de Livros (Versões Separadas) COM MÓDULO DE MODERAÇÃO -->
     <div id="book-editor-modal" class="hidden fixed inset-0 z-50 flex items-center justify-center modal-overlay px-4 py-4">
         <div class="bg-white rounded-2xl shadow-2xl w-full max-w-4xl max-h-full flex flex-col relative overflow-hidden text-gray-900">
-            <div class="p-5 border-b border-gray-100 flex justify-between items-center bg-green-50/50"><h3 id="book-editor-title" class="text-xl font-bold text-gray-900 flex items-center gap-2"><i data-lucide="book-plus" class="w-6 h-6 text-green-700"></i> Adicionar Livro</h3><button onclick="window.closeBookEditor()" class="text-gray-400 hover:text-gray-600"><i data-lucide="x" class="w-6 h-6"></i></button></div>
+            <div class="p-5 border-b flex justify-between items-center bg-green-50/50"><h3 id="book-editor-title" class="text-xl font-bold text-green-900">Livro</h3><button onclick="window.closeBookEditor()" class="text-gray-400"><i data-lucide="x" class="w-6 h-6"></i></button></div>
             <div class="p-6 flex-1 overflow-y-auto flex flex-col gap-6">
                 <input type="hidden" id="edit-book-id">
                 
+                <div class="bg-green-50/30 p-4 rounded-xl border border-green-200 flex gap-6">
+                    <label class="font-bold text-gray-900"><input type="radio" name="book_price_mode" value="paid" onchange="window.toggleBookPriceMode()" class="mr-2" checked> Pago</label>
+                    <label class="font-bold text-gray-900"><input type="radio" name="book_price_mode" value="free" onchange="window.toggleBookPriceMode()" class="mr-2"> Gratuito (Isca)</label>
+                </div>
+                
                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                    <div><label class="block text-sm font-bold text-gray-700 mb-1">Título da Obra</label><input type="text" id="book-title" class="w-full border border-gray-300 bg-white rounded-xl px-4 py-2.5 outline-none focus:ring-2 focus:ring-green-700"></div>
-                    <div><label class="block text-sm font-bold text-gray-700 mb-1">Chamada Curta (Para a Galeria)</label><input type="text" id="book-subtitle" placeholder="Frase rápida que aparecerá embaixo da capa..." class="w-full border border-gray-300 bg-white rounded-xl px-4 py-2.5 outline-none focus:ring-2 focus:ring-green-700"></div>
+                    <input type="text" id="book-title" placeholder="Título da Obra" class="border border-gray-300 rounded-xl px-4 py-2.5 outline-none focus:ring-2 focus:ring-green-700">
+                    <input type="text" id="book-subtitle" placeholder="Subtítulo (Aparece na Galeria)" class="border border-gray-300 rounded-xl px-4 py-2.5 outline-none focus:ring-2 focus:ring-green-700">
+                </div>
+                
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <input type="text" id="book-cover" placeholder="Link da Capa (Imagem)" class="border border-gray-300 rounded-xl px-4 py-2.5 outline-none focus:ring-2 focus:ring-green-700">
+                    <input type="number" id="book-pages" placeholder="Quantidade de Páginas" class="border border-gray-300 rounded-xl px-4 py-2.5 outline-none focus:ring-2 focus:ring-green-700">
                 </div>
 
-                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                    <div><label class="block text-sm font-bold text-gray-700 mb-1">Link da Capa (2:3)</label><input type="text" id="book-cover" class="w-full border border-gray-300 bg-white rounded-xl px-4 py-2.5 outline-none focus:ring-2 focus:ring-green-700" placeholder="URL da Imagem"></div>
-                    <div><label class="block text-sm font-bold text-gray-700 mb-1">Quantidade de Páginas</label><input type="number" id="book-pages" placeholder="Ex: 120" class="w-full border border-gray-300 bg-white rounded-xl px-4 py-2.5 outline-none focus:ring-2 focus:ring-green-700"></div>
-                </div>
-
-                <!-- Engenharia ZIG: Formatos Independentes -->
                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-6 border-t border-gray-200 pt-6">
-                    <!-- Físico -->
-                    <div class="bg-gray-50 p-5 rounded-xl border border-gray-200">
-                        <label class="flex items-center gap-2 font-bold text-gray-900 mb-4 cursor-pointer text-lg"><input type="checkbox" id="book-has-physical" class="w-5 h-5 text-green-700 rounded focus:ring-green-700" onchange="window.toggleBookFormats()"> Versão Física (Livro Impresso)</label>
-                        <div id="book-physical-fields" class="flex flex-col gap-3 opacity-50 pointer-events-none transition-opacity">
-                            <div><label class="block text-xs font-bold text-gray-600 mb-1 uppercase">Preço do Físico (Ex: R$ 49,90)</label><input type="text" id="book-price-physical" class="w-full border border-gray-300 bg-white rounded-lg px-3 py-2 text-sm outline-none focus:ring-1 focus:ring-green-700" disabled></div>
-                            <div><label class="block text-xs font-bold text-gray-600 mb-1 uppercase">Link de Venda Físico</label><input type="text" id="book-link-physical" class="w-full border border-gray-300 bg-white rounded-lg px-3 py-2 text-sm outline-none focus:ring-1 focus:ring-green-700" placeholder="https://" disabled></div>
+                    <div class="bg-gray-50 p-4 rounded-xl border border-gray-200">
+                        <label class="flex items-center gap-2 font-bold mb-3"><input type="checkbox" id="book-has-physical" class="w-4 h-4" onchange="window.toggleBookFormats()"> Livro Físico</label>
+                        <div id="book-physical-fields" class="flex flex-col gap-2 opacity-50 pointer-events-none">
+                            <input type="text" id="book-price-physical" class="border border-gray-300 rounded-lg px-3 py-2 text-sm" placeholder="Preço (Ex: R$ 49,90)" disabled>
+                            <input type="text" id="book-link-physical" class="border border-gray-300 rounded-lg px-3 py-2 text-sm" placeholder="Link de Venda" disabled>
                         </div>
                     </div>
-                    
-                    <!-- E-book -->
-                    <div class="bg-blue-50/50 p-5 rounded-xl border border-blue-100">
-                        <label class="flex items-center gap-2 font-bold text-gray-900 mb-4 cursor-pointer text-lg"><input type="checkbox" id="book-has-ebook" class="w-5 h-5 text-blue-700 rounded focus:ring-blue-700" onchange="window.toggleBookFormats()"> Versão Digital (E-book)</label>
-                        <div id="book-ebook-fields" class="flex flex-col gap-3 opacity-50 pointer-events-none transition-opacity">
-                            <div><label class="block text-xs font-bold text-gray-600 mb-1 uppercase">Preço E-book (Ou digite "Gratuito")</label><input type="text" id="book-price-ebook" class="w-full border border-gray-300 bg-white rounded-lg px-3 py-2 text-sm outline-none focus:ring-1 focus:ring-blue-700" disabled></div>
-                            <div><label class="block text-xs font-bold text-gray-600 mb-1 uppercase">Link de Compra / Download</label><input type="text" id="book-link-ebook" class="w-full border border-gray-300 bg-white rounded-lg px-3 py-2 text-sm outline-none focus:ring-1 focus:ring-blue-700" placeholder="https://" disabled></div>
+                    <div class="bg-blue-50/50 p-4 rounded-xl border border-blue-100">
+                        <label class="flex items-center gap-2 font-bold mb-3"><input type="checkbox" id="book-has-ebook" class="w-4 h-4" onchange="window.toggleBookFormats()"> E-book (Digital)</label>
+                        <div id="book-ebook-fields" class="flex flex-col gap-2 opacity-50 pointer-events-none">
+                            <input type="text" id="book-price-ebook" class="border border-gray-300 rounded-lg px-3 py-2 text-sm" placeholder="Preço ou 'Gratuito'" disabled>
+                            <input type="text" id="book-link-ebook" class="border border-gray-300 rounded-lg px-3 py-2 text-sm" placeholder="Link de Download/Venda" disabled>
                         </div>
                     </div>
                 </div>
 
-                <div>
-                    <label class="block text-sm font-bold text-gray-700 mb-1">Amostra Grátis (Link do PDF opcional)</label>
-                    <input type="text" id="book-sample" class="w-full border border-gray-300 bg-white rounded-xl px-4 py-2.5 outline-none focus:ring-2 focus:ring-green-700" placeholder="URL do arquivo PDF no Drive para o botão de amostra">
-                </div>
+                <input type="text" id="book-sample" placeholder="Link para PDF de Amostra Grátis (Opcional)" class="w-full border border-gray-300 rounded-xl px-4 py-2.5 outline-none focus:ring-2 focus:ring-green-700">
 
                 <div>
-                    <label class="block text-sm font-bold text-gray-700 mb-1">Página de Vendas / Sinopse Completa</label>
+                    <label class="block text-sm font-bold mb-1">Sinopse da Página de Vendas</label>
                     <div class="border border-gray-300 border-b-0 rounded-t-xl bg-gray-50 px-4 py-3 flex flex-wrap gap-2">
-                        <button type="button" onclick="window.execEditor('bold')" class="p-2 bg-white border border-gray-200 rounded shadow-sm hover:bg-gray-100"><i data-lucide="bold" class="w-4 h-4"></i></button>
-                        <button type="button" onclick="window.execEditor('italic')" class="p-2 bg-white border border-gray-200 rounded shadow-sm hover:bg-gray-100"><i data-lucide="italic" class="w-4 h-4"></i></button>
-                        <button type="button" onclick="window.insertEditorImage()" class="px-3 py-1 bg-white border border-gray-200 rounded shadow-sm text-sm hover:bg-gray-100">Img</button>
+                        <button type="button" onclick="window.execEditor('bold')" class="p-2 bg-white border border-gray-200 rounded"><i data-lucide="bold" class="w-4 h-4"></i></button>
+                        <button type="button" onclick="window.insertEditorImage()" class="px-3 py-1 bg-white border border-gray-200 rounded text-sm">Img</button>
                     </div>
-                    <div id="book-fulltext" contenteditable="true" class="w-full border border-gray-300 border-t-0 rounded-b-xl px-6 py-6 min-h-[300px] bg-white overflow-y-auto prose prose-green max-w-none shadow-inner outline-none"></div>
+                    <div id="book-fulltext" contenteditable="true" class="w-full border border-gray-300 rounded-b-xl px-6 py-6 min-h-[250px] bg-white overflow-y-auto prose prose-green max-w-none shadow-inner outline-none"></div>
                 </div>
-            </div>
-            <div class="p-6 border-t border-gray-100 bg-gray-50 flex justify-between">
-                <button id="btn-delete-book" onclick="window.deleteBook(document.getElementById('edit-book-id').value)" class="hidden px-5 py-2.5 text-red-600 font-bold hover:bg-red-50 rounded-xl transition-colors"><i data-lucide="trash-2" class="w-4 h-4 inline mr-2"></i> Excluir</button>
-                <div class="flex gap-3 ml-auto">
-                    <button onclick="window.closeBookEditor()" class="px-6 py-2.5 border border-gray-300 text-gray-800 rounded-xl font-medium hover:bg-gray-100">Cancelar</button>
-                    <button onclick="window.saveBook()" id="btn-save-book" class="px-8 py-2.5 bg-green-700 hover:bg-green-800 text-white rounded-xl font-bold shadow-lg">Salvar Página do Livro</button>
-                </div>
-            </div>
-        </div>
-    </div>
 
-    <!-- Toast Notification -->
-    <div id="toast" class="fixed bottom-6 right-6 bg-green-700 text-white px-8 py-4 rounded-2xl shadow-2xl transform transition-transform duration-300 translate-y-32 opacity-0 z-50 flex items-center gap-3 font-bold border-b-4 border-green-900">
-        <i data-lucide="check-circle" class="w-6 h-6"></i> <span id="toast-msg">Ação concluída!</span>
+                <!-- NOVA SEÇÃO: Moderação e Métricas (ZIG) -->
+                <div class="border-t border-gray-200 pt-6 mt-2">
+                    <h4 class="text-sm font-bold text-gray-900 mb-4"><i data-lucide="shield-alert" class="w-4 h-4 inline mr-1 text-red-600"></i> Moderação e Métricas</h4>
+                    <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-4">
+                        <div>
+                            <label class="block text-xs font-bold text-gray-500 uppercase tracking-wider mb-1">Total de Curtidas</label>
+                            <input type="number" id="book-likes" class="w-full border border-gray-300 bg-white rounded-xl px-4 py-2.5 outline-none focus:ring-2 focus:ring-green-700" value="0">
+                        </div>
+                    </div>
+                    <div id="book-moderation-section" class="hidden">
+                        <label class="block text-xs font-bold text-gray-500 uppercase tracking-wider mb-2">Comentários Ativos (Clique na lixeira para apagar)</label>
+                        <div id="book-comments-moderation" class="flex flex-col gap-2 max-h-[250px] overflow-y-auto bg-gray-50 p-3 rounded-xl border border-gray-200 shadow-inner">
+                            <!-- Comentários injetados via JS -->
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+            <div class="p-6 border-t bg-gray-50 flex justify-between"><button id="btn-delete-book" onclick="window.deleteBook(document.getElementById('edit-book-id').value)" class="text-red-600 font-bold px-4">Remover Obra</button><div class="flex gap-3 ml-auto"><button onclick="window.closeBookEditor()" class="px-6 py-2.5 border rounded-xl font-medium hover:bg-gray-100">Cancelar</button><button onclick="window.saveBook()" id="btn-save-book" class="px-8 py-2.5 bg-green-700 text-white rounded-xl font-bold shadow-lg hover:bg-green-800">Salvar Livro</button></div></div>
+        </div>
     </div>
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
         import { getAuth, onAuthStateChanged, signInAnonymously, signInWithCustomToken } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
-        import { getFirestore, collection, onSnapshot, addDoc, updateDoc, deleteDoc, doc, arrayUnion, increment } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+        import { getFirestore, collection, onSnapshot, addDoc, updateDoc, deleteDoc, doc, arrayUnion, arrayRemove, increment } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
 
         const firebaseConfig = { apiKey: "AIzaSyCg5aIHRDyOPHDwrP_OFYMn2AE9euWVOyw", authDomain: "professorluizhenrique-a9fe9.firebaseapp.com", projectId: "professorluizhenrique-a9fe9", storageBucket: "professorluizhenrique-a9fe9.firebasestorage.app", messagingSenderId: "354928637639", appId: "1:354928637639:web:fd144793b51237618ff0e2" };
         const ADMIN_PASSWORD = "Biguidu2013@"; 
@@ -429,6 +433,7 @@
         window.currentCategoryFilter = null;
         window.currentOpenBookId = null;
         window.currentEditorId = 'post-fulltext';
+        window.deepLinkChecked = false;
 
         const app = initializeApp(firebaseConfig);
         const auth = getAuth(app);
@@ -449,13 +454,11 @@
             const allCats = [...new Set([...dbCats, ...postCats])].sort();
             
             const sidebarList = document.getElementById('categories-list');
-            if(sidebarList) {
-                sidebarList.innerHTML = allCats.map(c => `<a href="#" onclick="window.filterByCategory('${c.replace(/'/g, "\\'")}'); window.toggleMobileMenu(); return false;" class="hover:sys-text-accent py-2 flex items-center gap-3 font-bold text-base transition-colors"><i data-lucide="folder-open" class="w-4 h-4"></i> ${c}</a>`).join('') || '<span class="text-xs italic sys-text-secondary">Nenhuma pasta encontrada.</span>'; 
-            }
+            if(sidebarList) sidebarList.innerHTML = allCats.map(c => `<a href="#" onclick="window.filterByCategory('${c.replace(/'/g, "\\'")}'); window.toggleMobileMenu(); return false;" class="hover:sys-text-accent py-2 flex items-center gap-3 font-bold text-base transition-colors"><i data-lucide="folder-open" class="w-4 h-4"></i> ${c}</a>`).join('') || '<span class="text-xs italic sys-text-secondary">Nenhuma pasta.</span>'; 
+            
             const bottomList = document.getElementById('bottom-categories-list');
-            if(bottomList) {
-                bottomList.innerHTML = allCats.map(c => `<button onclick="window.filterByCategory('${c.replace(/'/g, "\\'")}'); window.toggleCategoriesModal();" class="w-full text-left px-5 py-4 sys-bg-body sys-text-primary hover:sys-text-accent font-black rounded-2xl transition-colors flex items-center gap-3 border sys-border shadow-sm"><i data-lucide="folder-open" class="w-5 h-5"></i> ${c}</button>`).join('') || '<p class="text-sm sys-text-secondary text-center py-4">Nenhuma pasta encontrada.</p>';
-            }
+            if(bottomList) bottomList.innerHTML = allCats.map(c => `<button onclick="window.filterByCategory('${c.replace(/'/g, "\\'")}'); window.toggleCategoriesModal(true);" class="w-full text-left px-5 py-4 sys-bg-body sys-text-primary hover:sys-text-accent font-black rounded-2xl transition-colors flex items-center gap-3 border sys-border shadow-sm"><i data-lucide="folder-open" class="w-5 h-5"></i> ${c}</button>`).join('') || '<p class="text-sm sys-text-secondary text-center py-4">Nenhuma pasta.</p>';
+            
             lucide.createIcons(); 
         };
 
@@ -473,8 +476,7 @@
                         window.blogPosts = []; snapshot.forEach(doc => { window.blogPosts.push({ id: doc.id, ...doc.data() }); });
                         window.blogPosts.sort((a, b) => (b.createdAt || 0) - (a.createdAt || 0));
                         window.updateCategoriesMenu(); window.renderPostsFeed();
-                        if (!document.getElementById('dashboard-modal').classList.contains('hidden') && !document.getElementById('admin-view-posts').classList.contains('hidden')) { window.renderAdminList(); }
-                        // Só executa o deeplink na primeira carga com sucesso
+                        if (!document.getElementById('dashboard-modal').classList.contains('hidden') && !document.getElementById('admin-view-posts').classList.contains('hidden')) window.renderAdminList();
                         if(!window.deepLinkChecked) { window.checkDeepLink(); window.deepLinkChecked = true; }
                     });
 
@@ -482,17 +484,15 @@
                         window.siteCategories = []; snapshot.forEach(doc => { window.siteCategories.push({ id: doc.id, ...doc.data() }); });
                         window.siteCategories.sort((a, b) => (a.createdAt || 0) - (b.createdAt || 0));
                         window.updateCategoriesMenu();
-                        if (!document.getElementById('dashboard-modal').classList.contains('hidden') && !document.getElementById('admin-view-categories').classList.contains('hidden')) { window.renderAdminCategories(); }
+                        if (!document.getElementById('dashboard-modal').classList.contains('hidden') && !document.getElementById('admin-view-categories').classList.contains('hidden')) window.renderAdminCategories();
                     });
 
                     onSnapshot(collection(db, 'artifacts', appId, 'public', 'data', 'books'), (snapshot) => {
                         window.siteBooks = []; snapshot.forEach(doc => { window.siteBooks.push({ id: doc.id, ...doc.data() }); });
                         window.siteBooks.sort((a, b) => (b.createdAt || 0) - (a.createdAt || 0)); 
                         window.renderLibrary();
-                        if(window.currentOpenBookId && !document.getElementById('book-detail-view').classList.contains('hidden')) {
-                            window.renderBookDetailContent(window.currentOpenBookId);
-                        }
-                        if (!document.getElementById('dashboard-modal').classList.contains('hidden') && !document.getElementById('admin-view-books').classList.contains('hidden')) { window.renderAdminBooks(); }
+                        if(window.currentOpenBookId && !document.getElementById('book-detail-view').classList.contains('hidden')) window.renderBookDetailContent(window.currentOpenBookId);
+                        if (!document.getElementById('dashboard-modal').classList.contains('hidden') && !document.getElementById('admin-view-books').classList.contains('hidden')) window.renderAdminBooks();
                     });
                 }
             });
@@ -503,12 +503,12 @@
         window.cycleFontSize = () => { const html = document.documentElement; let newSize = html.classList.contains('font-size-normal') ? 'large' : (html.classList.contains('font-size-large') ? 'xlarge' : 'normal'); html.className = html.className.replace(/font-size-\w+/g, '') + ' font-size-' + newSize; localStorage.setItem('site-font-size', newSize); };
         document.addEventListener('click', (e) => { const menu = document.getElementById('theme-menu'); if (menu && !menu.classList.contains('hidden') && !e.target.closest('.relative')) menu.classList.add('hidden'); });
 
-        window.showHome = () => { ['article-view','library-view','book-detail-view'].forEach(id=>document.getElementById(id).classList.add('hidden')); document.getElementById('home-view').classList.remove('hidden'); window.currentOpenBookId = null; window.renderPostsFeed(); };
-        window.showLibrary = () => { ['home-view','article-view','book-detail-view'].forEach(id=>document.getElementById(id).classList.add('hidden')); document.getElementById('library-view').classList.remove('hidden'); window.currentOpenBookId = null; };
+        window.showHome = () => { ['article-view','library-view','book-detail-view'].forEach(id=>document.getElementById(id).classList.add('hidden')); document.getElementById('home-view').classList.remove('hidden'); window.currentOpenBookId = null; window.renderPostsFeed(); window.scrollTo(0,0); };
+        window.showLibrary = () => { ['home-view','article-view','book-detail-view'].forEach(id=>document.getElementById(id).classList.add('hidden')); document.getElementById('library-view').classList.remove('hidden'); window.currentOpenBookId = null; window.scrollTo(0,0); };
         
         window.toggleMobileMenu = () => { const sidebar = document.getElementById('sidebar-menu'); const overlay = document.getElementById('sidebar-overlay'); if (sidebar.classList.contains('-translate-x-full')) { sidebar.classList.remove('-translate-x-full'); overlay.classList.remove('hidden'); setTimeout(() => overlay.classList.remove('opacity-0'), 10); } else { sidebar.classList.add('-translate-x-full'); overlay.classList.add('opacity-0'); setTimeout(() => overlay.classList.add('hidden'), 300); } };
         window.toggleCategories = (e) => { if(e) e.stopPropagation(); const list = document.getElementById('categories-list'); const chevron = document.getElementById('cat-chevron'); if(list) list.classList.toggle('hidden'); if(chevron) chevron.classList.toggle('rotate-180'); };
-        window.toggleCategoriesModal = () => { const modal = document.getElementById('categories-modal'); const inner = modal.querySelector('.slide-up-animation'); if(modal.classList.contains('hidden')) { modal.classList.remove('hidden'); setTimeout(() => inner.classList.remove('translate-y-full'), 10); } else { inner.classList.add('translate-y-full'); setTimeout(() => modal.classList.add('hidden'), 300); } };
+        window.toggleCategoriesModal = (forceClose) => { const modal = document.getElementById('categories-modal'); const inner = modal.querySelector('.slide-up-animation'); if(modal.classList.contains('hidden') && !forceClose) { modal.classList.remove('hidden'); setTimeout(() => inner.classList.remove('translate-y-full'), 10); } else { inner.classList.add('translate-y-full'); setTimeout(() => modal.classList.add('hidden'), 300); } };
 
         window.filterByCategory = (cat) => { window.currentCategoryFilter = cat; window.showHome(); };
         window.clearFilter = () => { window.currentCategoryFilter = null; window.showHome(); };
@@ -528,10 +528,17 @@
             lucide.createIcons();
         };
 
-        // LIVROS (GERENCIAMENTO DE FORMATOS)
+        window.toggleBookPriceMode = () => {
+            const mode = document.querySelector('input[name="book_price_mode"]:checked').value;
+            document.getElementById('book-has-physical').checked = (mode==='paid');
+            document.getElementById('book-has-ebook').checked = true;
+            window.toggleBookFormats();
+        };
+
         window.toggleBookFormats = () => {
             const hasPhys = document.getElementById('book-has-physical').checked;
             const hasEb = document.getElementById('book-has-ebook').checked;
+            const mode = document.querySelector('input[name="book_price_mode"]:checked').value;
             
             const physBlock = document.getElementById('book-physical-fields');
             const ebBlock = document.getElementById('book-ebook-fields');
@@ -539,24 +546,25 @@
             if(hasPhys) { physBlock.classList.remove('opacity-50', 'pointer-events-none'); document.getElementById('book-price-physical').disabled = false; document.getElementById('book-link-physical').disabled = false; }
             else { physBlock.classList.add('opacity-50', 'pointer-events-none'); document.getElementById('book-price-physical').disabled = true; document.getElementById('book-link-physical').disabled = true; }
             
-            if(hasEb) { ebBlock.classList.remove('opacity-50', 'pointer-events-none'); document.getElementById('book-price-ebook').disabled = false; document.getElementById('book-link-ebook').disabled = false; }
+            if(hasEb) { ebBlock.classList.remove('opacity-50', 'pointer-events-none'); document.getElementById('book-price-ebook').disabled = (mode==='free'); document.getElementById('book-link-ebook').disabled = false; document.getElementById('book-price-ebook').value = (mode==='free'?'Gratuito':document.getElementById('book-price-ebook').value); }
             else { ebBlock.classList.add('opacity-50', 'pointer-events-none'); document.getElementById('book-price-ebook').disabled = true; document.getElementById('book-link-ebook').disabled = true; }
         };
 
         window.openBookEditor = () => {
             window.currentEditorId = 'book-fulltext'; 
             document.getElementById('edit-book-id').value = '';
+            document.querySelector('input[name="book_price_mode"][value="paid"]').checked = true;
             
-            document.getElementById('book-has-physical').checked = true;
-            document.getElementById('book-has-ebook').checked = false;
-            window.toggleBookFormats();
-
-            ['title', 'subtitle', 'pages', 'cover', 'price-physical', 'link-physical', 'price-ebook', 'link-ebook', 'sample'].forEach(f => {
-                const el = document.getElementById('book-'+f); if(el) el.value = '';
+            ['title', 'subtitle', 'pages', 'cover', 'price-physical', 'link-physical', 'price-ebook', 'link-ebook', 'sample', 'likes'].forEach(f => {
+                const el = document.getElementById('book-'+f); if(el) el.value = f==='likes' ? '0' : '';
             });
             document.getElementById('book-fulltext').innerHTML = '';
             
-            document.getElementById('book-editor-title').innerText = "Adicionar Livro / Isca";
+            document.getElementById('book-moderation-section').classList.add('hidden');
+            document.getElementById('book-comments-moderation').innerHTML = '';
+            
+            window.toggleBookPriceMode();
+            document.getElementById('book-editor-title').innerText = "Adicionar Livro";
             document.getElementById('btn-delete-book').classList.add('hidden');
             document.getElementById('book-editor-modal').classList.remove('hidden');
         };
@@ -566,11 +574,14 @@
         window.saveBook = async () => {
             const btn = document.getElementById('btn-save-book'); btn.disabled = true;
             const id = document.getElementById('edit-book-id').value;
+            const mode = document.querySelector('input[name="book_price_mode"]:checked').value;
             
             const hasPhysical = document.getElementById('book-has-physical').checked;
             const hasEbook = document.getElementById('book-has-ebook').checked;
 
             if(!hasPhysical && !hasEbook) { alert("Você deve selecionar pelo menos um formato (Físico ou E-book)."); btn.disabled = false; return; }
+
+            const likesCount = parseInt(document.getElementById('book-likes').value) || 0;
 
             const data = {
                 title: document.getElementById('book-title').value || "Livro sem título",
@@ -579,19 +590,21 @@
                 cover: document.getElementById('book-cover').value || "",
                 sampleLink: document.getElementById('book-sample').value || "",
                 fullText: document.getElementById('book-fulltext').innerHTML || "",
+                priceMode: mode,
+                likes: likesCount,
                 
                 hasPhysical: hasPhysical,
                 pricePhysical: hasPhysical ? document.getElementById('book-price-physical').value : "",
                 linkPhysical: hasPhysical ? document.getElementById('book-link-physical').value : "",
                 
                 hasEbook: hasEbook,
-                priceEbook: hasEbook ? document.getElementById('book-price-ebook').value : "",
+                priceEbook: hasEbook ? (mode==='free'?'Gratuito':document.getElementById('book-price-ebook').value) : "",
                 linkEbook: hasEbook ? document.getElementById('book-link-ebook').value : ""
             };
 
             try {
                 if (id) { await updateDoc(doc(db, 'artifacts', appId, 'public', 'data', 'books', id), data); } 
-                else { await addDoc(collection(db, 'artifacts', appId, 'public', 'data', 'books'), { ...data, likes: 0, comments: [], createdAt: Date.now() }); }
+                else { await addDoc(collection(db, 'artifacts', appId, 'public', 'data', 'books'), { ...data, comments: [], createdAt: Date.now() }); }
                 window.closeBookEditor();
             } catch (e) { alert("Erro: " + e.message); } finally { btn.disabled = false; }
         };
@@ -601,14 +614,11 @@
             const b = window.siteBooks.find(x => x.id === id);
             document.getElementById('edit-book-id').value = b.id;
             
+            const mode = b.priceMode || 'paid';
+            document.querySelector(`input[name="book_price_mode"][value="${mode}"]`).checked = true;
+
             document.getElementById('book-has-physical').checked = !!b.hasPhysical;
             document.getElementById('book-has-ebook').checked = !!b.hasEbook;
-            // Legado: suporte para livros antigos
-            if(b.hasPhysical === undefined && b.hasEbook === undefined) {
-                if(b.format === 'Físico e E-book') { document.getElementById('book-has-physical').checked = true; document.getElementById('book-has-ebook').checked = true; }
-                else if (b.format === 'E-book' || b.priceMode === 'free') { document.getElementById('book-has-physical').checked = false; document.getElementById('book-has-ebook').checked = true; }
-                else { document.getElementById('book-has-physical').checked = true; document.getElementById('book-has-ebook').checked = false; }
-            }
             window.toggleBookFormats();
 
             document.getElementById('book-title').value = b.title || '';
@@ -616,21 +626,62 @@
             document.getElementById('book-pages').value = b.pages || '';
             document.getElementById('book-cover').value = b.cover || '';
             document.getElementById('book-sample').value = b.sampleLink || '';
+            document.getElementById('book-likes').value = b.likes || 0;
             
-            document.getElementById('book-price-physical').value = b.pricePhysical || (b.hasPhysical===undefined && b.priceMode!=='free' ? b.price : '');
-            document.getElementById('book-link-physical').value = b.linkPhysical || (b.hasPhysical===undefined && b.priceMode!=='free' ? b.link : '');
+            document.getElementById('book-price-physical').value = b.pricePhysical || '';
+            document.getElementById('book-link-physical').value = b.linkPhysical || '';
             
-            document.getElementById('book-price-ebook').value = b.priceEbook || (b.hasEbook===undefined && b.priceMode==='free' ? 'Gratuito' : '');
-            document.getElementById('book-link-ebook').value = b.linkEbook || (b.hasEbook===undefined && b.priceMode==='free' ? b.link : '');
+            document.getElementById('book-price-ebook').value = b.priceEbook || (mode==='free'?'Gratuito':'');
+            document.getElementById('book-link-ebook').value = b.linkEbook || '';
 
-            document.getElementById('book-fulltext').innerHTML = b.fullText || b.desc || ''; 
+            document.getElementById('book-fulltext').innerHTML = b.fullText || ''; 
+            
+            // Renderiza Seção de Moderação
+            const modSec = document.getElementById('book-moderation-section');
+            const modCont = document.getElementById('book-comments-moderation');
+            if(b.comments && b.comments.length > 0) {
+                modSec.classList.remove('hidden');
+                modCont.innerHTML = b.comments.map(c => `
+                    <div class="flex justify-between items-center bg-white p-3 rounded-lg border border-gray-200 shadow-sm gap-3">
+                        <div class="truncate flex-1">
+                            <p class="text-xs font-black text-gray-800 mb-0.5">${c.name.replace(/</g, "&lt;")}</p>
+                            <p class="text-xs text-gray-600 truncate">${c.text.replace(/</g, "&lt;")}</p>
+                        </div>
+                        <button type="button" onclick="window.deleteBookComment('${b.id}', ${c.date})" class="p-2 bg-red-50 text-red-600 rounded-lg hover:bg-red-100 transition-colors shrink-0" title="Apagar Comentário">
+                            <i data-lucide="trash-2" class="w-4 h-4"></i>
+                        </button>
+                    </div>
+                `).reverse().join('');
+            } else {
+                modSec.classList.add('hidden');
+                modCont.innerHTML = '';
+            }
             
             document.getElementById('book-editor-title').innerText = "Editar Livro / Página de Vendas";
             document.getElementById('btn-delete-book').classList.remove('hidden');
             document.getElementById('book-editor-modal').classList.remove('hidden');
+            lucide.createIcons();
         };
 
         window.deleteBook = async (id) => { if (confirm("Deseja remover este livro da biblioteca?")) { await deleteDoc(doc(db, 'artifacts', appId, 'public', 'data', 'books', id)); window.closeBookEditor(); } };
+
+        window.deleteBookComment = async (bookId, commentDate) => {
+            if(!confirm("Tem certeza que deseja apagar este comentário? Esta ação é irreversível.")) return;
+            const b = window.siteBooks.find(x => x.id === bookId);
+            if(!b) return;
+            const commentToRemove = b.comments.find(c => c.date === commentDate);
+            if(commentToRemove) {
+                try {
+                    await updateDoc(doc(db, 'artifacts', appId, 'public', 'data', 'books', bookId), {
+                        comments: arrayRemove(commentToRemove)
+                    });
+                    window.showToast("Comentário apagado com sucesso.");
+                    // Fecha o modal e abre de novo para atualizar a lista visualmente
+                    window.closeBookEditor();
+                    setTimeout(() => window.editBook(bookId), 100);
+                } catch(e) { console.error(e); }
+            }
+        };
 
         window.renderAdminBooks = () => {
             const list = document.getElementById('admin-books-list');
@@ -638,15 +689,14 @@
                 let badge = '';
                 if(b.hasPhysical && b.hasEbook) badge = 'Físico e E-book'; else if(b.hasPhysical) badge = 'Físico'; else badge = 'E-book';
                 return `
-                <div class="flex items-center gap-4 p-3 border border-gray-200 rounded-xl bg-white shadow-sm">
+                <div class="flex items-center gap-4 p-3 border border-gray-200 rounded-xl bg-white shadow-sm cursor-pointer hover:border-green-600 transition-colors" onclick="window.editBook('${b.id}')">
                     <img src="${window.getDriveImageUrl(b.cover)}" class="w-12 h-16 object-cover rounded bg-gray-100" onerror="this.src='https://via.placeholder.com/48x64?text=Livro'">
                     <div class="flex-1 truncate">
                         <p class="font-bold text-gray-900 text-sm truncate">${b.title}</p>
                         <p class="text-xs text-blue-600 mt-0.5 font-bold uppercase tracking-wider">${badge}</p>
                     </div>
                     <div class="flex gap-2 shrink-0">
-                        <button onclick="window.editBook('${b.id}')" class="p-2 bg-blue-50 text-blue-900 rounded-lg hover:bg-blue-100 transition-colors"><i data-lucide="edit-3" class="w-4 h-4"></i></button>
-                        <button onclick="window.deleteBook('${b.id}')" class="p-2 bg-red-50 text-red-600 rounded-lg hover:bg-red-100 transition-colors"><i data-lucide="trash-2" class="w-4 h-4"></i></button>
+                        <button class="p-2 bg-blue-50 text-blue-900 rounded-lg"><i data-lucide="edit-3" class="w-4 h-4"></i></button>
                     </div>
                 </div>`;
             }).join('') || '<p class="col-span-full text-center text-gray-400 py-6">Nenhum livro cadastrado.</p>';
@@ -661,7 +711,7 @@
             }
             container.innerHTML = window.siteBooks.map(b => {
                 let badgeFormat = ''; if(b.hasPhysical && b.hasEbook) badgeFormat = 'FÍSICO E E-BOOK'; else if(b.hasPhysical) badgeFormat = 'LIVRO FÍSICO'; else badgeFormat = 'E-BOOK';
-                let isFree = (b.hasEbook && (b.priceEbook||'').toLowerCase().includes('gratuito')) || b.priceMode === 'free';
+                let isFree = b.priceMode === 'free';
                 let topBadge = isFree ? `<div class="absolute top-2 right-2 bg-blue-600 text-white text-[10px] sm:text-xs font-black px-2 py-1 rounded-lg shadow-md tracking-wide uppercase">GRATUITO</div>` : '';
                 
                 return `
@@ -690,58 +740,42 @@
         window.renderBookDetailContent = (id) => {
             const b = window.siteBooks.find(x => x.id === id); if (!b) return;
 
-            // Variáveis seguras com fallback para modelos legados
-            const hasPhys = b.hasPhysical !== undefined ? b.hasPhysical : (b.format === 'Físico' || b.format === 'Físico e E-book' || b.priceMode === 'paid');
-            const hasEb = b.hasEbook !== undefined ? b.hasEbook : (b.format === 'E-book' || b.format === 'Físico e E-book' || b.priceMode === 'free');
-            
-            const pPhys = b.pricePhysical || (b.priceMode !== 'free' ? b.price : '');
-            const pEb = b.priceEbook || (b.priceMode === 'free' ? 'Gratuito' : '');
-            
-            const lPhys = (b.linkPhysical || (b.priceMode !== 'free' ? b.link : '#')).trim();
-            const lEb = (b.linkEbook || (b.priceMode === 'free' ? b.link : '#')).trim();
-            const safeLPhys = lPhys.startsWith('http') ? lPhys : 'https://'+lPhys;
-            const safeLEb = lEb.startsWith('http') ? lEb : 'https://'+lEb;
-
+            const isFree = b.priceMode === 'free';
             const safeSample = b.sampleLink ? (b.sampleLink.startsWith('http') ? b.sampleLink : 'https://' + b.sampleLink) : '';
             const likesCount = b.likes || 0;
             const commentsList = b.comments || [];
 
-            // Construtor da Tabela
             let tableRows = '';
-            if(hasPhys) {
-                tableRows += `<tr class="border-b sys-border"><td class="p-3 font-medium flex items-center gap-2"><i data-lucide="book" class="w-4 h-4"></i> Livro Físico</td><td class="p-3 font-black sys-text-accent">${pPhys || '-'}</td></tr>`;
-            }
-            if(hasEb) {
-                let colorClass = (pEb.toLowerCase().includes('grátis') || pEb.toLowerCase().includes('gratuito')) ? 'text-green-600' : 'sys-text-accent';
-                tableRows += `<tr><td class="p-3 font-medium flex items-center gap-2"><i data-lucide="smartphone" class="w-4 h-4"></i> E-book</td><td class="p-3 font-black ${colorClass}">${pEb || '-'}</td></tr>`;
-            }
-            const tableHtml = tableRows ? `<div class="border sys-border rounded-xl overflow-hidden mb-6"><table class="w-full text-left text-sm"><thead class="sys-bg-body border-b sys-border"><tr><th class="p-3 font-bold text-gray-500 uppercase tracking-widest text-[10px]">Formato</th><th class="p-3 font-bold text-gray-500 uppercase tracking-widest text-[10px]">Valor</th></tr></thead><tbody>${tableRows}</tbody></table></div>` : '';
-
-            // Construtor de Botões (Call to Actions)
             let buttonsHtml = '';
-            if (hasPhys) {
-                buttonsHtml += `<a href="${safeLPhys}" target="_blank" class="w-full flex justify-center items-center gap-2 sys-bg-accent text-white py-4 px-6 rounded-xl font-black text-sm uppercase tracking-wide hover:opacity-90 shadow-xl transition-all hover:-translate-y-1 mb-3">Comprar Livro Físico <i data-lucide="shopping-cart" class="w-4 h-4"></i></a>`;
+
+            if(b.hasPhysical) {
+                tableRows += `<tr class="border-b sys-border"><td class="p-3 font-medium flex items-center gap-2"><i data-lucide="book" class="w-4 h-4"></i> Livro Físico</td><td class="p-3 font-black sys-text-accent">${b.pricePhysical || '-'}</td></tr>`;
+                const lPhys = (b.linkPhysical||'#').startsWith('http') ? b.linkPhysical : 'https://'+b.linkPhysical;
+                buttonsHtml += `<a href="${lPhys}" target="_blank" class="w-full flex justify-center items-center gap-2 sys-bg-accent text-white py-4 px-6 rounded-xl font-black text-sm uppercase tracking-wide hover:opacity-90 shadow-xl transition-all hover:-translate-y-1 mb-3">Comprar Livro Físico <i data-lucide="shopping-cart" class="w-4 h-4"></i></a>`;
             }
-            if (hasEb) {
-                let isEbFree = (pEb.toLowerCase().includes('gratuito') || pEb.toLowerCase().includes('grátis'));
-                let btnTxt = isEbFree ? 'Baixar E-book Grátis' : 'Comprar E-book';
-                let bgClass = isEbFree ? 'bg-blue-700 hover:bg-blue-800' : 'sys-bg-accent hover:opacity-90';
-                buttonsHtml += `<a href="${safeLEb}" target="_blank" class="w-full flex justify-center items-center gap-2 ${bgClass} text-white py-4 px-6 rounded-xl font-black text-sm uppercase tracking-wide shadow-xl transition-all hover:-translate-y-1 mb-3"><i data-lucide="download" class="w-4 h-4"></i> ${btnTxt}</a>`;
+            if(b.hasEbook) {
+                let colorClass = isFree ? 'text-blue-600' : 'sys-text-accent';
+                tableRows += `<tr><td class="p-3 font-medium flex items-center gap-2"><i data-lucide="smartphone" class="w-4 h-4"></i> E-book</td><td class="p-3 font-black ${colorClass}">${isFree ? 'GRATUITO' : (b.priceEbook || '-')}</td></tr>`;
+                const lEb = (b.linkEbook||'#').startsWith('http') ? b.linkEbook : 'https://'+b.linkEbook;
+                let bgClass = isFree ? 'bg-blue-700 hover:bg-blue-800' : 'sys-bg-accent hover:opacity-90';
+                let txt = isFree ? 'Baixar E-book Grátis' : 'Comprar E-book';
+                let icn = isFree ? 'download' : 'shopping-cart';
+                buttonsHtml += `<a href="${lEb}" target="_blank" class="w-full flex justify-center items-center gap-2 ${bgClass} text-white py-4 px-6 rounded-xl font-black text-sm uppercase tracking-wide shadow-xl transition-all hover:-translate-y-1 mb-3">${txt} <i data-lucide="${icn}" class="w-4 h-4"></i></a>`;
             }
-            if (safeSample) {
+            if (safeSample && !isFree) {
                 buttonsHtml += `<a href="${safeSample}" target="_blank" class="w-full flex justify-center items-center gap-2 sys-bg-surface sys-text-primary border-2 sys-border py-4 px-6 rounded-xl font-bold text-sm uppercase tracking-wide hover:bg-gray-50 transition-all mb-3"><i data-lucide="file-text" class="w-4 h-4"></i> Ler Amostra Grátis</a>`;
             }
+
+            const tableHtml = tableRows ? `<div class="border sys-border rounded-xl overflow-hidden mb-6"><table class="w-full text-left text-sm"><thead class="sys-bg-body border-b sys-border"><tr><th class="p-3 font-bold text-gray-500 uppercase tracking-widest text-[10px]">Formato</th><th class="p-3 font-bold text-gray-500 uppercase tracking-widest text-[10px]">Valor</th></tr></thead><tbody>${tableRows}</tbody></table></div>` : '';
 
             const html = `
                 <div class="flex flex-col md:flex-row gap-8 lg:gap-12 mb-12">
                     <div class="w-full md:w-1/3 flex flex-col gap-6">
-                        <!-- Imagem com largura em 90% centralizada -->
                         <div class="aspect-[2/3] w-[90%] mx-auto md:w-full rounded-2xl overflow-hidden shadow-2xl sys-border border">
                             <img src="${window.getDriveImageUrl(b.cover)}" class="w-full h-full object-cover" onerror="this.src='https://via.placeholder.com/400x600?text=Capa'">
                         </div>
-                        
                         <div class="flex items-center justify-center gap-6 sys-bg-surface p-4 rounded-2xl sys-border border shadow-sm w-[90%] mx-auto md:w-full">
-                            <button onclick="window.likeBook('${b.id}')" class="flex flex-col items-center gap-1 text-red-500 hover:scale-110 active:scale-95 transition-transform">
+                            <button onclick="window.likeBook('${b.id}')" class="flex flex-col items-center gap-1 text-red-500 hover:scale-110 active:scale-95 transition-transform" title="Curtir Obra">
                                 <i data-lucide="heart" class="w-6 h-6 fill-current"></i>
                                 <span class="text-xs font-black">${likesCount}</span>
                             </button>
@@ -755,43 +789,28 @@
 
                     <div class="w-full md:w-2/3 flex flex-col">
                         <h1 class="text-3xl sm:text-4xl font-black sys-text-primary leading-tight mb-2">${b.title}</h1>
-                        ${b.pages ? `<p class="sys-text-secondary font-bold text-sm mb-6">${b.pages} Páginas</p>` : ''}
-                        
+                        ${b.pages ? `<p class="sys-text-secondary font-bold text-sm mb-6">${b.pages} Páginas</p>` : '<div class="mb-4"></div>'}
                         ${tableHtml}
-                        
-                        <div class="prose max-w-none sys-text-primary text-base sm:text-lg opacity-90 leading-relaxed mb-8 whitespace-pre-wrap">${b.fullText || b.desc || 'Sem sinopse disponível.'}</div>
-                        
-                        <div class="flex flex-col mt-auto border-t sys-border pt-8">
-                            ${buttonsHtml}
-                        </div>
+                        <div class="prose max-w-none sys-text-primary text-base sm:text-lg opacity-90 leading-relaxed mb-8">${b.fullText || 'Sem detalhes disponíveis.'}</div>
+                        <div class="flex flex-col mt-auto border-t sys-border pt-8">${buttonsHtml}</div>
                     </div>
                 </div>
 
                 <div class="border-t sys-border pt-10">
-                    <h3 class="text-2xl font-black sys-text-primary mb-6 flex items-center gap-2"><i data-lucide="message-square" class="w-6 h-6 sys-text-accent"></i> Comentários dos Leitores</h3>
-                    
+                    <h3 class="text-2xl font-black sys-text-primary mb-6 flex items-center gap-2"><i data-lucide="message-square" class="w-6 h-6 sys-text-accent"></i> Comentários</h3>
                     <div class="sys-bg-surface p-5 sm:p-6 rounded-2xl sys-border border shadow-sm mb-8">
-                        <p class="text-sm font-bold sys-text-primary mb-4">Deixe o seu comentário</p>
                         <div class="flex flex-col gap-3">
                             <input type="text" id="comment-name-${b.id}" placeholder="Seu nome" class="w-full border border-gray-300 rounded-xl px-4 py-3 outline-none focus:ring-2 focus:ring-blue-900 bg-white text-gray-900 text-sm">
                             <textarea id="comment-text-${b.id}" rows="3" placeholder="O que você achou desta obra?" class="w-full border border-gray-300 rounded-xl px-4 py-3 outline-none focus:ring-2 focus:ring-blue-900 bg-white text-gray-900 resize-none text-sm"></textarea>
-                            <button onclick="window.submitBookComment('${b.id}')" class="self-end bg-blue-900 hover:bg-blue-950 text-white px-6 py-2.5 rounded-xl font-bold text-sm transition-colors flex items-center gap-2">
-                                Enviar <i data-lucide="send" class="w-4 h-4"></i>
-                            </button>
+                            <button onclick="window.submitBookComment('${b.id}')" class="self-end bg-blue-900 hover:bg-blue-950 text-white px-6 py-2.5 rounded-xl font-bold text-sm transition-colors flex items-center gap-2">Enviar <i data-lucide="send" class="w-4 h-4"></i></button>
                         </div>
                     </div>
-
                     <div class="flex flex-col gap-4">
                         ${commentsList.length > 0 ? commentsList.map(c => `
                             <div class="flex gap-4 p-4 sys-bg-body rounded-2xl border sys-border">
-                                <div class="w-10 h-10 rounded-full sys-bg-surface flex items-center justify-center border sys-border shrink-0">
-                                    <i data-lucide="user" class="w-5 h-5 sys-text-secondary"></i>
-                                </div>
+                                <div class="w-10 h-10 rounded-full sys-bg-surface flex items-center justify-center border sys-border shrink-0"><i data-lucide="user" class="w-5 h-5 sys-text-secondary"></i></div>
                                 <div class="flex-1">
-                                    <div class="flex items-center gap-2 mb-1">
-                                        <p class="font-bold sys-text-primary text-sm">${c.name.replace(/</g, "&lt;")}</p>
-                                        <span class="text-[10px] sys-text-secondary">${new Date(c.date).toLocaleDateString('pt-BR')}</span>
-                                    </div>
+                                    <div class="flex items-center gap-2 mb-1"><p class="font-bold sys-text-primary text-sm">${c.name.replace(/</g, "&lt;")}</p><span class="text-[10px] sys-text-secondary">${new Date(c.date).toLocaleDateString('pt-BR')}</span></div>
                                     <p class="sys-text-secondary text-sm leading-relaxed">${c.text.replace(/</g, "&lt;")}</p>
                                 </div>
                             </div>
@@ -804,10 +823,18 @@
         };
 
         window.likeBook = async (id) => {
+            // ZIG: Sistema de bloqueio de curtida dupla (Memória do Navegador)
+            let likedBooks = JSON.parse(localStorage.getItem('plh_liked_books') || '[]');
+            if (likedBooks.includes(id)) {
+                window.showToast("Você já curtiu esta obra!");
+                return;
+            }
             try {
-                window.showToast("Curtida registrada!");
                 await updateDoc(doc(db, 'artifacts', appId, 'public', 'data', 'books', id), { likes: increment(1) });
-            } catch (e) {}
+                likedBooks.push(id);
+                localStorage.setItem('plh_liked_books', JSON.stringify(likedBooks));
+                window.showToast("Curtida registrada com sucesso!");
+            } catch (e) { console.error(e); }
         };
 
         window.submitBookComment = async (id) => {

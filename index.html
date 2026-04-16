@@ -547,7 +547,7 @@
         const ADMIN_PASSWORD = "Biguidu2013@"; 
         let blogPosts = [];
         let siteCategories = [];
-        let siteBooks = []; // Novo array de livros
+        let siteBooks = []; 
         let currentCategoryFilter = null;
 
         const app = initializeApp(firebaseConfig);
@@ -565,7 +565,6 @@
             
             onAuthStateChanged(auth, (user) => {
                 if (user) {
-                    // Posts
                     onSnapshot(collection(db, 'artifacts', appId, 'public', 'data', 'posts'), (snapshot) => {
                         blogPosts = []; snapshot.forEach(doc => { blogPosts.push({ id: doc.id, ...doc.data() }); });
                         blogPosts.sort((a, b) => (b.createdAt || 0) - (a.createdAt || 0));
@@ -574,7 +573,6 @@
                         checkDeepLink();
                     });
 
-                    // Categorias
                     onSnapshot(collection(db, 'artifacts', appId, 'public', 'data', 'categories'), (snapshot) => {
                         siteCategories = []; snapshot.forEach(doc => { siteCategories.push({ id: doc.id, ...doc.data() }); });
                         siteCategories.sort((a, b) => (a.createdAt || 0) - (b.createdAt || 0));
@@ -582,10 +580,9 @@
                         if (!document.getElementById('dashboard-modal').classList.contains('hidden') && !document.getElementById('admin-view-categories').classList.contains('hidden')) { window.renderAdminCategories(); }
                     });
 
-                    // Livros (Biblioteca)
                     onSnapshot(collection(db, 'artifacts', appId, 'public', 'data', 'books'), (snapshot) => {
                         siteBooks = []; snapshot.forEach(doc => { siteBooks.push({ id: doc.id, ...doc.data() }); });
-                        siteBooks.sort((a, b) => (b.createdAt || 0) - (a.createdAt || 0)); // Mais recentes primeiro
+                        siteBooks.sort((a, b) => (b.createdAt || 0) - (a.createdAt || 0)); 
                         renderLibrary();
                         if (!document.getElementById('dashboard-modal').classList.contains('hidden') && !document.getElementById('admin-view-books').classList.contains('hidden')) { window.renderAdminBooks(); }
                     });
@@ -601,7 +598,6 @@
             }
         }
 
-        /* SISTEMA VISUAL */
         window.toggleThemeMenu = (e) => { if(e) e.stopPropagation(); document.getElementById('theme-menu').classList.toggle('hidden'); };
         window.setSiteTheme = (theme) => {
             document.documentElement.className = document.documentElement.className.replace(/theme-\w+/g, '') + ' theme-' + theme;
@@ -617,7 +613,6 @@
             if (menu && !menu.classList.contains('hidden') && !e.target.closest('.relative')) menu.classList.add('hidden');
         });
 
-        /* NAVEGAÇÃO DE VIEWS */
         window.showHome = () => {
             document.getElementById('article-view').classList.add('hidden');
             document.getElementById('library-view').classList.add('hidden');
@@ -650,7 +645,6 @@
             }
         };
 
-        /* CATEGORIAS CRUD */
         window.createCategory = async () => {
             const input = document.getElementById('new-category-input'); const name = input.value.trim();
             if(name) { await addDoc(collection(db, 'artifacts', appId, 'public', 'data', 'categories'), { name, createdAt: Date.now() }); input.value = ''; }
@@ -674,7 +668,6 @@
             lucide.createIcons();
         };
 
-        /* LIVROS (BIBLIOTECA) CRUD */
         window.openBookEditor = () => {
             document.getElementById('edit-book-id').value = '';
             ['title', 'desc', 'price', 'btn-text', 'cover', 'link'].forEach(f => document.getElementById('book-'+f).value = f==='btn-text'?'Acessar':'');
@@ -762,7 +755,6 @@
             lucide.createIcons();
         };
 
-        /* ABAS DO PAINEL ADMIN */
         window.switchAdminTab = (tab) => {
             ['posts', 'books', 'categories'].forEach(t => {
                 document.getElementById('admin-view-'+t).classList.add('hidden');
@@ -775,7 +767,6 @@
             if(tab === 'categories') window.renderAdminCategories();
         };
 
-        /* REFLEXÕES CRUD */
         window.savePost = async () => {
             const btn = document.getElementById('btn-save-post'); const id = document.getElementById('edit-post-id').value; btn.disabled = true;
             const data = {
@@ -806,6 +797,8 @@
 
         window.renderPostsFeed = () => {
             const header = document.getElementById('feed-header');
+            const container = document.getElementById('feed-container'); 
+            
             if (currentCategoryFilter) header.innerHTML = `<div class="flex items-center gap-3"><button onclick="window.showHome()" class="p-2 sys-bg-surface sys-border border rounded-full hover:opacity-80"><i data-lucide="arrow-left" class="w-4 h-4 sys-text-secondary"></i></button><h2 class="text-3xl font-black sys-text-primary">Pasta: ${currentCategoryFilter}</h2></div>`;
             else header.innerHTML = `<h2 class="text-3xl font-black sys-text-primary mb-1">Reflexões</h2><p class="sys-text-secondary font-medium">Estudos e aprendizados sobre a Fé.</p>`;
             

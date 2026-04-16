@@ -9,7 +9,199 @@
     
     <title>Professor Luiz Henrique - Reflexões</title>
     
-    <!-- Metadados para Redes Sociais -->
+    <!-- Metadados para Redes Sociais --><!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <link rel="preconnect" href="https://www.gstatic.com">
+    <link rel="preconnect" href="https://firestore.googleapis.com">
+    
+    <title>Professor Luiz Henrique - Reflexões</title>
+    
+    <meta property="og:title" content="Professor Luiz Henrique - Reflexões de Fé">
+    <meta property="og:description" content="Estudos e aprendizados sobre a Fé. Palavras e reflexões diárias.">
+    <meta property="og:url" content="https://PROFESSORLUIZHENRIQUE.vercel.app/">
+    <meta property="og:image" content="https://SEU-DOMINIO-AQUI.vercel.app/foto-compartilhamento.jpg">
+    <meta property="og:image:type" content="image/jpeg">
+    <meta property="og:type" content="website">
+    <meta name="twitter:card" content="summary_large_image">
+    
+    <link rel="icon" type="image/jpeg" href="./foto-compartilhamento.jpg">
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        html { scroll-behavior: smooth; }
+        
+        .faq-content {
+            display: grid;
+            grid-template-rows: 0fr;
+            transition: grid-template-rows 0.4s ease-out;
+        }
+        .faq-content.open { grid-template-rows: 1fr; }
+        .faq-content-inner { overflow: hidden; }
+        
+        .chevron-icon { transition: transform 0.3s ease; }
+        .open .chevron-icon { transform: rotate(180deg); }
+
+        #mobile-menu {
+            transition: max-height 0.3s ease-in-out;
+            max-height: 0;
+            overflow: hidden;
+        }
+        #mobile-menu.menu-open { max-height: 500px; }
+
+        .modal-overlay {
+            background-color: rgba(0, 0, 0, 0.6);
+            backdrop-filter: blur(8px);
+        }
+        .hidden { display: none !important; }
+
+        .fade-enter {
+            animation: fadeIn 0.4s ease-in-out forwards;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Temas de Leitura Corrigidos para Contraste */
+        .theme-light { background-color: #ffffff; color: #1f2937; }
+        .theme-polen { background-color: #f4ecd8; color: #5f4b32; }
+        .theme-cafe { background-color: #3c2f2f; color: #e7d8c9; }
+        .theme-dark { background-color: #111827; color: #f3f4f6; }
+        
+        .theme-verde { background: linear-gradient(135deg, #064e3b 0%, #065f46 100%); color: #ffffff; }
+        .theme-azul { background: linear-gradient(135deg, #1e3a8a 0%, #1e40af 100%); color: #ffffff; }
+        .theme-vermelho { background: linear-gradient(135deg, #7f1d1d 0%, #991b1b 100%); color: #ffffff; }
+
+        .theme-verde .prose, .theme-azul .prose, .theme-vermelho .prose, .theme-dark .prose, .theme-cafe .prose {
+            color: inherit !important;
+        }
+        .theme-verde .prose h1, .theme-azul .prose h1, .theme-vermelho .prose h1,
+        .theme-verde .prose h2, .theme-azul .prose h2, .theme-vermelho .prose h2 {
+            color: #ffffff !important;
+        }
+
+        /* Tamanhos de Fonte */
+        .font-normal-view { font-size: 1.125rem; line-height: 1.75rem; }
+        .font-large-view { font-size: 1.35rem; line-height: 2.1rem; }
+        .font-xlarge-view { font-size: 1.6rem; line-height: 2.4rem; }
+
+        /* Botão Flutuante */
+        .floating-btn {
+            position: fixed;
+            bottom: 24px;
+            right: 24px;
+            z-index: 40;
+            transition: all 0.3s ease;
+        }
+        .floating-btn:hover { transform: translateY(-4px); box-shadow: 0 10px 20px rgba(0,0,0,0.2); }
+    </style>
+</head>
+<body class="bg-gray-100 text-gray-800 font-sans antialiased min-h-screen flex flex-col">
+
+    <header class="bg-white shadow-sm sticky top-0 z-20 flex-shrink-0">
+        <div class="max-w-3xl mx-auto px-4 py-4 flex items-center justify-between">
+            <a href="#" onclick="window.clearFilter(); window.closeArticle(); return false;" class="text-xl sm:text-2xl font-bold tracking-tight text-blue-900 flex items-center gap-2 truncate hover:opacity-80 transition-opacity">
+                <img src="./foto-compartilhamento.jpg" alt="Foto do Professor Luiz Henrique" class="w-8 h-8 rounded-full object-cover border-2 border-blue-900 shrink-0">
+                Professor Luiz Henrique
+            </a>
+            
+            <button onclick="window.toggleMobileMenu()" class="p-2 text-gray-600 hover:text-blue-900 focus:outline-none rounded-lg hover:bg-gray-100 transition-colors">
+                <i data-lucide="menu" class="w-6 h-6"></i>
+            </button>
+        </div>
+
+        <div id="mobile-menu" class="bg-white border-t border-gray-100 px-4 shadow-sm overflow-y-auto">
+            <nav class="flex flex-col py-4 gap-4 text-sm font-medium text-gray-600 max-w-3xl mx-auto">
+                <a href="#" onclick="window.clearFilter(); window.closeArticle(); window.toggleMobileMenu(); return false;" class="hover:text-blue-900 flex items-center gap-2 font-bold"><i data-lucide="home" class="w-4 h-4"></i> Início</a>
+                
+                <div class="flex flex-col">
+                    <button onclick="window.toggleCategories(event)" class="flex items-center justify-between w-full text-left hover:text-blue-900 transition-colors focus:outline-none py-1 font-bold">
+                        <span class="flex items-center gap-2"><i data-lucide="folder" class="w-4 h-4"></i> Categorias</span>
+                        <i data-lucide="chevron-down" id="cat-chevron" class="w-4 h-4 transition-transform"></i>
+                    </button>
+                    <div id="categories-list" class="hidden flex-col pl-6 mt-3 gap-3 text-gray-500 border-l-2 border-gray-100 ml-2"></div>
+                </div>
+
+                <a href="#" class="hover:text-blue-900 flex items-center gap-2 font-bold"><i data-lucide="user" class="w-4 h-4"></i> Sobre</a>
+                <a href="#" class="hover:text-blue-900 flex items-center gap-2 font-bold"><i data-lucide="mail" class="w-4 h-4"></i> Contato</a>
+                
+                <div class="border-t border-gray-100 pt-3 mt-1">
+                    <a href="#" onclick="window.openAdminLogin(); return false;" class="flex items-center gap-2 text-gray-400 hover:text-blue-900 transition-colors">
+                        <i data-lucide="settings" class="w-4 h-4"></i> Painel
+                    </a>
+                </div>
+            </nav>
+        </div>
+    </header>
+
+    <main id="home-view" class="flex-grow max-w-3xl w-full mx-auto px-4 py-8 z-10 fade-enter">
+        <div class="mb-8 text-center sm:text-left" id="feed-header">
+            <h2 class="text-3xl font-black text-gray-900 mb-1">Reflexões</h2>
+            <p class="text-gray-500 font-medium">Estudos e aprendizados sobre a Fé.</p>
+        </div>
+
+        <div id="feed-container" class="flex flex-col gap-6">
+            <div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden animate-pulse">
+                <div class="aspect-video bg-gray-200 w-full"></div>
+                <div class="p-6">
+                    <div class="h-8 bg-gray-200 rounded w-3/4 mb-3"></div>
+                    <div class="h-4 bg-gray-200 rounded w-full"></div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <main id="article-view" class="hidden flex-grow w-full bg-white z-10 transition-all duration-300">
+        <div class="max-w-3xl mx-auto px-4 py-8 fade-enter">
+            <div class="flex flex-wrap items-center justify-between gap-4 mb-8 border-b border-gray-200/50 pb-6">
+                <button onclick="window.closeArticle()" class="flex items-center gap-2 text-blue-600 hover:text-blue-800 font-bold group">
+                    <i data-lucide="arrow-left" class="w-5 h-5 transform group-hover:-translate-x-1 transition-transform"></i> Voltar
+                </button>
+
+                <div class="flex items-center gap-3">
+                    <button onclick="window.toggleFontSize()" class="p-2 bg-gray-100 hover:bg-gray-200 rounded-lg text-gray-700 border border-gray-200" title="Ajustar Fonte">
+                        <i data-lucide="type" class="w-5 h-5"></i>
+                    </button>
+                    <div class="flex gap-1.5 p-1.5 bg-gray-100 rounded-xl border border-gray-200">
+                        <button onclick="window.setArticleTheme('light')" class="w-5 h-5 rounded-full bg-white border border-gray-300 shadow-sm" title="Claro"></button>
+                        <button onclick="window.setArticleTheme('polen')" class="w-5 h-5 rounded-full bg-[#f4ecd8] border border-gray-300" title="Polen"></button>
+                        <button onclick="window.setArticleTheme('dark')" class="w-5 h-5 rounded-full bg-gray-900 border border-black" title="Escuro"></button>
+                        <button onclick="window.setArticleTheme('verde')" class="w-5 h-5 rounded-full bg-green-700 border border-white" title="Verde"></button>
+                        <button onclick="window.setArticleTheme('azul')" class="w-5 h-5 rounded-full bg-blue-700 border border-white" title="Azul"></button>
+                    </div>
+                </div>
+            </div>
+
+            <article id="article-content" class="pb-16"></article>
+        </div>
+    </main>
+
+    <a href="https://chat.whatsapp.com/DgwfvBpeVZIIzHZLgiIlCk" target="_blank" class="floating-btn bg-green-600 text-white px-5 py-3 rounded-full shadow-2xl flex items-center gap-2 font-bold text-sm sm:text-base border-b-4 border-green-800 active:translate-y-1 active:border-b-0 hover:bg-green-700 transition-all">
+        <i data-lucide="users" class="w-5 h-5"></i> Seja Notificado
+    </a>
+
+    <div id="login-modal" class="hidden fixed inset-0 z-50 flex items-center justify-center modal-overlay px-4">
+        <div class="bg-white rounded-2xl shadow-2xl w-full max-w-sm p-8 relative">
+            <button onclick="window.closeAdminLogin()" class="absolute top-4 right-4 text-gray-400 hover:text-gray-600"><i data-lucide="x" class="w-6 h-6"></i></button>
+            <div class="text-center mb-6">
+                <div class="w-16 h-16 bg-blue-50 text-blue-600 rounded-full flex items-center justify-center mx-auto mb-4"><i data-lucide="lock" class="w-8 h-8"></i></div>
+                <h3 class="text-2xl font-bold text-gray-900">Acesso Restrito</h3>
+            </div>
+            <input type="password" id="admin-password" placeholder="Senha" class="w-full border border-gray-300 rounded-xl px-4 py-3 mb-4 outline-none focus:ring-2 focus:ring-blue-900">
+            <button onclick="window.verifyPassword()" class="w-full bg-blue-900 hover:bg-blue-950 text-white font-bold py-3 rounded-xl transition-all">Entrar no Painel</button>
+            <p id="login-error" class="text-red-500 text-sm mt-3 text-center hidden">Senha incorreta.</p>
+        </div>
+    </div>
+
+    <div id="dashboard-modal" class="hidden fixed inset-0 z-50 flex items-center justify-center modal-overlay px-4">
+        <div class="bg-white rounded-2xl shadow-2xl w-full max-w-4xl max-h-[90vh] flex flex-col relative overflow-hidden">
+            <div class="p-6 border-b border-gray-100 flex justify-between items-center bg-gray-50/50">
+                <h3 class
     <meta property="og:title" content="Professor Luiz Henrique - Reflexões de Fé">
     <meta property="og:description" content="Estudos e aprendizados sobre a Fé. Palavras e reflexões diárias.">
     <!-- Imagem de capa padrão para o site (importante para o WhatsApp) -->

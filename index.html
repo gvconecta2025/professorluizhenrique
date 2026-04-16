@@ -208,7 +208,7 @@
     <!-- OVERLAY DO SIDEBAR -->
     <div id="sidebar-overlay" onclick="window.toggleMobileMenu()" class="fixed inset-0 bg-black/50 backdrop-blur-sm z-40 hidden transition-opacity opacity-0 duration-300"></div>
 
-    <!-- MENU LATERAL (SIDEBAR) - Desliza da Esquerda (-translate-x-full) -->
+    <!-- MENU LATERAL (SIDEBAR) -->
     <aside id="sidebar-menu" class="fixed top-0 left-0 h-full w-[280px] sys-bg-surface shadow-2xl z-50 transform -translate-x-full transition-transform duration-300 ease-in-out flex flex-col border-r sys-border">
         <div class="p-6 flex justify-between items-center sys-border border-b bg-gray-50/5 sys-bg-body">
             <span class="font-black text-xl sys-text-primary flex items-center gap-2"><i data-lucide="compass" class="w-6 h-6 sys-text-accent"></i> Menu</span>
@@ -385,15 +385,16 @@
         </div>
     </div>
 
-    <!-- EDITOR -->
+    <!-- EDITOR COMPLETO (REFORMULADO) -->
     <div id="editor-modal" class="hidden fixed inset-0 z-50 flex items-center justify-center modal-overlay px-4 py-4">
-        <div class="bg-white rounded-2xl shadow-2xl w-full max-w-3xl max-h-full flex flex-col relative overflow-hidden text-gray-900">
+        <div class="bg-white rounded-2xl shadow-2xl w-full max-w-4xl max-h-full flex flex-col relative overflow-hidden text-gray-900">
             <div class="p-5 border-b border-gray-100 flex justify-between items-center bg-gray-50">
                 <h3 id="editor-title" class="text-xl font-bold text-gray-900">Nova Reflexão</h3>
                 <button onclick="window.closeEditor()" class="text-gray-400 hover:text-gray-600"><i data-lucide="x" class="w-6 h-6"></i></button>
             </div>
             <div class="p-6 flex-1 overflow-y-auto flex flex-col gap-6">
                 <input type="hidden" id="edit-post-id">
+                
                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <div class="bg-gray-50 p-4 rounded-xl border border-gray-200">
                         <p class="text-sm font-bold text-gray-900 mb-3">Tipo</p>
@@ -418,44 +419,121 @@
                         </div>
                     </div>
                 </div>
-                <div>
-                    <label class="block text-sm font-bold text-gray-700 mb-1">Título da Reflexão</label>
-                    <input type="text" id="post-title" class="w-full border border-gray-300 bg-white rounded-xl px-4 py-2.5 outline-none focus:ring-2 focus:ring-blue-900">
+
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div class="sm:col-span-2">
+                        <label class="block text-sm font-bold text-gray-700 mb-1">Título da Reflexão</label>
+                        <input type="text" id="post-title" class="w-full border border-gray-300 bg-white rounded-xl px-4 py-2.5 outline-none focus:ring-2 focus:ring-blue-900">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-bold text-gray-700 mb-1">Subtítulo / Breve Resumo</label>
+                        <input type="text" id="post-subtitle" class="w-full border border-gray-300 bg-white rounded-xl px-4 py-2.5 outline-none focus:ring-2 focus:ring-blue-900">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-bold text-gray-700 mb-1">Categoria (Obrigatória)</label>
+                        <select id="post-category" class="w-full border border-gray-300 bg-white rounded-xl px-4 py-2.5 outline-none focus:ring-2 focus:ring-blue-900 text-gray-900 cursor-pointer">
+                            <option value="">Sem Categoria</option>
+                        </select>
+                    </div>
                 </div>
-                <div>
-                    <label class="block text-sm font-bold text-gray-700 mb-1">Subtítulo / Breve Resumo</label>
-                    <input type="text" id="post-subtitle" class="w-full border border-gray-300 bg-white rounded-xl px-4 py-2.5 outline-none focus:ring-2 focus:ring-blue-900">
+
+                <div class="bg-blue-50/30 p-5 rounded-xl border border-blue-100 grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div class="sm:col-span-2"><p class="text-xs font-bold text-blue-900 uppercase">Mídia de Capa do Artigo</p></div>
+                    <input type="text" id="post-image" class="w-full border border-gray-300 bg-white rounded-xl px-4 py-2.5 text-sm outline-none" placeholder="Link da Imagem (Google Drive)">
+                    <input type="text" id="post-youtube" class="w-full border border-gray-300 bg-white rounded-xl px-4 py-2.5 text-sm outline-none" placeholder="Link do Vídeo (YouTube)">
                 </div>
-                <div>
-                    <label class="block text-sm font-bold text-gray-700 mb-1">Categoria (Obrigatória)</label>
-                    <select id="post-category" class="w-full border border-gray-300 bg-white rounded-xl px-4 py-2.5 outline-none focus:ring-2 focus:ring-blue-900 text-gray-900 cursor-pointer">
-                        <option value="">Sem Categoria</option>
-                    </select>
-                </div>
-                <div class="bg-blue-50/30 p-5 rounded-xl border border-blue-100 flex flex-col gap-4">
-                    <p class="text-xs font-bold text-blue-900 uppercase">Mídia de Capa (YouTube ou Imagem)</p>
-                    <input type="text" id="post-image" class="w-full border border-gray-300 bg-white rounded-xl px-4 py-2 text-sm outline-none" placeholder="Link da Imagem (Google Drive)">
-                    <input type="text" id="post-youtube" class="w-full border border-gray-300 bg-white rounded-xl px-4 py-2 text-sm outline-none" placeholder="Link do Vídeo (YouTube)">
-                </div>
+
                 <div>
                     <label class="block text-sm font-bold text-gray-700 mb-1">Texto Principal</label>
-                    <div class="border border-gray-300 border-b-0 rounded-t-xl bg-gray-50 px-3 py-2 flex flex-wrap gap-2 items-center">
-                        <button type="button" onclick="window.execEditor('bold')" class="p-2 hover:bg-gray-200 rounded"><i data-lucide="bold" class="w-4 h-4"></i></button>
-                        <button type="button" onclick="window.execEditor('italic')" class="p-2 hover:bg-gray-200 rounded"><i data-lucide="italic" class="w-4 h-4"></i></button>
-                        <button type="button" onclick="window.execEditor('formatBlock', '<H2>')" class="px-2 font-bold text-sm">H1</button>
-                        <button type="button" onclick="window.insertEditorImage()" class="p-2 text-blue-600" title="Inserir Imagem"><i data-lucide="image" class="w-4 h-4"></i></button>
-                        <button type="button" onclick="window.insertEditorVideo()" class="p-2 text-red-600" title="Inserir Vídeo"><i data-lucide="youtube" class="w-4 h-4"></i></button>
-                        <!-- NOVO BOTÃO DE COMPRA/LINK -->
-                        <button type="button" onclick="window.insertEditorButton()" class="p-2 text-green-700 hover:bg-gray-200 rounded" title="Inserir Botão (Call to Action)"><i data-lucide="link" class="w-4 h-4"></i></button>
+                    
+                    <!-- BARRA DE FERRAMENTAS DO EDITOR NATIVO -->
+                    <div class="border border-gray-300 border-b-0 rounded-t-xl bg-gray-50 px-4 py-3 flex flex-col gap-3">
+                        
+                        <!-- Linha 1: Formatação, Alinhamento e Listas -->
+                        <div class="flex flex-wrap items-center gap-3 border-b border-gray-200 pb-3">
+                            <div class="flex items-center bg-white border border-gray-200 rounded-lg overflow-hidden shadow-sm">
+                                <button type="button" onclick="window.execEditor('bold')" class="p-2 hover:bg-gray-100 text-gray-700 transition-colors" title="Negrito"><i data-lucide="bold" class="w-4 h-4"></i></button>
+                                <button type="button" onclick="window.execEditor('italic')" class="p-2 hover:bg-gray-100 text-gray-700 border-l border-gray-200 transition-colors" title="Itálico"><i data-lucide="italic" class="w-4 h-4"></i></button>
+                                <button type="button" onclick="window.execEditor('underline')" class="p-2 hover:bg-gray-100 text-gray-700 border-l border-gray-200 transition-colors" title="Sublinhado"><i data-lucide="underline" class="w-4 h-4"></i></button>
+                                <button type="button" onclick="window.execEditor('strikeThrough')" class="p-2 hover:bg-gray-100 text-gray-700 border-l border-gray-200 transition-colors" title="Riscado"><i data-lucide="strikethrough" class="w-4 h-4"></i></button>
+                            </div>
+                            
+                            <div class="flex items-center bg-white border border-gray-200 rounded-lg overflow-hidden shadow-sm">
+                                <button type="button" onclick="window.execEditor('justifyLeft')" class="p-2 hover:bg-gray-100 text-gray-700 transition-colors" title="Esquerda"><i data-lucide="align-left" class="w-4 h-4"></i></button>
+                                <button type="button" onclick="window.execEditor('justifyCenter')" class="p-2 hover:bg-gray-100 text-gray-700 border-l border-gray-200 transition-colors" title="Centro"><i data-lucide="align-center" class="w-4 h-4"></i></button>
+                                <button type="button" onclick="window.execEditor('justifyRight')" class="p-2 hover:bg-gray-100 text-gray-700 border-l border-gray-200 transition-colors" title="Direita"><i data-lucide="align-right" class="w-4 h-4"></i></button>
+                                <button type="button" onclick="window.execEditor('justifyFull')" class="p-2 hover:bg-gray-100 text-gray-700 border-l border-gray-200 transition-colors" title="Justificado"><i data-lucide="align-justify" class="w-4 h-4"></i></button>
+                            </div>
+
+                            <div class="flex items-center bg-white border border-gray-200 rounded-lg overflow-hidden shadow-sm">
+                                <button type="button" onclick="window.execEditor('insertUnorderedList')" class="p-2 hover:bg-gray-100 text-gray-700 transition-colors" title="Marcadores"><i data-lucide="list" class="w-4 h-4"></i></button>
+                                <button type="button" onclick="window.execEditor('insertOrderedList')" class="p-2 hover:bg-gray-100 text-gray-700 border-l border-gray-200 transition-colors" title="Numeração"><i data-lucide="list-ordered" class="w-4 h-4"></i></button>
+                            </div>
+                        </div>
+
+                        <!-- Linha 2: Blocos, Fontes e Cores -->
+                        <div class="flex flex-wrap items-center gap-3 border-b border-gray-200 pb-3">
+                            <select onchange="window.execEditor('formatBlock', this.value); this.selectedIndex=0;" class="bg-white border border-gray-200 rounded-lg px-3 py-1.5 text-sm font-medium outline-none cursor-pointer hover:bg-gray-50 shadow-sm text-gray-700 min-w-[140px]">
+                                <option value="">Estilo...</option>
+                                <option value="H1">Título Principal (H1)</option>
+                                <option value="H2">Subtítulo (H2)</option>
+                                <option value="H3">Tópico (H3)</option>
+                                <option value="P">Texto Normal (P)</option>
+                                <option value="BLOCKQUOTE">Bloco de Citação</option>
+                            </select>
+
+                            <select onchange="window.execEditor('fontSize', this.value); this.selectedIndex=0;" class="bg-white border border-gray-200 rounded-lg px-3 py-1.5 text-sm font-medium outline-none cursor-pointer hover:bg-gray-50 shadow-sm text-gray-700">
+                                <option value="">Tamanho...</option>
+                                <option value="1">Pequeno</option>
+                                <option value="3">Normal</option>
+                                <option value="5">Grande</option>
+                                <option value="7">Gigante</option>
+                            </select>
+                            
+                            <div class="flex items-center gap-3 bg-white border border-gray-200 rounded-lg px-3 py-1.5 shadow-sm">
+                                <label class="text-xs font-bold text-gray-500 cursor-pointer flex items-center gap-1" title="Cor da Letra">
+                                    <i data-lucide="baseline" class="w-4 h-4 text-gray-700"></i>
+                                    <input type="color" onchange="window.execEditor('foreColor', this.value)" class="w-5 h-5 cursor-pointer border-0 p-0 rounded">
+                                </label>
+                                <div class="w-px h-4 bg-gray-200"></div>
+                                <label class="text-xs font-bold text-gray-500 cursor-pointer flex items-center gap-1" title="Cor de Fundo / Marca-texto">
+                                    <i data-lucide="highlighter" class="w-4 h-4 text-gray-700"></i>
+                                    <input type="color" onchange="window.execEditor('hiliteColor', this.value)" class="w-5 h-5 cursor-pointer border-0 p-0 rounded" value="#ffff00">
+                                </label>
+                            </div>
+                            
+                            <button type="button" onclick="window.execEditor('removeFormat')" class="p-1.5 hover:bg-gray-200 rounded-lg text-gray-500 transition-colors ml-auto sm:ml-0" title="Limpar Formatação">
+                                <i data-lucide="eraser" class="w-5 h-5"></i>
+                            </button>
+                        </div>
+
+                        <!-- Linha 3: Inserções Especiais -->
+                        <div class="flex flex-wrap items-center gap-2">
+                            <button type="button" onclick="window.insertEditorLink()" class="flex items-center gap-1.5 px-3 py-1.5 bg-white border border-gray-200 rounded-lg hover:bg-gray-50 text-sm font-bold text-gray-700 shadow-sm transition-colors" title="Inserir Link">
+                                <i data-lucide="link-2" class="w-4 h-4 text-blue-600"></i> Link
+                            </button>
+                            <button type="button" onclick="window.insertEditorImage()" class="flex items-center gap-1.5 px-3 py-1.5 bg-white border border-gray-200 rounded-lg hover:bg-gray-50 text-sm font-bold text-gray-700 shadow-sm transition-colors" title="Inserir Imagem (Drive/URL)">
+                                <i data-lucide="image" class="w-4 h-4 text-emerald-600"></i> Imagem
+                            </button>
+                            <button type="button" onclick="window.insertEditorVideo()" class="flex items-center gap-1.5 px-3 py-1.5 bg-white border border-gray-200 rounded-lg hover:bg-gray-50 text-sm font-bold text-gray-700 shadow-sm transition-colors" title="Inserir Vídeo (YouTube)">
+                                <i data-lucide="youtube" class="w-4 h-4 text-red-600"></i> Vídeo
+                            </button>
+                            <button type="button" onclick="window.insertEditorButton()" class="flex items-center gap-1.5 px-4 py-1.5 bg-green-50 border border-green-200 rounded-lg hover:bg-green-100 text-sm font-black text-green-800 shadow-sm transition-colors ml-auto" title="Inserir Botão de Compra / Ação (CTA)">
+                                <i data-lucide="mouse-pointer-click" class="w-4 h-4"></i> Botão (CTA)
+                            </button>
+                        </div>
                     </div>
-                    <div id="post-fulltext" contenteditable="true" class="w-full border border-gray-300 rounded-b-xl px-5 py-5 min-h-[300px] bg-white overflow-y-auto prose prose-blue max-w-none shadow-inner outline-none"></div>
+                    
+                    <!-- ÁREA DE EDIÇÃO DO TEXTO -->
+                    <div id="post-fulltext" contenteditable="true" class="w-full border border-gray-300 border-t-0 rounded-b-xl px-6 py-6 min-h-[400px] bg-white overflow-y-auto prose prose-blue max-w-none shadow-inner outline-none focus:bg-blue-50/10 transition-colors"></div>
                 </div>
             </div>
+            
             <div class="p-6 border-t border-gray-100 flex justify-between items-center bg-gray-50">
-                <button id="btn-delete-editor" onclick="window.deletePost(document.getElementById('edit-post-id').value, true)" class="hidden px-5 py-2.5 text-red-600 font-bold hover:bg-red-50 rounded-xl"><i data-lucide="trash-2" class="w-4 h-4 inline mr-2"></i> Excluir</button>
+                <button id="btn-delete-editor" onclick="window.deletePost(document.getElementById('edit-post-id').value, true)" class="hidden px-5 py-2.5 text-red-600 font-bold hover:bg-red-50 rounded-xl transition-colors"><i data-lucide="trash-2" class="w-4 h-4 inline mr-2"></i> Excluir</button>
                 <div class="flex gap-3 ml-auto">
-                    <button onclick="window.closeEditor()" class="px-6 py-2.5 border border-gray-300 text-gray-800 rounded-xl font-medium">Cancelar</button>
-                    <button onclick="window.savePost()" id="btn-save-post" class="px-8 py-2.5 bg-blue-900 text-white rounded-xl font-bold shadow-lg">Salvar Reflexão</button>
+                    <button onclick="window.closeEditor()" class="px-6 py-2.5 border border-gray-300 text-gray-800 rounded-xl font-medium hover:bg-gray-100 transition-colors">Cancelar</button>
+                    <button onclick="window.savePost()" id="btn-save-post" class="px-8 py-2.5 bg-blue-900 hover:bg-blue-950 text-white rounded-xl font-bold shadow-lg transition-all">Salvar Reflexão</button>
                 </div>
             </div>
         </div>
@@ -875,6 +953,12 @@
         }
 
         window.execEditor = (cmd, val = null) => { document.execCommand(cmd, false, val); document.getElementById('post-fulltext').focus(); };
+        
+        window.insertEditorLink = () => {
+            const url = prompt("Insira o link (URL):");
+            if(url) window.execEditor('createLink', url);
+        };
+        
         window.insertEditorImage = () => { const url = prompt("Link da imagem:"); if (url) window.execEditor('insertHTML', `<img src="${window.getDriveImageUrl(url)}" class="w-full rounded-xl my-4" />`); };
         window.insertEditorVideo = () => { const url = prompt("Link do YouTube:"); const id = window.getYoutubeId(url); if (id) window.execEditor('insertHTML', `<div class="aspect-video w-full rounded-xl overflow-hidden my-4"><iframe class="w-full h-full" src="https://www.youtube.com/embed/${id}" frameborder="0" allowfullscreen></iframe></div>`); };
         

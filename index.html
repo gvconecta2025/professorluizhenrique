@@ -195,7 +195,7 @@
                 <div class="p-2 sys-bg-body rounded-lg sys-border border"><i data-lucide="home" class="w-5 h-5"></i></div> Início
             </a>
 
-            <!-- NOVA ABA: BIBLIOTECA -->
+            <!-- ABA: BIBLIOTECA -->
             <a href="#" onclick="window.showLibrary(); window.toggleMobileMenu(); return false;" class="flex items-center gap-4 font-bold text-lg sys-text-primary hover:sys-text-accent transition-colors">
                 <div class="p-2 sys-bg-body rounded-lg sys-border border"><i data-lucide="book-open" class="w-5 h-5"></i></div> Biblioteca
             </a>
@@ -207,10 +207,12 @@
             <div class="flex flex-col gap-2 mt-2">
                 <p class="text-[10px] font-black uppercase tracking-widest sys-text-secondary mb-2 pl-1">Explorar</p>
                 <div class="flex flex-col gap-3">
+                    <!-- BOTÃO PASTAS QUE EXPANDE -->
                     <button onclick="window.toggleCategories(event)" class="flex items-center justify-between w-full text-left sys-text-primary hover:sys-text-accent font-bold text-lg transition-colors">
-                        <span class="flex items-center gap-4"><div class="p-2 sys-bg-body rounded-lg sys-border border"><i data-lucide="folder" class="w-5 h-5"></i></div> Categorias</span>
+                        <span class="flex items-center gap-4"><div class="p-2 sys-bg-body rounded-lg sys-border border"><i data-lucide="folder" class="w-5 h-5"></i></div> Pastas</span>
                         <i data-lucide="chevron-down" id="cat-chevron" class="w-4 h-4 transition-transform"></i>
                     </button>
+                    <!-- LISTA DE PASTAS (SANFONA) -->
                     <div id="categories-list" class="hidden flex-col pl-14 mt-1 gap-4 sys-text-secondary border-l-2 sys-border ml-[22px] pb-2">
                         <!-- Categorias injetadas -->
                     </div>
@@ -219,8 +221,8 @@
                 <a href="#" class="flex items-center gap-4 font-bold text-lg sys-text-primary hover:sys-text-accent transition-colors mt-2">
                     <div class="p-2 sys-bg-body rounded-lg sys-border border"><i data-lucide="user" class="w-5 h-5"></i></div> Sobre
                 </a>
-                <a href="#" class="flex items-center gap-4 font-bold text-lg sys-text-primary hover:sys-text-accent transition-colors mt-2">
-                    <div class="p-2 sys-bg-body rounded-lg sys-border border"><i data-lucide="mail" class="w-5 h-5"></i></div> Contato
+                <a href="https://chat.whatsapp.com/DgwfvBpeVZIIzHZLgiIlCk" target="_blank" class="flex items-center gap-4 font-bold text-lg text-green-600 hover:text-green-700 transition-colors mt-2">
+                    <div class="p-2 bg-green-50 rounded-lg border border-green-100"><i data-lucide="message-circle" class="w-5 h-5"></i></div> Comunidade
                 </a>
             </div>
 
@@ -242,7 +244,7 @@
         <div id="feed-container" class="flex flex-col gap-6"></div>
     </main>
 
-    <!-- VIEW: BIBLIOTECA (NOVA) -->
+    <!-- VIEW: BIBLIOTECA -->
     <main id="library-view" class="hidden flex-grow max-w-4xl w-full mx-auto px-4 py-8 pb-28 sm:pb-8 z-10 fade-enter">
         <div class="mb-8 text-center sm:text-left border-b sys-border pb-6">
             <h2 class="text-3xl font-black sys-text-primary mb-2 flex items-center justify-center sm:justify-start gap-3"><i data-lucide="book-open" class="w-8 h-8 sys-text-accent"></i> Biblioteca</h2>
@@ -275,7 +277,7 @@
                 <span class="text-[10px] font-bold">Início</span>
             </button>
 
-            <!-- NOVO BOTÃO BIBLIOTECA NO MOBILE -->
+            <!-- BOTÃO BIBLIOTECA -->
             <button onclick="window.showLibrary(); window.scrollTo(0,0);" class="flex flex-col items-center justify-center w-full h-full sys-text-secondary hover:sys-text-accent transition-all group">
                 <div class="p-1.5 rounded-2xl group-hover:bg-gray-100/50 transition-colors mb-0.5">
                     <i data-lucide="book-open" class="w-[22px] h-[22px]"></i>
@@ -290,8 +292,9 @@
                 <span class="text-[10px] font-bold">Pastas</span>
             </button>
             
-            <a href="https://chat.whatsapp.com/DgwfvBpeVZIIzHZLgiIlCk" target="_blank" class="flex flex-col items-center justify-center w-full h-full sys-text-secondary hover:text-green-600 transition-all group">
-                <div class="p-1.5 rounded-2xl group-hover:bg-green-50 transition-colors mb-0.5">
+            <!-- BOTÃO COMUNIDADE EM VERDE PARA DESTAQUE/CONVERSÃO -->
+            <a href="https://chat.whatsapp.com/DgwfvBpeVZIIzHZLgiIlCk" target="_blank" class="flex flex-col items-center justify-center w-full h-full text-green-600 hover:text-green-700 transition-all group">
+                <div class="p-1.5 rounded-2xl bg-green-50 group-hover:bg-green-100 transition-colors mb-0.5">
                     <i data-lucide="message-circle" class="w-[22px] h-[22px]"></i>
                 </div>
                 <span class="text-[10px] font-bold">Comunidade</span>
@@ -299,11 +302,11 @@
         </div>
     </nav>
 
-    <!-- MODAL DE CATEGORIAS -->
+    <!-- MODAL DE CATEGORIAS (MENU INFERIOR) -->
     <div id="categories-modal" onclick="if(event.target === this) window.toggleCategoriesModal()" class="hidden fixed inset-0 z-50 flex items-end justify-center modal-overlay sm:hidden">
         <div class="sys-bg-surface rounded-t-3xl shadow-2xl w-full p-6 relative transform transition-transform translate-y-full slide-up-animation pb-safe border-t sys-border">
             <div class="flex justify-between items-center mb-6 border-b sys-border pb-4">
-                <h3 class="text-xl font-black sys-text-primary flex items-center gap-2"><i data-lucide="layout-grid" class="w-6 h-6 sys-text-accent"></i> Categorias</h3>
+                <h3 class="text-xl font-black sys-text-primary flex items-center gap-2"><i data-lucide="layout-grid" class="w-6 h-6 sys-text-accent"></i> Pastas</h3>
                 <button onclick="window.toggleCategoriesModal()" class="sys-text-secondary hover:sys-text-primary bg-gray-100 p-2 rounded-full"><i data-lucide="x" class="w-5 h-5"></i></button>
             </div>
             <div id="bottom-categories-list" class="flex flex-col gap-3 max-h-[60vh] overflow-y-auto pb-4"></div>
@@ -384,7 +387,6 @@
 
     <!-- EDITOR DE POSTS (REFLEXÕES) -->
     <div id="editor-modal" class="hidden fixed inset-0 z-50 flex items-center justify-center modal-overlay px-4 py-4">
-        <!-- O mesmo editor de textos da versão anterior -->
         <div class="bg-white rounded-2xl shadow-2xl w-full max-w-4xl max-h-full flex flex-col relative overflow-hidden text-gray-900">
             <div class="p-5 border-b border-gray-100 flex justify-between items-center bg-gray-50">
                 <h3 id="editor-title" class="text-xl font-bold text-gray-900">Nova Reflexão</h3>
@@ -810,10 +812,23 @@
             posts.forEach(post => {
                 const article = document.createElement('article'); article.className = 'sys-bg-surface rounded-2xl shadow-sm sys-border border overflow-hidden hover:shadow-xl transition-all duration-500 group cursor-pointer';
                 const ytId = window.getYoutubeId(post.youtubeUrl);
+                
+                // Engenharia ZIG: O feed roda o vídeo no fundo em loop sem controles para gerar dinamismo.
                 const mediaHtml = ytId 
-                    ? `<div class="aspect-video bg-gray-900 overflow-hidden relative group"><img src="https://img.youtube.com/vi/${ytId}/maxresdefault.jpg" onerror="this.src='https://img.youtube.com/vi/${ytId}/hqdefault.jpg'" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 opacity-90"><div class="absolute inset-0 flex items-center justify-center pointer-events-none"><div class="w-16 h-16 bg-black/50 backdrop-blur-sm rounded-full flex items-center justify-center border border-white/20 group-hover:bg-blue-900/80 transition-all shadow-xl group-hover:scale-110"><svg class="w-7 h-7 text-white ml-1" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></div></div></div>` 
+                    ? `<div class="aspect-video bg-black relative overflow-hidden group">
+                           <iframe class="absolute inset-0 w-full h-full pointer-events-none transform scale-150" src="https://www.youtube.com/embed/${ytId}?autoplay=1&mute=1&controls=0&showinfo=0&rel=0&loop=1&playlist=${ytId}" frameborder="0" allow="autoplay; encrypted-media"></iframe>
+                           <div class="absolute inset-0 z-10 flex items-center justify-center bg-black/20 group-hover:bg-black/10 transition-colors cursor-pointer">
+                               <div class="w-16 h-16 bg-white/20 backdrop-blur-md rounded-full flex items-center justify-center border border-white/30 group-hover:bg-white/30 transition-all shadow-2xl group-hover:scale-110">
+                                   <svg class="w-7 h-7 text-white ml-1 shadow-sm" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+                               </div>
+                           </div>
+                       </div>` 
                     : `<div class="aspect-video bg-gray-100 overflow-hidden"><img src="${window.getDriveImageUrl(post.imageUrl)}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"></div>`;
                 
+                const isPage = post.type === 'page';
+                const safeTitle = (post.title || "").replace(/'/g, "\\'");
+                const safeSubtitle = (post.subtitle || "").replace(/'/g, "\\'");
+
                 article.innerHTML = `
                     <div onclick="window.${post.type === 'page' ? 'openArticle' : 'togglePost'}('${post.id}')">
                         ${mediaHtml}
@@ -823,7 +838,7 @@
                             <p class="sys-text-secondary text-sm line-clamp-2">${post.subtitle}</p>
                             <div class="flex items-center justify-between pt-4 mt-4 sys-border border-t">
                                 <div class="sys-text-accent font-black text-xs uppercase flex items-center gap-1 toggle-indicator-${post.id}">Ler mais <i data-lucide="chevron-right" class="w-3 h-3"></i></div>
-                                <button onclick="window.sharePost('${post.id}', '${(post.title || "").replace(/'/g, "\\'")}', '${(post.subtitle || "").replace(/'/g, "\\'")}', event)" class="p-2 sys-text-secondary hover:text-green-600 transition-all"><i data-lucide="share-2" class="w-5 h-5"></i></button>
+                                <button onclick="window.sharePost('${post.id}', '${safeTitle}', '${safeSubtitle}', event)" class="p-2 sys-text-secondary hover:text-green-600 transition-all"><i data-lucide="share-2" class="w-5 h-5"></i></button>
                             </div>
                         </div>
                     </div>
@@ -869,11 +884,14 @@
         window.togglePost = (id) => { const el = document.getElementById('content-' + id); if(!el) return; el.classList.toggle('open'); document.querySelector('.toggle-indicator-' + id).innerHTML = el.classList.contains('open') ? `Recolher <i data-lucide="chevron-up" class="w-3 h-3"></i>` : `Ler mais <i data-lucide="chevron-right" class="w-3 h-3"></i>`; lucide.createIcons(); };
         window.filterByCategory = (cat) => { currentCategoryFilter = cat; window.showHome(); };
         window.clearFilter = () => { currentCategoryFilter = null; window.showHome(); };
+        
         function updateCategoriesMenu() { 
             const cats = siteCategories.map(c => c.name); 
-            document.getElementById('categories-list').innerHTML = cats.map(c => `<a href="#" onclick="window.filterByCategory('${c}'); window.toggleMobileMenu(); return false;" class="hover:sys-text-accent py-2 flex items-center gap-3 font-bold text-base transition-colors"><i data-lucide="folder-open" class="w-4 h-4"></i> ${c}</a>`).join('') || '<span class="text-xs italic sys-text-secondary">Nenhuma categoria.</span>'; 
+            // Menu Lateral (Agora usando a palavra "Pastas" mantendo a coerência visual)
+            document.getElementById('categories-list').innerHTML = cats.map(c => `<a href="#" onclick="window.filterByCategory('${c}'); window.toggleMobileMenu(); return false;" class="hover:sys-text-accent py-2 flex items-center gap-3 font-bold text-base transition-colors"><i data-lucide="folder-open" class="w-4 h-4"></i> ${c}</a>`).join('') || '<span class="text-xs italic sys-text-secondary">Nenhuma pasta encontrada.</span>'; 
+            
             const bottomList = document.getElementById('bottom-categories-list');
-            if(bottomList) bottomList.innerHTML = cats.map(c => `<button onclick="window.filterByCategory('${c}'); window.toggleCategoriesModal();" class="w-full text-left px-5 py-4 sys-bg-body sys-text-primary hover:sys-text-accent font-black rounded-2xl transition-colors flex items-center gap-3 border sys-border shadow-sm"><i data-lucide="folder-open" class="w-5 h-5"></i> ${c}</button>`).join('') || '<p class="text-sm sys-text-secondary text-center py-4">Nenhuma categoria encontrada.</p>';
+            if(bottomList) bottomList.innerHTML = cats.map(c => `<button onclick="window.filterByCategory('${c}'); window.toggleCategoriesModal();" class="w-full text-left px-5 py-4 sys-bg-body sys-text-primary hover:sys-text-accent font-black rounded-2xl transition-colors flex items-center gap-3 border sys-border shadow-sm"><i data-lucide="folder-open" class="w-5 h-5"></i> ${c}</button>`).join('') || '<p class="text-sm sys-text-secondary text-center py-4">Nenhuma pasta encontrada.</p>';
             lucide.createIcons(); 
         }
 

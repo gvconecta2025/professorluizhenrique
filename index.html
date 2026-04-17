@@ -705,7 +705,7 @@
         window.showBio = () => { ['home-view','article-view','book-detail-view','library-view', 'community-view', 'courses-view', 'course-detail-view'].forEach(id=>document.getElementById(id).classList.add('hidden')); document.getElementById('bio-view').classList.remove('hidden'); window.currentOpenBookId = null; window.currentOpenCourseId = null; window.renderBio(); window.scrollTo(0,0); };
 
         window.toggleMobileMenu = () => {
-            if (window.innerWidth >= 1024) return; // Prevent logic flip on desktop where it's always open
+            if (window.innerWidth >= 1024) return;
             const sidebar = document.getElementById('sidebar-menu'); const overlay = document.getElementById('sidebar-overlay'); if (sidebar.classList.contains('-translate-x-full')) { sidebar.classList.remove('-translate-x-full'); overlay.classList.remove('hidden'); setTimeout(() => overlay.classList.remove('opacity-0'), 10); } else { sidebar.classList.add('-translate-x-full'); overlay.classList.add('opacity-0'); setTimeout(() => overlay.classList.add('hidden'), 300); } 
         };
         window.toggleCategories = (e) => { if(e) e.stopPropagation(); const list = document.getElementById('categories-list'); const chevron = document.getElementById('cat-chevron'); if(list) list.classList.toggle('hidden'); if(chevron) chevron.classList.toggle('rotate-180'); };

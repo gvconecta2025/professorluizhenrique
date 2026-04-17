@@ -179,6 +179,7 @@
         </div>
         <div class="flex-1 overflow-y-auto px-6 py-6 flex flex-col gap-6">
             <a href="#" onclick="window.clearFilter(); window.showHome(); window.toggleMobileMenu(); return false;" class="flex items-center gap-4 font-bold text-lg sys-text-primary hover:sys-text-accent transition-colors"><i data-lucide="home" class="w-5 h-5"></i> Início</a>
+            <a href="#" onclick="window.showCourses(); window.toggleMobileMenu(); return false;" class="flex items-center gap-4 font-bold text-lg sys-text-primary hover:sys-text-accent transition-colors"><i data-lucide="graduation-cap" class="w-5 h-5"></i> Cursos e Eventos</a>
             <a href="#" onclick="window.showLibrary(); window.toggleMobileMenu(); return false;" class="flex items-center gap-4 font-bold text-lg sys-text-primary hover:sys-text-accent transition-colors"><i data-lucide="book-open" class="w-5 h-5"></i> Biblioteca</a>
             
             <div class="flex flex-col gap-2 mt-2">
@@ -237,6 +238,25 @@
             </button>
         </div>
         <div id="book-detail-content"></div>
+    </main>
+
+    <!-- Main Content: Courses Gallery -->
+    <main id="courses-view" class="hidden flex-grow max-w-4xl w-full mx-auto px-4 py-8 pb-28 sm:pb-8 z-10 fade-enter">
+        <div class="mb-8 border-b sys-border pb-6 text-center sm:text-left">
+            <h2 class="text-3xl font-black sys-text-primary mb-2 flex items-center justify-center sm:justify-start gap-3"><i data-lucide="graduation-cap" class="w-8 h-8 sys-text-accent"></i> Cursos e Eventos</h2>
+            <p class="sys-text-secondary font-medium">Cursos online, mentorias e eventos focados em alta performance.</p>
+        </div>
+        <div id="courses-container" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4 sm:gap-6"></div>
+    </main>
+
+    <!-- Main Content: Course Detail -->
+    <main id="course-detail-view" class="hidden flex-grow max-w-4xl w-full mx-auto px-4 py-8 pb-28 sm:pb-8 z-10 fade-enter">
+        <div class="mb-6 border-b sys-border pb-4">
+            <button onclick="window.showCourses()" class="flex items-center gap-2 sys-text-accent font-bold group hover:opacity-80 transition-all">
+                <i data-lucide="arrow-left" class="w-5 h-5 transform group-hover:-translate-x-1 transition-transform"></i> Voltar para Cursos
+            </button>
+        </div>
+        <div id="course-detail-content"></div>
     </main>
 
     <!-- Main Content: Article Detail -->
@@ -335,20 +355,24 @@
     <nav class="fixed bottom-0 w-full sys-bg-surface sys-border border-t shadow-[0_-10px_40px_rgba(0,0,0,0.06)] z-30 sm:hidden pb-safe">
         <div class="flex justify-around items-center h-[72px] px-1">
             <button onclick="window.clearFilter(); window.showHome(); window.scrollTo(0,0);" class="flex flex-col items-center justify-center w-full h-full sys-text-secondary hover:sys-text-accent transition-all group">
-                <div class="p-1.5 rounded-2xl group-hover:bg-gray-100/50 transition-colors mb-0.5"><i data-lucide="home" class="w-[22px] h-[22px]"></i></div>
+                <div class="p-1.5 rounded-2xl group-hover:bg-gray-100/50 transition-colors mb-0.5"><i data-lucide="home" class="w-[20px] h-[20px]"></i></div>
                 <span class="text-[10px] font-bold">Início</span>
             </button>
+            <button onclick="window.showCourses(); window.scrollTo(0,0);" class="flex flex-col items-center justify-center w-full h-full sys-text-secondary hover:sys-text-accent transition-all group">
+                <div class="p-1.5 rounded-2xl group-hover:bg-gray-100/50 transition-colors mb-0.5"><i data-lucide="graduation-cap" class="w-[20px] h-[20px]"></i></div>
+                <span class="text-[10px] font-bold">Cursos</span>
+            </button>
             <button onclick="window.showLibrary(); window.scrollTo(0,0);" class="flex flex-col items-center justify-center w-full h-full sys-text-secondary hover:sys-text-accent transition-all group">
-                <div class="p-1.5 rounded-2xl group-hover:bg-gray-100/50 transition-colors mb-0.5"><i data-lucide="book-open" class="w-[22px] h-[22px]"></i></div>
+                <div class="p-1.5 rounded-2xl group-hover:bg-gray-100/50 transition-colors mb-0.5"><i data-lucide="book-open" class="w-[20px] h-[20px]"></i></div>
                 <span class="text-[10px] font-bold">Biblioteca</span>
             </button>
             <button onclick="window.toggleCategoriesModal()" class="flex flex-col items-center justify-center w-full h-full sys-text-secondary hover:sys-text-accent transition-all group">
-                <div class="p-1.5 rounded-2xl group-hover:bg-gray-100/50 transition-colors mb-0.5"><i data-lucide="layout-grid" class="w-[22px] h-[22px]"></i></div>
+                <div class="p-1.5 rounded-2xl group-hover:bg-gray-100/50 transition-colors mb-0.5"><i data-lucide="layout-grid" class="w-[20px] h-[20px]"></i></div>
                 <span class="text-[10px] font-bold">Pastas</span>
             </button>
             <button onclick="window.showCommunity(); window.scrollTo(0,0);" class="flex flex-col items-center justify-center w-full h-full text-green-600 hover:text-green-700 transition-all group">
-                <div class="p-2 rounded-2xl bg-green-600 text-white shadow-md mb-0.5"><i data-lucide="users" class="w-[20px] h-[20px]"></i></div>
-                <span class="text-[10px] font-black text-green-700">Comunidade</span>
+                <div class="p-2 rounded-2xl bg-green-600 text-white shadow-md mb-0.5"><i data-lucide="users" class="w-[18px] h-[18px]"></i></div>
+                <span class="text-[10px] font-black text-green-700">Grupo</span>
             </button>
         </div>
     </nav>
@@ -389,6 +413,7 @@
             </div>
             <div class="px-6 pt-4 border-b border-gray-100 bg-white flex gap-6 overflow-x-auto">
                 <button onclick="window.switchAdminTab('posts')" id="tab-btn-posts" class="pb-3 text-sm font-black text-blue-900 border-b-2 border-blue-900 focus:outline-none whitespace-nowrap">Conteúdos</button>
+                <button onclick="window.switchAdminTab('courses')" id="tab-btn-courses" class="pb-3 text-sm font-bold text-gray-400 border-b-2 border-transparent focus:outline-none whitespace-nowrap">Cursos</button>
                 <button onclick="window.switchAdminTab('books')" id="tab-btn-books" class="pb-3 text-sm font-bold text-gray-400 border-b-2 border-transparent focus:outline-none whitespace-nowrap">Biblioteca</button>
                 <button onclick="window.switchAdminTab('categories')" id="tab-btn-categories" class="pb-3 text-sm font-bold text-gray-400 border-b-2 border-transparent focus:outline-none whitespace-nowrap">Pastas</button>
                 <button onclick="window.switchAdminTab('community')" id="tab-btn-community" class="pb-3 text-sm font-bold text-gray-400 border-b-2 border-transparent focus:outline-none whitespace-nowrap">Comunidade</button>
@@ -400,6 +425,12 @@
                     <div class="flex justify-between items-center mb-6"><h4 class="text-lg font-semibold text-gray-800">Seus Conteúdos</h4><button onclick="window.openEditor()" class="bg-blue-900 text-white px-6 py-2.5 rounded-xl font-bold flex items-center gap-2"><i data-lucide="plus" class="w-5 h-5"></i> Novo Conteúdo</button></div>
                     <div id="admin-posts-list" class="flex flex-col gap-3"></div>
                 </div>
+                
+                <div id="admin-view-courses" class="hidden">
+                    <div class="flex justify-between items-center mb-6"><h4 class="text-lg font-semibold text-gray-800">Cursos e Eventos</h4><button onclick="window.openCourseEditor()" class="bg-purple-700 text-white px-6 py-2.5 rounded-xl font-bold flex items-center gap-2"><i data-lucide="folder-plus" class="w-5 h-5"></i> Novo Curso</button></div>
+                    <div id="admin-courses-list" class="grid grid-cols-1 sm:grid-cols-2 gap-4"></div>
+                </div>
+
                 <div id="admin-view-books" class="hidden">
                     <div class="flex justify-between items-center mb-6"><h4 class="text-lg font-semibold text-gray-800">Biblioteca</h4><button onclick="window.openBookEditor()" class="bg-green-700 text-white px-6 py-2.5 rounded-xl font-bold flex items-center gap-2"><i data-lucide="book-plus" class="w-5 h-5"></i> Novo Livro</button></div>
                     <div id="admin-books-list" class="grid grid-cols-1 sm:grid-cols-2 gap-4"></div>
@@ -501,6 +532,62 @@
         </div>
     </div>
 
+    <!-- Editor de Cursos -->
+    <div id="course-editor-modal" class="hidden fixed inset-0 z-[60] flex items-center justify-center modal-overlay px-4 py-4">
+        <div class="bg-white rounded-2xl shadow-2xl w-full max-w-4xl max-h-full flex flex-col relative overflow-hidden text-gray-900">
+            <div class="p-5 border-b flex justify-between items-center bg-purple-50/50"><h3 id="course-editor-title" class="text-xl font-bold text-purple-900">Curso</h3><button onclick="window.closeCourseEditor()" class="text-gray-400"><i data-lucide="x" class="w-6 h-6"></i></button></div>
+            <div class="p-6 flex-1 overflow-y-auto flex flex-col gap-6">
+                <input type="hidden" id="edit-course-id">
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <input type="text" id="course-title" placeholder="Nome do Curso / Evento" class="border border-gray-300 rounded-xl px-4 py-2.5 outline-none focus:ring-2 focus:ring-purple-700">
+                    <input type="text" id="course-subtitle" placeholder="Subtítulo (Aparece na Galeria)" class="border border-gray-300 rounded-xl px-4 py-2.5 outline-none focus:ring-2 focus:ring-purple-700">
+                </div>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <input type="text" id="course-cover" placeholder="Link da Capa (Imagem 2:3)" class="border border-gray-300 rounded-xl px-4 py-2.5 outline-none focus:ring-2 focus:ring-purple-700">
+                    <input type="text" id="course-workload" placeholder="Carga Horária ou Quantidade de Módulos" class="border border-gray-300 rounded-xl px-4 py-2.5 outline-none focus:ring-2 focus:ring-purple-700">
+                </div>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-6 border-t border-gray-200 pt-6">
+                    <div class="bg-gray-50 p-4 rounded-xl border border-gray-200">
+                        <label class="flex items-center gap-2 font-bold mb-3"><input type="checkbox" id="course-has-presential" class="w-4 h-4" onchange="window.toggleCourseFormats()"> Turma Presencial / Evento</label>
+                        <div id="course-presential-fields" class="flex flex-col gap-2 opacity-50 pointer-events-none">
+                            <input type="text" id="course-price-presential" class="border border-gray-300 rounded-lg px-3 py-2 text-sm" placeholder="Preço (Ex: R$ 149,90 ou Gratuito)" disabled>
+                            <input type="text" id="course-btn-presential" class="border border-gray-300 rounded-lg px-3 py-2 text-sm" placeholder="Texto Botão (Ex: Garantir Vaga)" disabled>
+                            <input type="text" id="course-link-presential" class="border border-gray-300 rounded-lg px-3 py-2 text-sm" placeholder="Link de Inscrição / Compra" disabled>
+                        </div>
+                    </div>
+                    <div class="bg-purple-50/50 p-4 rounded-xl border border-purple-100">
+                        <label class="flex items-center gap-2 font-bold mb-3"><input type="checkbox" id="course-has-online" class="w-4 h-4" onchange="window.toggleCourseFormats()"> Curso Online / Gravado</label>
+                        <div id="course-online-fields" class="flex flex-col gap-2 opacity-50 pointer-events-none">
+                            <input type="text" id="course-price-online" class="border border-gray-300 rounded-lg px-3 py-2 text-sm" placeholder="Preço ou 'Gratuito'" disabled>
+                            <input type="text" id="course-btn-online" class="border border-gray-300 rounded-lg px-3 py-2 text-sm" placeholder="Texto Botão (Ex: Comprar Acesso)" disabled>
+                            <input type="text" id="course-link-online" class="border border-gray-300 rounded-lg px-3 py-2 text-sm" placeholder="Link de Checkout / Plataforma" disabled>
+                        </div>
+                    </div>
+                </div>
+                <input type="text" id="course-sample" placeholder="Link do Vídeo ou PDF de Apresentação (Opcional)" class="w-full border border-gray-300 rounded-xl px-4 py-2.5 outline-none focus:ring-2 focus:ring-purple-700">
+                <div>
+                    <label class="block text-sm font-bold mb-1">Sinopse / Conteúdo Programático</label>
+                    <div class="border border-gray-300 border-b-0 rounded-t-xl bg-gray-50 px-4 py-3 flex flex-wrap gap-2">
+                        <button type="button" onclick="window.execEditor('bold')" class="p-2 bg-white border border-gray-200 rounded"><i data-lucide="bold" class="w-4 h-4"></i></button>
+                        <button type="button" onclick="window.insertEditorImage()" class="px-3 py-1 bg-white border border-gray-200 rounded text-sm">Img</button>
+                    </div>
+                    <div id="course-fulltext" contenteditable="true" class="w-full border border-gray-300 rounded-b-xl px-6 py-6 min-h-[250px] bg-white overflow-y-auto prose prose-purple max-w-none shadow-inner outline-none"></div>
+                </div>
+                <div class="border-t border-gray-200 pt-6 mt-2">
+                    <h4 class="text-sm font-bold text-gray-900 mb-4"><i data-lucide="shield-alert" class="w-4 h-4 inline mr-1 text-red-600"></i> Moderação e Métricas</h4>
+                    <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-4">
+                        <div><label class="block text-xs font-bold text-gray-500 uppercase tracking-wider mb-1">Total de Curtidas</label><input type="number" id="course-likes" class="w-full border border-gray-300 bg-white rounded-xl px-4 py-2.5 outline-none focus:ring-2 focus:ring-purple-700" value="0"></div>
+                    </div>
+                    <div id="course-moderation-section" class="hidden">
+                        <label class="block text-xs font-bold text-gray-500 uppercase tracking-wider mb-2">Avaliações Ativas</label>
+                        <div id="course-comments-moderation" class="flex flex-col gap-2 max-h-[250px] overflow-y-auto bg-gray-50 p-3 rounded-xl border border-gray-200 shadow-inner"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="p-6 border-t bg-gray-50 flex justify-between"><button id="btn-delete-course" onclick="window.deleteCourse(document.getElementById('edit-course-id').value)" class="hidden px-5 py-2.5 text-red-600 font-bold hover:bg-red-50 rounded-xl transition-colors"><i data-lucide="trash-2" class="w-4 h-4 inline mr-2"></i> Excluir</button><div class="flex gap-3 ml-auto"><button onclick="window.closeCourseEditor()" class="px-6 py-2.5 border border-gray-300 rounded-xl font-medium hover:bg-gray-100">Cancelar</button><button onclick="window.saveCourse()" id="btn-save-course" class="px-8 py-2.5 bg-purple-700 text-white rounded-xl font-bold shadow-lg hover:bg-purple-800">Salvar Curso</button></div></div>
+        </div>
+    </div>
+
     <!-- Editor de Livros -->
     <div id="book-editor-modal" class="hidden fixed inset-0 z-[60] flex items-center justify-center modal-overlay px-4 py-4">
         <div class="bg-white rounded-2xl shadow-2xl w-full max-w-4xl max-h-full flex flex-col relative overflow-hidden text-gray-900">
@@ -569,11 +656,11 @@
         const firebaseConfig = { apiKey: "AIzaSyCg5aIHRDyOPHDwrP_OFYMn2AE9euWVOyw", authDomain: "professorluizhenrique-a9fe9.firebaseapp.com", projectId: "professorluizhenrique-a9fe9", storageBucket: "professorluizhenrique-a9fe9.firebasestorage.app", messagingSenderId: "354928637639", appId: "1:354928637639:web:fd144793b51237618ff0e2" };
         const ADMIN_PASSWORD = "Biguidu2013@"; 
         
-        window.blogPosts = []; window.siteCategories = []; window.siteBooks = []; window.siteGroups = [];
+        window.blogPosts = []; window.siteCategories = []; window.siteBooks = []; window.siteCourses = []; window.siteGroups = [];
         window.siteBio = ""; 
         window.defaultBioText = `<p><strong>Luiz Henrique Magalhães</strong> é professor de matemática desde 2001, com foco no desenvolvimento de alunos entre 9 e 17 anos. É fundador do <em>PLH Preparatórios</em>, uma plataforma dedicada ao Desenvolvimento Sistemático de jovens, que reúne cursos, materiais e acompanhamento para famílias que querem ir além do conteúdo escolar comum.</p><p>Ao longo de mais de vinte anos na linha de frente da educação, ele acompanhou centenas de famílias de perto. Foi nessa trincheira que observou com clareza o que realmente funciona e o que não funciona quando o assunto é aprender a estudar, organizar o tempo e desenvolver constância e resiliência.</p><p>Especialista na preparação para Colégios Militares, o professor Luiz atua como mentor para alunos que buscam a alta performance académica. Ele é o arquiteto de uma metodologia que foca no Desenvolvimento Sistemático, unindo ferramentas práticas, ordem e disciplina.</p><p>É autor de diversas obras focadas na área do desenvolvimento e da vida prática, incluindo livros como <em>Dinheiro com Propósito</em>, <em>Rotina, Tempo e Método</em> e manuais fundamentais para a aprovação em concursos militares.</p><p>Antes de qualquer título, ofício ou projeto, Luiz é, acima de tudo, o marido da Giselle e o pai de três filhos: Beatriz, Luiz Guilherme e Maria Eduarda. Como ele mesmo costuma dizer, sua família foi e continua sendo a sua "primeira sala de aula sobre o que realmente importa". Atualmente, a família reside na cidade de Governador Valadares, Minas Gerais, de onde ele escreve, leciona e coordena esta crescente comunidade de estudos e desenvolvimento.</p>`;
 
-        window.currentCategoryFilter = null; window.currentOpenBookId = null; window.currentEditorId = 'post-fulltext'; window.deepLinkChecked = false;
+        window.currentCategoryFilter = null; window.currentOpenBookId = null; window.currentOpenCourseId = null; window.currentEditorId = 'post-fulltext'; window.deepLinkChecked = false;
 
         const app = initializeApp(firebaseConfig); const auth = getAuth(app); const db = getFirestore(app); const appId = typeof __app_id !== 'undefined' ? __app_id : 'plh-desenvolvimento-jovens';
 
@@ -599,6 +686,7 @@
                     onSnapshot(collection(db, 'artifacts', appId, 'public', 'data', 'posts'), (snapshot) => { window.blogPosts = []; snapshot.forEach(doc => { window.blogPosts.push({ id: doc.id, ...doc.data() }); }); window.blogPosts.sort((a, b) => (b.createdAt || 0) - (a.createdAt || 0)); window.updateCategoriesMenu(); window.renderPostsFeed(); if (!document.getElementById('dashboard-modal').classList.contains('hidden') && !document.getElementById('admin-view-posts').classList.contains('hidden')) window.renderAdminList(); if(!window.deepLinkChecked) { window.checkDeepLink(); window.deepLinkChecked = true; } });
                     onSnapshot(collection(db, 'artifacts', appId, 'public', 'data', 'categories'), (snapshot) => { window.siteCategories = []; snapshot.forEach(doc => { window.siteCategories.push({ id: doc.id, ...doc.data() }); }); window.siteCategories.sort((a, b) => (a.createdAt || 0) - (b.createdAt || 0)); window.updateCategoriesMenu(); if (!document.getElementById('dashboard-modal').classList.contains('hidden') && !document.getElementById('admin-view-categories').classList.contains('hidden')) window.renderAdminCategories(); });
                     onSnapshot(collection(db, 'artifacts', appId, 'public', 'data', 'books'), (snapshot) => { window.siteBooks = []; snapshot.forEach(doc => { window.siteBooks.push({ id: doc.id, ...doc.data() }); }); window.siteBooks.sort((a, b) => (b.createdAt || 0) - (a.createdAt || 0)); window.renderLibrary(); if(window.currentOpenBookId && !document.getElementById('book-detail-view').classList.contains('hidden')) window.renderBookDetailContent(window.currentOpenBookId); if (!document.getElementById('dashboard-modal').classList.contains('hidden') && !document.getElementById('admin-view-books').classList.contains('hidden')) window.renderAdminBooks(); });
+                    onSnapshot(collection(db, 'artifacts', appId, 'public', 'data', 'courses'), (snapshot) => { window.siteCourses = []; snapshot.forEach(doc => { window.siteCourses.push({ id: doc.id, ...doc.data() }); }); window.siteCourses.sort((a, b) => (b.createdAt || 0) - (a.createdAt || 0)); window.renderCourses(); if(window.currentOpenCourseId && !document.getElementById('course-detail-view').classList.contains('hidden')) window.renderCourseDetailContent(window.currentOpenCourseId); if (!document.getElementById('dashboard-modal').classList.contains('hidden') && !document.getElementById('admin-view-courses').classList.contains('hidden')) window.renderAdminCourses(); });
                     onSnapshot(collection(db, 'artifacts', appId, 'public', 'data', 'groups'), (snapshot) => { window.siteGroups = []; snapshot.forEach(doc => { window.siteGroups.push({ id: doc.id, ...doc.data() }); }); window.siteGroups.sort((a, b) => (a.createdAt || 0) - (b.createdAt || 0)); window.renderCommunityGroups(); if (!document.getElementById('dashboard-modal').classList.contains('hidden') && !document.getElementById('admin-view-community').classList.contains('hidden')) window.renderAdminGroups(); });
                     onSnapshot(doc(db, 'artifacts', appId, 'public', 'data', 'settings', 'bio'), (docSnap) => { if(docSnap.exists()) { window.siteBio = docSnap.data().fullText; } else { window.siteBio = window.defaultBioText; } window.renderBio(); });
                 }
@@ -610,10 +698,11 @@
         window.cycleFontSize = () => { const html = document.documentElement; let newSize = html.classList.contains('font-size-normal') ? 'large' : (html.classList.contains('font-size-large') ? 'xlarge' : 'normal'); html.className = html.className.replace(/font-size-\w+/g, '') + ' font-size-' + newSize; localStorage.setItem('site-font-size', newSize); };
         document.addEventListener('click', (e) => { const menu = document.getElementById('theme-menu'); if (menu && !menu.classList.contains('hidden') && !e.target.closest('.relative')) menu.classList.add('hidden'); });
 
-        window.showHome = () => { ['article-view','library-view','book-detail-view','community-view', 'bio-view'].forEach(id=>document.getElementById(id).classList.add('hidden')); document.getElementById('home-view').classList.remove('hidden'); window.currentOpenBookId = null; window.renderPostsFeed(); window.scrollTo(0,0); };
-        window.showLibrary = () => { ['home-view','article-view','book-detail-view','community-view', 'bio-view'].forEach(id=>document.getElementById(id).classList.add('hidden')); document.getElementById('library-view').classList.remove('hidden'); window.currentOpenBookId = null; window.scrollTo(0,0); };
-        window.showCommunity = () => { ['home-view','article-view','book-detail-view','library-view', 'bio-view'].forEach(id=>document.getElementById(id).classList.add('hidden')); document.getElementById('community-view').classList.remove('hidden'); window.currentOpenBookId = null; window.renderCommunityGroups(); window.scrollTo(0,0); };
-        window.showBio = () => { ['home-view','article-view','book-detail-view','library-view', 'community-view'].forEach(id=>document.getElementById(id).classList.add('hidden')); document.getElementById('bio-view').classList.remove('hidden'); window.currentOpenBookId = null; window.renderBio(); window.scrollTo(0,0); };
+        window.showHome = () => { ['article-view','library-view','book-detail-view','community-view', 'bio-view', 'courses-view', 'course-detail-view'].forEach(id=>document.getElementById(id).classList.add('hidden')); document.getElementById('home-view').classList.remove('hidden'); window.currentOpenBookId = null; window.currentOpenCourseId = null; window.renderPostsFeed(); window.scrollTo(0,0); };
+        window.showLibrary = () => { ['home-view','article-view','book-detail-view','community-view', 'bio-view', 'courses-view', 'course-detail-view'].forEach(id=>document.getElementById(id).classList.add('hidden')); document.getElementById('library-view').classList.remove('hidden'); window.currentOpenBookId = null; window.currentOpenCourseId = null; window.scrollTo(0,0); };
+        window.showCourses = () => { ['home-view','article-view','book-detail-view','library-view', 'community-view', 'bio-view', 'course-detail-view'].forEach(id=>document.getElementById(id).classList.add('hidden')); document.getElementById('courses-view').classList.remove('hidden'); window.currentOpenBookId = null; window.currentOpenCourseId = null; window.scrollTo(0,0); };
+        window.showCommunity = () => { ['home-view','article-view','book-detail-view','library-view', 'bio-view', 'courses-view', 'course-detail-view'].forEach(id=>document.getElementById(id).classList.add('hidden')); document.getElementById('community-view').classList.remove('hidden'); window.currentOpenBookId = null; window.currentOpenCourseId = null; window.renderCommunityGroups(); window.scrollTo(0,0); };
+        window.showBio = () => { ['home-view','article-view','book-detail-view','library-view', 'community-view', 'courses-view', 'course-detail-view'].forEach(id=>document.getElementById(id).classList.add('hidden')); document.getElementById('bio-view').classList.remove('hidden'); window.currentOpenBookId = null; window.currentOpenCourseId = null; window.renderBio(); window.scrollTo(0,0); };
 
         window.toggleMobileMenu = () => {
             if (window.innerWidth >= 1024) return; // Prevent logic flip on desktop where it's always open
@@ -695,6 +784,144 @@
         };
         /* ================= FIM GESTÃO COMUNIDADE ================= */
 
+        /* ================= GESTÃO DE CURSOS ================= */
+        window.toggleCourseFormats = () => {
+            const hasPres = document.getElementById('course-has-presential').checked; const hasOn = document.getElementById('course-has-online').checked;
+            const presBlock = document.getElementById('course-presential-fields'); const onBlock = document.getElementById('course-online-fields');
+            if(hasPres) { presBlock.classList.remove('opacity-50', 'pointer-events-none'); document.getElementById('course-price-presential').disabled = false; document.getElementById('course-btn-presential').disabled = false; document.getElementById('course-link-presential').disabled = false; } else { presBlock.classList.add('opacity-50', 'pointer-events-none'); document.getElementById('course-price-presential').disabled = true; document.getElementById('course-btn-presential').disabled = true; document.getElementById('course-link-presential').disabled = true; }
+            if(hasOn) { onBlock.classList.remove('opacity-50', 'pointer-events-none'); document.getElementById('course-price-online').disabled = false; document.getElementById('course-btn-online').disabled = false; document.getElementById('course-link-online').disabled = false; } else { onBlock.classList.add('opacity-50', 'pointer-events-none'); document.getElementById('course-price-online').disabled = true; document.getElementById('course-btn-online').disabled = true; document.getElementById('course-link-online').disabled = true; }
+        };
+
+        window.openCourseEditor = () => {
+            window.currentEditorId = 'course-fulltext'; document.getElementById('edit-course-id').value = ''; document.getElementById('course-has-presential').checked = false; document.getElementById('course-has-online').checked = true; window.toggleCourseFormats();
+            ['title', 'subtitle', 'workload', 'cover', 'price-presential', 'btn-presential', 'link-presential', 'price-online', 'btn-online', 'link-online', 'sample', 'likes'].forEach(f => { const el = document.getElementById('course-'+f); if(el) { if (f==='likes') el.value = '0'; else if (f==='btn-presential') el.value = 'Garantir Vaga'; else if (f==='btn-online') el.value = 'Comprar Acesso'; else el.value = ''; } });
+            document.getElementById('course-fulltext').innerHTML = ''; document.getElementById('course-moderation-section').classList.add('hidden'); document.getElementById('course-comments-moderation').innerHTML = '';
+            document.getElementById('course-editor-title').innerText = "Adicionar Curso / Evento"; document.getElementById('btn-delete-course').classList.add('hidden'); document.getElementById('course-editor-modal').classList.remove('hidden');
+        };
+
+        window.closeCourseEditor = () => document.getElementById('course-editor-modal').classList.add('hidden');
+        
+        window.saveCourse = async () => {
+            const btn = document.getElementById('btn-save-course'); btn.disabled = true; const id = document.getElementById('edit-course-id').value;
+            const hasPresential = document.getElementById('course-has-presential').checked; const hasOnline = document.getElementById('course-has-online').checked;
+            if(!hasPresential && !hasOnline) { alert("Selecione pelo menos um formato (Presencial ou Online)."); btn.disabled = false; return; }
+            const likesCount = parseInt(document.getElementById('course-likes').value) || 0;
+            const data = { title: document.getElementById('course-title').value || "Curso", subtitle: document.getElementById('course-subtitle').value || "", workload: document.getElementById('course-workload').value || "", cover: document.getElementById('course-cover').value || "", sampleLink: document.getElementById('course-sample').value || "", fullText: document.getElementById('course-fulltext').innerHTML || "", likes: likesCount, hasPresential: hasPresential, pricePresential: hasPresential ? document.getElementById('course-price-presential').value : "", btnPresential: hasPresential ? (document.getElementById('course-btn-presential').value || "Garantir Vaga") : "", linkPresential: hasPresential ? document.getElementById('course-link-presential').value : "", hasOnline: hasOnline, priceOnline: hasOnline ? document.getElementById('course-price-online').value : "", btnOnline: hasOnline ? (document.getElementById('course-btn-online').value || "Comprar Acesso") : "", linkOnline: hasOnline ? document.getElementById('course-link-online').value : "" };
+            try { if (id) { await updateDoc(doc(db, 'artifacts', appId, 'public', 'data', 'courses', id), data); } else { await addDoc(collection(db, 'artifacts', appId, 'public', 'data', 'courses'), { ...data, comments: [], createdAt: Date.now() }); } window.closeCourseEditor(); } catch (e) { alert("Erro: " + e.message); } finally { btn.disabled = false; }
+        };
+
+        window.editCourse = (id) => {
+            window.currentEditorId = 'course-fulltext'; const c = window.siteCourses.find(x => x.id === id); document.getElementById('edit-course-id').value = c.id;
+            document.getElementById('course-has-presential').checked = c.hasPresential || false; document.getElementById('course-has-online').checked = c.hasOnline !== undefined ? c.hasOnline : true; window.toggleCourseFormats();
+            document.getElementById('course-title').value = c.title || ''; document.getElementById('course-subtitle').value = c.subtitle || ''; document.getElementById('course-workload').value = c.workload || ''; document.getElementById('course-cover').value = c.cover || ''; document.getElementById('course-sample').value = c.sampleLink || ''; document.getElementById('course-likes').value = c.likes || 0;
+            document.getElementById('course-price-presential').value = c.pricePresential || ''; document.getElementById('course-btn-presential').value = c.btnPresential || 'Garantir Vaga'; document.getElementById('course-link-presential').value = c.linkPresential || '';
+            document.getElementById('course-price-online').value = c.priceOnline || ''; document.getElementById('course-btn-online').value = c.btnOnline || 'Comprar Acesso'; document.getElementById('course-link-online').value = c.linkOnline || '';
+            document.getElementById('course-fulltext').innerHTML = c.fullText || ''; 
+            const modSec = document.getElementById('course-moderation-section'); const modCont = document.getElementById('course-comments-moderation');
+            if(c.comments && c.comments.length > 0) { modSec.classList.remove('hidden'); modCont.innerHTML = c.comments.map(cm => `<div class="flex justify-between items-center bg-white p-3 rounded-lg border border-gray-200 shadow-sm gap-3"><div class="truncate flex-1"><p class="text-xs font-black text-gray-800 mb-0.5">${cm.name.replace(/</g, "&lt;")}</p><p class="text-xs text-gray-600 truncate">${cm.text.replace(/</g, "&lt;")}</p></div><button type="button" onclick="window.deleteCourseComment('${c.id}', ${cm.date})" class="p-2 bg-red-50 text-red-600 rounded-lg hover:bg-red-100 transition-colors shrink-0"><i data-lucide="trash-2" class="w-4 h-4"></i></button></div>`).reverse().join(''); } else { modSec.classList.add('hidden'); modCont.innerHTML = ''; }
+            document.getElementById('course-editor-title').innerText = "Editar Curso / Evento"; document.getElementById('btn-delete-course').classList.remove('hidden'); document.getElementById('course-editor-modal').classList.remove('hidden'); lucide.createIcons();
+        };
+
+        window.deleteCourse = async (id) => { if (confirm("Remover este curso?")) { await deleteDoc(doc(db, 'artifacts', appId, 'public', 'data', 'courses', id)); window.closeCourseEditor(); } };
+
+        window.deleteCourseComment = async (courseId, commentDate) => {
+            if(!confirm("Apagar avaliação?")) return; const c = window.siteCourses.find(x => x.id === courseId); if(!c) return;
+            const commentToRemove = c.comments.find(cm => cm.date === commentDate);
+            if(commentToRemove) { try { await updateDoc(doc(db, 'artifacts', appId, 'public', 'data', 'courses', courseId), { comments: arrayRemove(commentToRemove) }); window.showToast("Avaliação apagada."); window.closeCourseEditor(); setTimeout(() => window.editCourse(courseId), 100); } catch(e) { console.error(e); } }
+        };
+
+        window.renderAdminCourses = () => {
+            const list = document.getElementById('admin-courses-list');
+            list.innerHTML = window.siteCourses.map(c => {
+                let badge = ''; const hasPres = c.hasPresential; const hasOn = c.hasOnline;
+                if(hasPres && hasOn) badge = 'Híbrido'; else if(hasPres) badge = 'Presencial'; else badge = 'Online';
+                return `<div class="flex items-center gap-4 p-3 border border-gray-200 rounded-xl bg-white shadow-sm cursor-pointer hover:border-purple-600 transition-colors" onclick="window.editCourse('${c.id}')"><img src="${window.getDriveImageUrl(c.cover)}" class="w-12 h-16 object-cover rounded bg-gray-100" onerror="this.src='https://via.placeholder.com/48x64?text=Curso'"><div class="flex-1 truncate"><p class="font-bold text-gray-900 text-sm truncate">${c.title}</p><p class="text-xs text-purple-600 mt-0.5 font-bold uppercase tracking-wider">${badge}</p></div><div class="flex gap-2 shrink-0"><button class="p-2 bg-purple-50 text-purple-900 rounded-lg"><i data-lucide="edit-3" class="w-4 h-4"></i></button></div></div>`;
+            }).join('') || '<p class="col-span-full text-center text-gray-400 py-6">Nenhum curso.</p>';
+            lucide.createIcons();
+        };
+
+        window.renderCourses = () => {
+            const container = document.getElementById('courses-container');
+            if(window.siteCourses.length === 0) { container.innerHTML = `<div class="col-span-full py-20 text-center flex flex-col items-center justify-center opacity-60"><i data-lucide="graduation-cap" class="w-12 h-12 sys-text-secondary mb-4"></i><p class="sys-text-secondary font-bold">Nenhum curso disponível no momento.</p></div>`; lucide.createIcons(); return; }
+            container.innerHTML = window.siteCourses.map(c => {
+                const hasPres = c.hasPresential; const hasOn = c.hasOnline; const pOn = c.priceOnline || '';
+                let badgeFormat = ''; if(hasPres && hasOn) badgeFormat = 'PRESENCIAL E ONLINE'; else if(hasPres) badgeFormat = 'PRESENCIAL'; else badgeFormat = 'ONLINE';
+                let isFree = hasOn && (pOn.toLowerCase().includes('grat') || pOn.toLowerCase().includes('grátis'));
+                let topBadge = isFree ? `<div class="absolute top-2 right-2 bg-blue-600 text-white text-[10px] sm:text-xs font-black px-2 py-1 rounded-lg shadow-md tracking-wide uppercase">GRATUITO</div>` : '';
+                return `<div onclick="window.openCourseDetail('${c.id}')" class="flex flex-col group sys-bg-surface rounded-2xl shadow-sm sys-border border overflow-hidden hover:shadow-xl transition-all duration-300 cursor-pointer"><div class="aspect-[2/3] bg-gray-100 relative overflow-hidden border-b sys-border"><img src="${window.getDriveImageUrl(c.cover)}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" onerror="this.src='https://via.placeholder.com/400x600?text=Capa'">${topBadge}</div><div class="p-4 flex flex-col flex-grow items-center text-center"><h3 class="font-black sys-text-primary text-sm sm:text-base leading-snug mb-1 group-hover:sys-text-accent transition-colors line-clamp-2">${c.title}</h3><p class="text-xs sys-text-secondary line-clamp-2 mt-1 opacity-80">${c.subtitle || ''}</p><p class="text-[10px] sys-text-secondary font-bold uppercase tracking-wider mt-auto pt-3 border-t sys-border border-dashed w-full">${badgeFormat}</p></div></div>`;
+            }).join('');
+            lucide.createIcons();
+        };
+
+        window.openCourseDetail = (id) => {
+            window.currentOpenCourseId = id; ['home-view','library-view','article-view','community-view', 'bio-view', 'courses-view', 'book-detail-view'].forEach(i=>document.getElementById(i).classList.add('hidden')); document.getElementById('course-detail-view').classList.remove('hidden'); window.scrollTo(0, 0); window.renderCourseDetailContent(id);
+        };
+
+        window.renderCourseDetailContent = (id) => {
+            const c = window.siteCourses.find(x => x.id === id); if (!c) return;
+            const hasPres = c.hasPresential; const hasOn = c.hasOnline;
+            const pPres = c.pricePresential || ''; const pOn = c.priceOnline || '';
+            const lPres = (c.linkPresential || '#').trim(); const lOn = (c.linkOnline || '#').trim();
+            const safeLPres = lPres.startsWith('http') ? lPres : 'https://'+lPres; const safeLOn = lOn.startsWith('http') ? lOn : 'https://'+lOn;
+            const safeSample = c.sampleLink ? (c.sampleLink.startsWith('http') ? c.sampleLink : 'https://' + c.sampleLink) : '';
+            const likesCount = c.likes || 0; const commentsList = c.comments || [];
+
+            let tableRows = ''; let buttonsHtml = '';
+            if(hasPres) {
+                tableRows += `<tr class="border-b sys-border"><td class="p-3 font-medium flex items-center gap-2"><i data-lucide="map-pin" class="w-4 h-4"></i> Presencial</td><td class="p-3 font-black sys-text-accent">${pPres || '-'}</td></tr>`;
+                let txt = c.btnPresential || 'Garantir Vaga'; buttonsHtml += `<a href="${safeLPres}" target="_blank" class="w-full flex justify-center items-center gap-2 sys-bg-accent text-white py-4 px-6 rounded-xl font-black text-sm uppercase tracking-wide hover:opacity-90 shadow-xl transition-all hover:-translate-y-1 mb-3">${txt} <i data-lucide="check-circle-2" class="w-4 h-4"></i></a>`;
+            }
+            if(hasOn) {
+                let isFree = pOn.toLowerCase().includes('grat') || pOn.toLowerCase().includes('grátis'); let colorClass = isFree ? 'text-green-600' : 'sys-text-accent';
+                tableRows += `<tr><td class="p-3 font-medium flex items-center gap-2"><i data-lucide="monitor-play" class="w-4 h-4"></i> Online</td><td class="p-3 font-black ${colorClass}">${pOn || '-'}</td></tr>`;
+                let bgClass = isFree ? 'bg-blue-700 hover:bg-blue-800' : 'sys-bg-accent hover:opacity-90'; let icn = isFree ? 'play' : 'shopping-cart'; let txt = c.btnOnline || (isFree ? 'Acessar Gratuitamente' : 'Comprar Acesso');
+                buttonsHtml += `<a href="${safeLOn}" target="_blank" class="w-full flex justify-center items-center gap-2 ${bgClass} text-white py-4 px-6 rounded-xl font-black text-sm uppercase tracking-wide shadow-xl transition-all hover:-translate-y-1 mb-3"><i data-lucide="${icn}" class="w-4 h-4"></i> ${txt}</a>`;
+            }
+            if (safeSample) { buttonsHtml += `<a href="${safeSample}" target="_blank" class="w-full flex justify-center items-center gap-2 sys-bg-surface sys-text-primary border-2 sys-border py-4 px-6 rounded-xl font-bold text-sm uppercase tracking-wide hover:bg-gray-50 transition-all mb-3"><i data-lucide="video" class="w-4 h-4"></i> Ver Apresentação</a>`; }
+
+            const tableHtml = tableRows ? `<div class="border sys-border rounded-xl overflow-hidden mb-6"><table class="w-full text-left text-sm"><thead class="sys-bg-body border-b sys-border"><tr><th class="p-3 font-bold text-gray-500 uppercase tracking-widest text-[10px]">Formato</th><th class="p-3 font-bold text-gray-500 uppercase tracking-widest text-[10px]">Valor</th></tr></thead><tbody>${tableRows}</tbody></table></div>` : '';
+
+            document.getElementById('course-detail-content').innerHTML = `
+                <div class="flex flex-col md:flex-row gap-8 lg:gap-12 mb-12">
+                    <div class="w-full md:w-1/3 flex flex-col gap-6">
+                        <div class="aspect-[2/3] w-[90%] mx-auto md:w-full rounded-2xl overflow-hidden shadow-2xl sys-border border"><img src="${window.getDriveImageUrl(c.cover)}" class="w-full h-full object-cover" onerror="this.src='https://via.placeholder.com/400x600?text=Capa'"></div>
+                        <div class="flex items-center justify-center gap-6 sys-bg-surface p-4 rounded-2xl sys-border border shadow-sm w-[90%] mx-auto md:w-full">
+                            <button onclick="window.likeCourse('${c.id}')" class="flex flex-col items-center gap-1 text-red-500 hover:scale-110 active:scale-95 transition-transform" title="Recomendar Curso"><i data-lucide="heart" class="w-6 h-6 fill-current"></i><span class="text-xs font-black">${likesCount}</span></button>
+                            <div class="w-px h-8 bg-gray-200"></div><div class="flex flex-col items-center gap-1 sys-text-secondary"><i data-lucide="message-square" class="w-6 h-6"></i><span class="text-xs font-black">${commentsList.length}</span></div>
+                        </div>
+                    </div>
+                    <div class="w-full md:w-2/3 flex flex-col">
+                        <h1 class="text-3xl sm:text-4xl font-black sys-text-primary leading-tight mb-2">${c.title}</h1>
+                        ${c.workload ? `<p class="sys-text-secondary font-bold text-sm mb-6">${c.workload}</p>` : '<div class="mb-4"></div>'}
+                        ${tableHtml}
+                        <div class="prose max-w-none sys-text-primary text-base sm:text-lg opacity-90 leading-relaxed mb-8 whitespace-pre-wrap">${c.fullText || 'Sem conteúdo programático disponível.'}</div>
+                        <div class="flex flex-col mt-auto border-t sys-border pt-8">${buttonsHtml}</div>
+                    </div>
+                </div>
+                <div class="border-t sys-border pt-10">
+                    <h3 class="text-2xl font-black sys-text-primary mb-6 flex items-center gap-2"><i data-lucide="message-square" class="w-6 h-6 sys-text-accent"></i> Avaliações</h3>
+                    <div class="sys-bg-surface p-5 sm:p-6 rounded-2xl sys-border border shadow-sm mb-8"><div class="flex flex-col gap-3"><input type="text" id="course-comment-name-${c.id}" placeholder="Seu nome" class="w-full border border-gray-300 rounded-xl px-4 py-3 outline-none focus:ring-2 focus:ring-blue-900 bg-white text-gray-900 text-sm"><textarea id="course-comment-text-${c.id}" rows="3" placeholder="O que achou deste curso?" class="w-full border border-gray-300 rounded-xl px-4 py-3 outline-none focus:ring-2 focus:ring-blue-900 bg-white text-gray-900 resize-none text-sm"></textarea><button onclick="window.submitCourseComment('${c.id}')" class="self-end bg-purple-700 hover:bg-purple-800 text-white px-6 py-2.5 rounded-xl font-bold text-sm transition-colors flex items-center gap-2">Enviar <i data-lucide="send" class="w-4 h-4"></i></button></div></div>
+                    <div class="flex flex-col gap-4">${commentsList.length > 0 ? commentsList.map(cm => `<div class="flex gap-4 p-4 sys-bg-body rounded-2xl border sys-border"><div class="w-10 h-10 rounded-full sys-bg-surface flex items-center justify-center border sys-border shrink-0"><i data-lucide="user" class="w-5 h-5 sys-text-secondary"></i></div><div class="flex-1"><div class="flex items-center gap-2 mb-1"><p class="font-bold sys-text-primary text-sm">${cm.name.replace(/</g, "&lt;")}</p><span class="text-[10px] sys-text-secondary">${new Date(cm.date).toLocaleDateString('pt-BR')}</span></div><p class="sys-text-secondary text-sm leading-relaxed">${cm.text.replace(/</g, "&lt;")}</p></div></div>`).reverse().join('') : '<p class="text-center sys-text-secondary py-8 italic opacity-70">Nenhuma avaliação ainda.</p>'}</div>
+                </div>
+            `;
+            lucide.createIcons();
+        };
+
+        window.likeCourse = async (id) => {
+            let likedCourses = JSON.parse(localStorage.getItem('plh_liked_courses') || '[]');
+            if (likedCourses.includes(id)) { window.showToast("Você já avaliou este curso!"); return; }
+            try { await updateDoc(doc(db, 'artifacts', appId, 'public', 'data', 'courses', id), { likes: increment(1) }); likedCourses.push(id); localStorage.setItem('plh_liked_courses', JSON.stringify(likedCourses)); window.showToast("Avaliação registrada!"); } catch (e) { console.error(e); }
+        };
+
+        window.submitCourseComment = async (id) => {
+            const nameInput = document.getElementById(`course-comment-name-${id}`); const textInput = document.getElementById(`course-comment-text-${id}`);
+            const name = nameInput.value.trim() || 'Aluno(a)'; const text = textInput.value.trim();
+            if (!text) { alert("Escreva uma avaliação."); return; }
+            try { window.showToast("Enviado!"); await updateDoc(doc(db, 'artifacts', appId, 'public', 'data', 'courses', id), { comments: arrayUnion({ name, text, date: Date.now() }) }); textInput.value = ''; nameInput.value = ''; } catch (e) {}
+        };
+        /* ================= FIM GESTÃO DE CURSOS ================= */
+
+
         window.toggleBookFormats = () => {
             const hasPhys = document.getElementById('book-has-physical').checked; const hasEb = document.getElementById('book-has-ebook').checked;
             const physBlock = document.getElementById('book-physical-fields'); const ebBlock = document.getElementById('book-ebook-fields');
@@ -765,7 +992,7 @@
         };
 
         window.openBookDetail = (id) => {
-            window.currentOpenBookId = id; ['home-view','library-view','article-view','community-view', 'bio-view'].forEach(i=>document.getElementById(i).classList.add('hidden')); document.getElementById('book-detail-view').classList.remove('hidden'); window.scrollTo(0, 0); window.renderBookDetailContent(id);
+            window.currentOpenBookId = id; ['home-view','library-view','article-view','community-view', 'bio-view', 'courses-view', 'course-detail-view'].forEach(i=>document.getElementById(i).classList.add('hidden')); document.getElementById('book-detail-view').classList.remove('hidden'); window.scrollTo(0, 0); window.renderBookDetailContent(id);
         };
 
         window.renderBookDetailContent = (id) => {
@@ -834,13 +1061,14 @@
         window.showToast = (msg) => { document.getElementById('toast-msg').innerText = msg; const toast = document.getElementById('toast'); toast.classList.remove('translate-y-32', 'opacity-0'); setTimeout(() => toast.classList.add('translate-y-32', 'opacity-0'), 3000); };
 
         window.switchAdminTab = (tab) => {
-            ['posts', 'books', 'categories', 'community', 'bio'].forEach(t => {
+            ['posts', 'books', 'categories', 'community', 'bio', 'courses'].forEach(t => {
                 document.getElementById('admin-view-'+t).classList.add('hidden');
                 document.getElementById('tab-btn-'+t).className = "pb-3 text-sm font-bold text-gray-400 border-b-2 border-transparent hover:text-gray-600 transition-colors focus:outline-none whitespace-nowrap";
             });
             document.getElementById('admin-view-'+tab).classList.remove('hidden');
             document.getElementById('tab-btn-'+tab).className = "pb-3 text-sm font-black text-blue-900 border-b-2 border-blue-900 transition-colors focus:outline-none whitespace-nowrap";
             if(tab === 'posts') window.renderAdminList();
+            if(tab === 'courses') window.renderAdminCourses();
             if(tab === 'books') window.renderAdminBooks();
             if(tab === 'categories') window.renderAdminCategories();
             if(tab === 'community') window.renderAdminGroups();
@@ -909,7 +1137,7 @@
 
         window.openArticle = (id) => { 
             const p = window.blogPosts.find(x => x.id === id); if (!p) return; 
-            ['home-view','library-view','book-detail-view','community-view', 'bio-view'].forEach(i=>document.getElementById(i).classList.add('hidden')); document.getElementById('article-view').classList.remove('hidden'); window.scrollTo(0, 0); 
+            ['home-view','library-view','book-detail-view','community-view', 'bio-view', 'courses-view', 'course-detail-view'].forEach(i=>document.getElementById(i).classList.add('hidden')); document.getElementById('article-view').classList.remove('hidden'); window.scrollTo(0, 0); 
             const ytId = window.getYoutubeId(p.youtubeUrl); 
             const mediaHtml = ytId ? `<div class="aspect-video rounded-3xl overflow-hidden mb-8 shadow-2xl bg-black"><iframe class="w-full h-full" src="https://www.youtube.com/embed/${ytId}" frameborder="0" allowfullscreen></iframe></div>` : `<div class="aspect-video rounded-3xl overflow-hidden mb-8 shadow-xl"><img src="${window.getDriveImageUrl(p.imageUrl)}" class="w-full h-full object-cover"></div>`; 
             const safeTitle = (p.title || "").replace(/'/g, "\\'"); const safeSubtitle = (p.subtitle || "").replace(/'/g, "\\'");
